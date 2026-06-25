@@ -4,7 +4,9 @@ import {
   HeadingFeature,
   ItalicFeature,
   LinkFeature,
+  OrderedListFeature,
   ParagraphFeature,
+  UnorderedListFeature,
   lexicalEditor,
   UnderlineFeature,
   type LinkFields,
@@ -14,6 +16,8 @@ export const defaultLexical = lexicalEditor({
   features: [
     ParagraphFeature(),
     HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+    UnorderedListFeature(),
+    OrderedListFeature(),
     UnderlineFeature(),
     BoldFeature(),
     ItalicFeature(),
