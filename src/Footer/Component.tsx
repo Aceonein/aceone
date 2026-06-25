@@ -45,7 +45,7 @@ export async function Footer() {
     <footer style={{ background: bg, borderTop: `1px solid ${bdr}`, marginTop: 'auto' }} id="newsletter-foot">
       <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', borderBottom: `1px solid ${bdr}` }}>
         {/* Brand col */}
-        <div style={{ padding: '48px 40px 48px 24px', borderRight: `1px solid ${bdr}` }}>
+        <div style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#f0efe9', marginBottom: 14 }}>ACEONE/</div>
           <p style={{ fontSize: 13, fontWeight: 400, color: t2, lineHeight: 1.7, maxWidth: 260 }}>
             The financially literate friend that young Indians never had.
@@ -53,12 +53,12 @@ export async function Footer() {
         </div>
         {/* Link cols */}
         {cols.map((col) => (
-          <div key={col.heading} style={{ padding: '48px 24px', borderRight: `1px solid ${bdr}` }}>
+          <div key={col.heading} style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: t3, marginBottom: 20 }}>{col.heading}</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {col.links.map(({ label, href }) => (
                 <li key={href}>
-                  <Link href={href} style={{ fontSize: 13, color: t2, textDecoration: 'none', transition: 'color 0.2s' }}>{label}</Link>
+                  <Link href={href} style={{ fontSize: 13, color: t2, textDecoration: 'none' }}>{label}</Link>
                 </li>
               ))}
             </ul>
@@ -66,13 +66,13 @@ export async function Footer() {
         ))}
       </div>
       {/* Bottom bar */}
-      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 32px' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: t3 }}>
-          © 2025 Aceone · Anti-Debt. Pro-Decision.
+          © 2026 Aceone · Anti-Debt. Pro-Decision.
         </span>
         <div style={{ display: 'flex', alignItems: 'stretch' }}>
           {[{ Icon: XIcon, label: 'Twitter' }, { Icon: LinkedInIcon, label: 'LinkedIn' }, { Icon: YouTubeIcon, label: 'YouTube' }].map(({ Icon, label }) => (
-            <a key={label} href="#" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 11, color: t3, transition: 'color 0.2s', textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
+            <a key={label} href="#" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 11, color: t3, textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
               <Icon />{label}
             </a>
           ))}

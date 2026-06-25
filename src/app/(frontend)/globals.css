@@ -294,6 +294,10 @@ html::before {
   }
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    font-family: var(--font-sans), 'Space Grotesk', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+    line-height: 1.5;
   }
 }
 

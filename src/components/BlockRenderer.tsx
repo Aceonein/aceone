@@ -67,7 +67,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
           const w = sizes[block.size ?? 'wide'] ?? '100%'
           return (
             <figure key={i} style={{ margin: '40px 0', maxWidth: w }}>
-              <img src={url} alt={block.alt ?? (typeof img === 'object' ? img?.alt : '') ?? ''} style={{ width: '100%', borderRadius: 10, display: 'block', border: `1px solid ${s.bdr}` }} />
+              <img src={url} alt={block.alt ?? (typeof img === 'object' ? img?.alt : '') ?? ''} style={{ width: '100%', display: 'block', border: `1px solid ${s.bdr}` }} />
               {block.caption && <figcaption style={{ fontFamily: s.mono, fontSize: 11.5, color: s.t3, marginTop: 8, textAlign: 'center' }}>{block.caption}</figcaption>}
             </figure>
           )
@@ -93,7 +93,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         )
 
         if (type === 'pull-quote') return (
-          <blockquote key={i} style={{ margin: '44px 0', padding: '32px 40px', background: s.bg2, borderRadius: 14, borderTop: `1px solid ${s.bdr2}`, transition: 'background 0.4s, border-color 0.4s' }}>
+          <blockquote key={i} style={{ margin: '44px 0', padding: '4px 0 4px 24px', borderLeft: `2px solid ${s.t1}`, transition: 'border-color 0.4s' }}>
             <p style={{ fontFamily: s.serif, fontSize: block.size === 'large' ? 26 : 21, fontWeight: 700, fontStyle: 'italic', lineHeight: 1.4, color: s.t1, marginBottom: block.attribution ? 14 : 0, transition: 'color 0.4s' }}>
               &ldquo;{block.quote}&rdquo;
             </p>
@@ -102,9 +102,9 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         )
 
         if (type === 'data-box') return (
-          <div key={i} style={{ margin: '36px 0', padding: 28, background: s.bg2, border: `1px solid ${s.bdr2}`, borderRadius: 14, transition: 'background 0.4s, border-color 0.4s' }}>
-            {block.title && <div style={{ fontFamily: s.mono, fontSize: 11, fontWeight: 500, letterSpacing: '0.16em', textTransform: 'uppercase', color: s.t3, marginBottom: 20, transition: 'color 0.4s' }}>{block.title}</div>}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 16 }}>
+          <div key={i} style={{ margin: '36px 0', border: `1px solid ${s.bdr}`, overflow: 'hidden', transition: 'border-color 0.4s' }}>
+            {block.title && <div style={{ fontFamily: s.mono, fontSize: 8, fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: s.t3, background: s.bg2, padding: '8px 16px', borderBottom: `1px solid ${s.bdr}`, display: 'flex', alignItems: 'center', gap: 10, transition: 'color 0.4s, background 0.4s' }}><span style={{ width: 6, height: 6, background: s.acc, display: 'block', flexShrink: 0 }} />{block.title}</div>}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 0 }}>
               {(block.dataPoints ?? []).map((dp: any, j: number) => (
                 <div key={j}>
                   <div style={{ fontFamily: s.serif, fontSize: 28, fontWeight: 700, lineHeight: 1, color: dp.isNegative ? '#ef4444' : s.acc, marginBottom: 4, transition: 'color 0.4s' }}>
@@ -152,14 +152,14 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         )
 
         if (type === 'disclaimer') return (
-          <div key={i} style={{ margin: '32px 0', padding: '16px 20px', background: s.bg3, border: `1px solid ${s.bdr2}`, borderRadius: 10, display: 'flex', gap: 14, transition: 'background 0.4s, border-color 0.4s' }}>
+          <div key={i} style={{ margin: '32px 0', padding: '16px 20px', background: s.bg2, border: `1px solid ${s.bdr}`, borderLeft: `2px solid ${s.acc}`, display: 'flex', gap: 14, transition: 'background 0.4s, border-color 0.4s' }}>
             <span style={{ fontSize: 16, flexShrink: 0 }}>⚠️</span>
             <div style={{ fontSize: 13, fontWeight: 400, lineHeight: 1.7, color: s.t3 }}>{richText(block.content)}</div>
           </div>
         )
 
         if (type === 'accordion') return (
-          <div key={i} style={{ margin: '28px 0', border: `1px solid ${s.bdr2}`, borderRadius: 12, overflow: 'hidden', transition: 'border-color 0.4s' }}>
+          <div key={i} style={{ margin: '28px 0', border: `1px solid ${s.bdr}`, overflow: 'hidden', transition: 'border-color 0.4s' }}>
             {(block.items ?? []).map((item: any, j: number) => (
               <details key={j} open={item.defaultOpen} style={{ borderBottom: j < block.items.length - 1 ? `1px solid ${s.bdr}` : 'none', transition: 'border-color 0.4s' }}>
                 <summary style={{ padding: '16px 20px', fontWeight: 500, fontSize: 15, color: s.t1, cursor: 'pointer', listStyle: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', transition: 'color 0.4s' }}>
