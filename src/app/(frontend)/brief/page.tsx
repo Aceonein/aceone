@@ -74,23 +74,20 @@ export default async function BriefPage() {
                 <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ao-t3)' }}>{label}</div>
               </div>
             ))}
-            {/* Subscribe CTA — matches nav height */}
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', padding: '0 24px', flexShrink: 0 }}>
-              <a
-                href="#newsletter"
-                className="ao-cta"
-                style={{
-                  display: 'flex', alignItems: 'center',
-                  height: 48, padding: '0 20px',
-                  textDecoration: 'none', whiteSpace: 'nowrap',
-                  fontFamily: mono, fontSize: 11, fontWeight: 700,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: 'var(--ao-bg)', background: 'var(--ao-t1)',
-                }}
-              >
-                Subscribe →
-              </a>
-            </div>
+            <a
+              href="#newsletter"
+              className="ao-cta"
+              style={{
+                marginLeft: 'auto', display: 'flex', alignItems: 'center',
+                padding: '0 24px', flexShrink: 0,
+                textDecoration: 'none', whiteSpace: 'nowrap',
+                fontFamily: mono, fontSize: 11, fontWeight: 700,
+                letterSpacing: '0.1em', textTransform: 'uppercase',
+                color: 'var(--ao-bg)', background: 'var(--ao-t1)',
+              }}
+            >
+              Subscribe →
+            </a>
           </div>
         </div>
       </section>
