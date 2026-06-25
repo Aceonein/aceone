@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '../../access/isAdmin'
 import { anyone } from '../../access/anyone'
+import { authenticated } from '../../access/authenticated'
 
 export const Tags: CollectionConfig = {
   slug: 'tags',
   access: {
-    create: isAdmin,
+    create: authenticated,
     delete: isAdmin,
     read: anyone,
     update: isAdmin,

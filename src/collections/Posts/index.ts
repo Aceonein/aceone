@@ -166,6 +166,11 @@ export const Posts: CollectionConfig<'posts'> = {
         { label: 'Approved', value: 'approved' },
         { label: 'Published', value: 'published' },
       ],
+      access: {
+        // Authors cannot directly edit status — they use the workflow bar
+        update: ({ req: { user } }) =>
+          (user as any)?.role === 'admin' || (user as any)?.role === 'moderator',
+      },
       admin: { position: 'sidebar' },
     },
     {

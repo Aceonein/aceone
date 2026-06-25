@@ -8,11 +8,13 @@ export const Authors: CollectionConfig = {
     create: isAdmin,
     delete: isAdmin,
     read: anyone,
-    update: isAdmin,
+    update: ({ req: { user } }) =>
+      user?.role === 'admin' || (user as any)?.role === 'moderator',
   },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'designation', 'updatedAt'],
+    hidden: ({ user }) => (user as any)?.role === 'author',
   },
   fields: [
     {

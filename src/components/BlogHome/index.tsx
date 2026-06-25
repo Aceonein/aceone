@@ -221,13 +221,13 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
         marginTop: 'var(--ao-nav-h)',
         borderBottom: '1px solid var(--ao-border)',
         minHeight: '58vh',
-        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+        display: 'flex', flexDirection: 'column', justifyContent: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
         <HeroGeometric />
         <div className="ao-hero-inner" style={{
           maxWidth: 1280, margin: '0 auto', width: '100%',
-          padding: '56px 32px 48px',
+          padding: '56px 32px 56px',
           boxSizing: 'border-box',
         }}>
           {/* Eyebrow with leading line */}

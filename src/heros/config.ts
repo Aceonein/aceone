@@ -19,22 +19,12 @@ export const hero: Field = {
       defaultValue: 'lowImpact',
       label: 'Type',
       options: [
-        {
-          label: 'None',
-          value: 'none',
-        },
-        {
-          label: 'High Impact',
-          value: 'highImpact',
-        },
-        {
-          label: 'Medium Impact',
-          value: 'mediumImpact',
-        },
-        {
-          label: 'Low Impact',
-          value: 'lowImpact',
-        },
+        { label: 'None',                      value: 'none' },
+        { label: 'High Impact',               value: 'highImpact' },
+        { label: 'Medium Impact',             value: 'mediumImpact' },
+        { label: 'Low Impact',                value: 'lowImpact' },
+        { label: 'Cover Story (Blog Home)',   value: 'coverStory' },
+        { label: 'Text Only (No Image)',      value: 'textOnly' },
       ],
       required: true,
     },
@@ -66,6 +56,32 @@ export const hero: Field = {
       },
       relationTo: 'media',
       required: true,
+    },
+    // Cover Story: optional override — if empty, auto-picks top post by views+upvotes
+    {
+      name: 'coverStoryOverride',
+      label: 'Featured Post (override)',
+      type: 'relationship',
+      relationTo: 'posts',
+      admin: {
+        condition: (_, { type } = {}) => type === 'coverStory',
+        description: 'Leave blank to auto-select the top post by views + upvotes',
+      },
+    },
+    // Text Only: headline + subhead
+    {
+      name: 'headline',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'textOnly',
+      },
+    },
+    {
+      name: 'subhead',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'textOnly',
+      },
     },
   ],
   label: false,

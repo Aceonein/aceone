@@ -19,7 +19,8 @@ export const Media: CollectionConfig = {
   folders: true,
   access: {
     create: authenticated,
-    delete: authenticated,
+    delete: ({ req: { user } }) =>
+      user?.role === 'admin' || (user as any)?.role === 'moderator',
     read: anyone,
     update: authenticated,
   },

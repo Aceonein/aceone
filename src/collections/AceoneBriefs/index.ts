@@ -17,6 +17,7 @@ export const AceoneBriefs: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'publishedAt', 'status', 'sentAt'],
     description: 'The Aceone Brief — Weekly newsletter issues',
+    hidden: ({ user }) => (user as any)?.role !== 'admin',
     livePreview: {
       url: () =>
         `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/brief`,

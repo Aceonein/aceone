@@ -328,7 +328,7 @@ export interface FolderInterface {
 export interface User {
   id: string;
   name?: string | null;
-  role: 'admin' | 'moderator' | 'author';
+  role?: ('admin' | 'moderator' | 'author') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -508,7 +508,7 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'coverStory' | 'textOnly';
     richText?: {
       root: {
         type: string;
@@ -549,8 +549,14 @@ export interface Page {
         }[]
       | null;
     media?: (string | null) | Media;
+    /**
+     * Leave blank to auto-select the top post by views + upvotes
+     */
+    coverStoryOverride?: (string | null) | Post;
+    headline?: string | null;
+    subhead?: string | null;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | BlogListBlock | BriefListBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -1228,6 +1234,33 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BlogListBlock".
+ */
+export interface BlogListBlock {
+  /**
+   * Posts shown per page
+   */
+  postsPerPage?: number | null;
+  showCategoryFilter?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'blogList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BriefListBlock".
+ */
+export interface BriefListBlock {
+  /**
+   * Issues shown per page
+   */
+  issuesPerPage?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'briefList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1731,6 +1764,9 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        coverStoryOverride?: T;
+        headline?: T;
+        subhead?: T;
       };
   layout?:
     | T
@@ -1740,6 +1776,8 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        blogList?: T | BlogListBlockSelect<T>;
+        briefList?: T | BriefListBlockSelect<T>;
       };
   meta?:
     | T
@@ -1836,6 +1874,25 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BlogListBlock_select".
+ */
+export interface BlogListBlockSelect<T extends boolean = true> {
+  postsPerPage?: T;
+  showCategoryFilter?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BriefListBlock_select".
+ */
+export interface BriefListBlockSelect<T extends boolean = true> {
+  issuesPerPage?: T;
   id?: T;
   blockName?: T;
 }
