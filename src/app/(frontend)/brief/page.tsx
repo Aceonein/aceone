@@ -1,10 +1,10 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
-import Link from 'next/link'
 import { NewsletterSection } from '@/components/NewsletterSection'
 import { BriefHeroAnimation } from '@/components/BriefHeroAnimation'
 import { BriefClient } from '@/components/BriefClient'
+import { BriefSubscribeForm } from '@/components/BriefSubscribeForm'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 60
@@ -82,32 +82,8 @@ export default async function BriefPage() {
           </div>
 
           {/* Right — subscribe */}
-          <div style={{ padding: '56px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 20, background: 'var(--ao-bg-2)', borderLeft: '1px solid var(--ao-border)' }}>
-            <div>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 16 }}>Subscribe to The Brief</div>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                style={{
-                  width: '100%', padding: '13px 16px', boxSizing: 'border-box',
-                  background: 'var(--ao-bg)', border: '1px solid var(--ao-border-2)',
-                  fontFamily: mono, fontSize: 13, color: 'var(--ao-t1)',
-                  outline: 'none', marginBottom: 10, display: 'block',
-                }}
-              />
-              <Link href="#newsletter" style={{
-                display: 'block', textAlign: 'center', padding: '13px 0',
-                background: 'var(--ao-t1)', color: 'var(--ao-bg)',
-                fontFamily: mono, fontSize: 11, fontWeight: 700,
-                letterSpacing: '0.1em', textTransform: 'uppercase',
-                textDecoration: 'none',
-              }}>
-                Subscribe →
-              </Link>
-            </div>
-            <p style={{ fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)', lineHeight: 1.7, letterSpacing: '0.04em' }}>
-              Join {totalReaders.toLocaleString()}+ readers · No spam · Unsubscribe anytime
-            </p>
+          <div style={{ padding: '56px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'var(--ao-bg-2)', borderLeft: '1px solid var(--ao-border)' }}>
+            <BriefSubscribeForm readers={totalReaders} />
           </div>
         </div>
       </section>
