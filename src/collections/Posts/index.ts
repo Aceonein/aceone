@@ -46,6 +46,15 @@ export const Posts: CollectionConfig<'posts'> = {
   admin: {
     defaultColumns: ['title', 'status', 'author', 'updatedAt'],
     useAsTitle: 'title',
+    livePreview: {
+      url: ({ data }) =>
+        `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/posts/${data?.slug}`,
+    },
+    components: {
+      edit: {
+        beforeDocumentControls: ['@/components/PostWorkflow'],
+      },
+    },
   },
   fields: [
     {

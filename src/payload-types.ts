@@ -360,6 +360,10 @@ export interface AceoneBrief {
    * Newsletter title (shown on web archive page)
    */
   title: string;
+  /**
+   * Issue number (e.g. 1, 2, 3…)
+   */
+  issueNumber?: number | null;
   content: {
     root: {
       type: string;
@@ -1540,6 +1544,7 @@ export interface AuthorsSelect<T extends boolean = true> {
  */
 export interface AceoneBriefsSelect<T extends boolean = true> {
   title?: T;
+  issueNumber?: T;
   content?: T;
   author?: T;
   coverImage?: T;
@@ -2381,23 +2386,38 @@ export interface Header {
  */
 export interface Footer {
   id: string;
-  navItems?:
+  brandTagline?: string | null;
+  copyrightText?: string | null;
+  columns?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        heading: string;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  socialLinks?:
+    | {
+        platform: 'Twitter / X' | 'LinkedIn' | 'YouTube' | 'Instagram' | 'GitHub';
+        url: string;
         id?: string | null;
       }[]
     | null;
@@ -2432,18 +2452,33 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  brandTagline?: T;
+  copyrightText?: T;
+  columns?:
     | T
     | {
-        link?:
+        heading?: T;
+        links?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
             };
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;

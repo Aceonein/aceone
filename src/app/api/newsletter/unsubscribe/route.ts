@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { verifyUnsubscribeToken } from '@/lib/email/tokens'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const email = searchParams.get('email')
+  const token = searchParams.get('token')
 
-  if (!email) {
-    return NextResponse.json({ error: 'Email required' }, { status: 400 })
+  if (!email || !token) {
+    return NextResponse.json({ error: 'Missing email or token' }, { status: 400 })
+  }
+
+  if (!verifyUnsubscribeToken(email, token)) {
+    return NextResponse.json({ error: 'Invalid unsubscribe link' }, { status: 403 })
   }
 
   try {
@@ -20,7 +26,8 @@ export async function GET(request: NextRequest) {
     })
 
     if (existing.docs.length === 0) {
-      return NextResponse.json({ error: 'Email not found' }, { status: 404 })
+      // Already gone — redirect to unsubscribed page anyway
+      return NextResponse.redirect(new URL('/unsubscribed', request.url))
     }
 
     await payload.update({

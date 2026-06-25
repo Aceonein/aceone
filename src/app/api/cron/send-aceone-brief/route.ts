@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { getEmailProvider } from '@/lib/email'
+import { generateUnsubscribeToken } from '@/lib/email/tokens'
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
@@ -63,7 +64,8 @@ export async function GET(request: NextRequest) {
       await Promise.allSettled(
         batch.map(async (subscriber: any) => {
           try {
-            const unsubUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(subscriber.email)}`
+            const token = generateUnsubscribeToken(subscriber.email)
+            const unsubUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(subscriber.email)}&token=${token}`
             const html = newsletter.htmlEmailContent.replace('{{unsubscribe_url}}', unsubUrl)
 
             const result = await emailProvider.sendEmail({

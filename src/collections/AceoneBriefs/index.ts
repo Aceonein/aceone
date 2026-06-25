@@ -17,6 +17,10 @@ export const AceoneBriefs: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'publishedAt', 'status', 'sentAt'],
     description: 'The Aceone Brief — Weekly newsletter issues',
+    livePreview: {
+      url: () =>
+        `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/brief`,
+    },
   },
   fields: [
     {
@@ -24,6 +28,11 @@ export const AceoneBriefs: CollectionConfig = {
       type: 'text',
       required: true,
       admin: { description: 'Newsletter title (shown on web archive page)' },
+    },
+    {
+      name: 'issueNumber',
+      type: 'number',
+      admin: { position: 'sidebar', description: 'Issue number (e.g. 1, 2, 3…)' },
     },
     {
       name: 'content',

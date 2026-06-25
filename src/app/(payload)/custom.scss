@@ -131,6 +131,16 @@ td,
   border-radius: 12px !important;
 }
 
+/* Force card title/label text visible — Payload dark mode zeroes this out */
+[class*="card"] h3,
+[class*="card"] h4,
+[class*="card"] p,
+[class*="card"] span:not([class*="icon"]),
+[class*="card__title"],
+[class*="card__body"] {
+  color: var(--theme-text) !important;
+}
+
 /* ── Inputs ── */
 input,
 textarea,
