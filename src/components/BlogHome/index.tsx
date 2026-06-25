@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import { catColor } from '@/utilities/catColor'
+import { HeroGeometric } from '@/components/HeroGeometric'
 
 type Post = {
   id: string
@@ -221,7 +222,9 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
         borderBottom: '1px solid var(--ao-border)',
         minHeight: '58vh',
         display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+        position: 'relative', overflow: 'hidden',
       }}>
+        <HeroGeometric />
         <div className="ao-hero-inner" style={{
           maxWidth: 1280, margin: '0 auto', width: '100%',
           padding: '56px 32px 48px',
@@ -304,8 +307,8 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
                   padding: '0 18px', height: '100%',
                   fontFamily: mono, fontSize: 10, fontWeight: 400,
                   letterSpacing: '0.12em', textTransform: 'uppercase',
-                  color: isActive ? 'var(--ao-t1)' : 'var(--ao-t3)',
-                  background: isActive ? 'var(--ao-bg-2)' : 'none',
+                  color: isActive ? 'var(--ao-bg)' : 'var(--ao-t3)',
+                  background: isActive ? 'var(--ao-t1)' : 'none',
                   border: 'none',
                   borderRight: '1px solid var(--ao-border)',
                   cursor: 'pointer', whiteSpace: 'nowrap',
@@ -345,11 +348,11 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
             {(['card', 'list'] as const).map(v => (
               <button key={v} onClick={() => setView(v)} style={{
                 width: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: v === view ? 'var(--ao-bg-2)' : 'none',
+                background: v === view ? 'var(--ao-t1)' : 'none',
                 border: 'none',
                 borderLeft: v === 'list' ? '1px solid var(--ao-border)' : 'none',
                 cursor: 'pointer',
-                color: v === view ? 'var(--ao-t1)' : 'var(--ao-t3)',
+                color: v === view ? 'var(--ao-bg)' : 'var(--ao-t3)',
               }}>
                 {v === 'card'
                   ? <svg viewBox="0 0 16 16" fill="currentColor" width={14} height={14}><rect x="1" y="1" width="6" height="6" /><rect x="9" y="1" width="6" height="6" /><rect x="1" y="9" width="6" height="6" /><rect x="9" y="9" width="6" height="6" /></svg>

@@ -30,7 +30,7 @@ export const NewsletterSection: React.FC = () => {
             <span style={{ fontSize: 14 }}>—</span> The Aceone Brief
           </span>
         </div>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px,5vw,52px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--ao-nl-t1)', marginBottom: 16, transition: 'color 0.4s' }}>
+        <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(36px,5vw,52px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--ao-nl-t1)', marginBottom: 16, transition: 'color 0.4s' }}>
           Market intelligence, distilled.
         </h2>
         <p style={{ fontSize: 16, fontWeight: 300, color: 'var(--ao-nl-t2)', lineHeight: 1.72, marginBottom: 38, transition: 'color 0.4s' }}>
@@ -46,12 +46,12 @@ export const NewsletterSection: React.FC = () => {
               onChange={e => setEmail(e.target.value)}
               placeholder="you@email.com"
               required
-              style={{ flex: 1, height: 50, padding: '0 20px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 100, fontFamily: 'inherit', fontSize: 14, color: 'var(--ao-nl-t1)', outline: 'none', transition: 'border-color 0.2s' }}
+              style={{ flex: 1, height: 50, padding: '0 20px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 0, fontFamily: 'inherit', fontSize: 14, color: 'var(--ao-nl-t1)', outline: 'none', transition: 'border-color 0.2s' }}
             />
             <button
               type="submit"
               disabled={state === 'loading'}
-              style={{ padding: '0 26px', height: 50, background: 'var(--ao-nl-t1)', color: 'var(--ao-nl-bg)', fontSize: 14, fontWeight: 600, borderRadius: 100, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s', opacity: state === 'loading' ? 0.7 : 1 }}
+              style={{ padding: '0 26px', height: 50, background: 'var(--ao-nl-t1)', color: 'var(--ao-nl-bg)', fontSize: 14, fontWeight: 600, borderRadius: 0, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s', opacity: state === 'loading' ? 0.7 : 1 }}
             >
               {state === 'loading' ? '…' : 'Subscribe →'}
             </button>
