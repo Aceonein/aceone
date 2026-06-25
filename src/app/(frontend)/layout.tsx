@@ -38,6 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <style>{`.ao-cta{transition:background .18s ease,color .18s ease}.ao-cta:hover{background:var(--ao-accent)!important;color:#fff!important}@media(prefers-reduced-motion:reduce){.ao-cta{transition:none}}`}</style>
       </head>
       <body>
         <Providers>
