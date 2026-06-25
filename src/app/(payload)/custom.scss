@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+/* ── Base ── */
+:root {
+  --theme-bg: #060709;
+  --theme-elevation-0: #000000;
+  --theme-elevation-50: #0a0c12;
+  --theme-elevation-100: #0d1018;
+  --theme-elevation-150: #111420;
+  --theme-elevation-200: #151824;
+  --theme-elevation-500: #1e2233;
+  --theme-elevation-900: #2a2f45;
+  --theme-text: #d8dae6;
+  --theme-text-dim: #6b7296;
+  --theme-border-color: rgba(255, 255, 255, 0.06);
+  --theme-success-500: #22c55e;
+  --theme-error-500: #ef4444;
+  --theme-warning-500: #f59e0b;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-size: 14px;
+  background: var(--theme-bg);
+  color: var(--theme-text);
+}
+
+/* ── Nav / sidebar ── */
+.nav,
+nav[class*="nav"],
+[class*="nav__"] {
+  background: var(--theme-elevation-0) !important;
+  border-right: 1px solid var(--theme-border-color) !important;
+}
+
+.nav__brand,
+[class*="nav__brand"] {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 12px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  opacity: 0.8;
+}
+
+.nav__link,
+[class*="nav-cell"],
+[class*="nav__link"] {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  border-radius: 8px !important;
+  transition: background 0.18s, color 0.18s !important;
+}
+
+.nav__link:hover,
+[class*="nav__link"]:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.nav__link--active,
+[class*="nav__link--active"],
+[aria-current="page"] {
+  background: rgba(72, 120, 232, 0.12) !important;
+  color: #6fa0f8 !important;
+}
+
+/* ── Toolbar ── */
+.app-header,
+[class*="app-header"],
+[class*="step-nav"],
+.step-nav {
+  background: var(--theme-elevation-50) !important;
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+/* ── Collection table ── */
+table,
+.table,
+[class*="table__"] {
+  border-collapse: collapse !important;
+  background: transparent !important;
+}
+
+thead tr,
+[class*="table__header"] {
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  background: transparent !important;
+}
+
+th,
+[class*="table__header-cell"] {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--theme-text-dim) !important;
+  padding: 10px 16px !important;
+}
+
+tbody tr,
+[class*="table__row"] {
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  transition: background 0.14s !important;
+}
+
+tbody tr:hover,
+[class*="table__row"]:hover {
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+td,
+[class*="table__cell"] {
+  font-size: 13.5px !important;
+  padding: 14px 16px !important;
+  color: var(--theme-text) !important;
+  vertical-align: middle !important;
+}
+
+/* ── Cards / panels ── */
+.card,
+[class*="card"],
+.render-fields,
+[class*="render-fields"],
+.form-submit,
+[class*="document__sidebar"],
+[class*="doc-controls"] {
+  background: var(--theme-elevation-50) !important;
+  border: 1px solid var(--theme-border-color) !important;
+  border-radius: 12px !important;
+}
+
+/* ── Inputs ── */
+input,
+textarea,
+select,
+[class*="text-input__input"],
+[class*="textarea__input"],
+.field-type input,
+.field-type textarea {
+  background: var(--theme-elevation-0) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+  color: var(--theme-text) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 14px !important;
+  padding: 10px 14px !important;
+  transition: border-color 0.18s, box-shadow 0.18s !important;
+}
+
+input:focus,
+textarea:focus,
+[class*="text-input__input"]:focus {
+  border-color: rgba(72, 120, 232, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(72, 120, 232, 0.12) !important;
+  outline: none !important;
+}
+
+/* ── Buttons ── */
+.btn,
+[class*="btn"],
+button[class*="button"] {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.18s !important;
+  letter-spacing: 0.01em !important;
+}
+
+.btn--style-primary,
+[class*="btn--style-primary"] {
+  background: #4878e8 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.btn--style-primary:hover {
+  background: #6090f0 !important;
+}
+
+.btn--style-secondary,
+[class*="btn--style-secondary"] {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: var(--theme-text) !important;
+}
+
+/* ── Labels / field names ── */
+.field-label,
+[class*="field-label"],
+label {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10.5px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--theme-text-dim) !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* ── Status pills ── */
+[class*="status"],
+[class*="pill"] {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  border-radius: 100px !important;
+  padding: 3px 10px !important;
+}
+
+/* ── Rich text editor ── */
+.rich-text,
+[class*="rich-text"],
+.lexical-editor,
+[class*="editor"] {
+  background: var(--theme-elevation-0) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.18); }
+
+/* ── Toast / notifications ── */
+[class*="toast"],
+[class*="notification"] {
+  font-family: 'DM Sans', sans-serif !important;
+  border-radius: 10px !important;
+  border: 1px solid var(--theme-border-color) !important;
+  background: var(--theme-elevation-150) !important;
+}

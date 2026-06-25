@@ -43,8 +43,91 @@
   --breakpoint-lg: 64rem;
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
-  --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+/* ── Aceone design tokens ── */
+:root {
+  --ao-bg:         #f8f7f4;
+  --ao-bg-2:       #f0efe9;
+  --ao-bg-3:       #e8e7e0;
+  --ao-surface:    #ffffff;
+  --ao-nav-bg:     #f8f7f4;
+  --ao-border:     #d4d3cc;
+  --ao-border-2:   #b8b7af;
+  --ao-border-ui:  #a0a099;
+  --ao-t1:         #0a0a08;
+  --ao-t2:         #4a4a44;
+  --ao-t3:         #8c8b84;
+  --ao-card-bg:    #ffffff;
+  --ao-card-bdr:   #d4d3cc;
+  --ao-card-shad:  none;
+  --ao-accent:     #3B3FD8;
+  --ao-accent-dim: rgba(59,63,216,0.08);
+  --ao-nl-bg:      #0a0a08;
+  --ao-nl-t1:      #f0efe9;
+  --ao-nl-t2:      rgba(240,239,233,0.45);
+  --ao-nav-h:      48px;
+  --ao-dot-pf:  #3b82f6;
+  --ao-dot-inv: #22c55e;
+  --ao-dot-mkt: #f59e0b;
+  --ao-dot-pol: #a78bfa;
+  --ao-dot-cry: #06b6d4;
+  --ao-dot-dd:  #f97316;
+}
+
+[data-theme='dark'] {
+  --ao-bg:         #0a0a08;
+  --ao-bg-2:       #111110;
+  --ao-bg-3:       #1a1a18;
+  --ao-surface:    #161614;
+  --ao-nav-bg:     #0a0a08;
+  --ao-border:     #2a2a26;
+  --ao-border-2:   #3a3a36;
+  --ao-border-ui:  #4a4a44;
+  --ao-t1:         #f0efe9;
+  --ao-t2:         #8c8b84;
+  --ao-t3:         #4a4a44;
+  --ao-card-bg:    #161614;
+  --ao-card-bdr:   #2a2a26;
+  --ao-card-shad:  none;
+  --ao-accent:     #6b6ff0;
+  --ao-accent-dim: rgba(107,111,240,0.12);
+  --ao-nl-bg:      #f8f7f4;
+  --ao-nl-t1:      #0a0a08;
+  --ao-nl-t2:      rgba(10,10,8,0.50);
+}
+
+/* ── Grain overlay ── */
+html::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 280px 280px;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
+}
+[data-theme='dark'] html::before {
+  opacity: 0.04;
+  mix-blend-mode: screen;
+}
+
+/* ── Keyframes ── */
+@keyframes ao-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ao-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
+}
+@keyframes ao-pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
 }
 
 @layer utilities {
@@ -211,6 +294,10 @@
   }
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    font-family: var(--font-sans), 'Space Grotesk', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+    line-height: 1.5;
   }
 }
 

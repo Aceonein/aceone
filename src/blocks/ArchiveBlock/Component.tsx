@@ -5,8 +5,6 @@ import { getPayload } from 'payload'
 import React from 'react'
 import RichText from '@/components/RichText'
 
-import { CollectionArchive } from '@/components/CollectionArchive'
-
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
@@ -59,7 +57,11 @@ export const ArchiveBlock: React.FC<
           <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
         </div>
       )}
-      <CollectionArchive posts={posts} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {posts.map((post) => (
+          <a key={post.id} href={`/posts/${post.slug}`} style={{ fontSize: 15, color: 'var(--ao-t1)', textDecoration: 'none' }}>{post.title}</a>
+        ))}
+      </div>
     </div>
   )
 }

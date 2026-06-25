@@ -67,10 +67,14 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    authors: Author;
+    'aceone-briefs': AceoneBrief;
+    categories: Category;
+    media: Media;
+    'newsletter-subscribers': NewsletterSubscriber;
     pages: Page;
     posts: Post;
-    media: Media;
-    categories: Category;
+    tags: Tag;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -89,10 +93,14 @@ export interface Config {
     };
   };
   collectionsSelect: {
+    authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    'aceone-briefs': AceoneBriefsSelect<false> | AceoneBriefsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -153,122 +161,46 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
+ * via the `definition` "authors".
  */
-export interface Page {
+export interface Author {
   id: string;
-  title: string;
-  hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    richText?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: string | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: string | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
-    media?: (string | null) | Media;
-  };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
+  name: string;
+  profileImage: string | Media;
   /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   * e.g. Senior Financial Analyst
    */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: string;
-  title: string;
-  heroImage?: (string | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (string | Post)[] | null;
-  categories?: (string | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (string | User)[] | null;
-  populatedAuthors?:
+  designation: string;
+  /**
+   * e.g. Dr., CFA (optional)
+   */
+  title?: string | null;
+  /**
+   * Max 500 characters
+   */
+  bio?: string | null;
+  expertise?:
     | {
+        area: string;
         id?: string | null;
-        name?: string | null;
       }[]
     | null;
+  email?: string | null;
   /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   * Username only (no @)
    */
-  generateSlug?: boolean | null;
-  slug: string;
+  twitter?: string | null;
+  /**
+   * Full profile URL
+   */
+  linkedin?: string | null;
+  /**
+   * Linked user account
+   */
+  user: string | User;
+  slug?: string | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -391,35 +323,12 @@ export interface FolderInterface {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: string;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (string | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (string | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: string;
   name?: string | null;
+  role: 'admin' | 'moderator' | 'author';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -438,6 +347,536 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * The Aceone Brief — Weekly newsletter issues
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aceone-briefs".
+ */
+export interface AceoneBrief {
+  id: string;
+  /**
+   * Newsletter title (shown on web archive page)
+   */
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  author: string | Author;
+  /**
+   * 16:9 ratio, 1200x675px recommended
+   */
+  coverImage: string | Media;
+  /**
+   * Sunday publication date
+   */
+  publishedAt: string;
+  /**
+   * Email subject line (50-60 chars optimal)
+   */
+  emailSubject: string;
+  /**
+   * Preview text in inbox (max 140 chars)
+   */
+  emailPreviewText: string;
+  /**
+   * Tags for this issue
+   */
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Scheduled = will auto-send on publishedAt date
+   */
+  status: 'draft' | 'scheduled' | 'sent';
+  /**
+   * Auto-generated email HTML (do not edit)
+   */
+  htmlEmailContent?: string | null;
+  /**
+   * Auto-generated plain text version
+   */
+  plainTextContent?: string | null;
+  /**
+   * When email was sent
+   */
+  sentAt?: string | null;
+  /**
+   * Subscribers at send time
+   */
+  recipientCount?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  title: string;
+  description?: string | null;
+  /**
+   * Hex color for UI e.g. #00c896
+   */
+  color?: string | null;
+  /**
+   * Optional SVG icon
+   */
+  icon?: (string | null) | Media;
+  /**
+   * Sort order on frontend
+   */
+  order?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  parent?: (string | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (string | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Newsletter subscribers
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-subscribers".
+ */
+export interface NewsletterSubscriber {
+  id: string;
+  email: string;
+  status: 'active' | 'unsubscribed' | 'bounced';
+  source?: ('homepage_footer' | 'aceone_brief_page' | 'blog_article') | null;
+  /**
+   * Consented to receive newsletter
+   */
+  consentNewsletter?: boolean | null;
+  /**
+   * Consented to marketing emails
+   */
+  consentMarketing?: boolean | null;
+  subscribedAt?: string | null;
+  unsubscribedAt?: string | null;
+  lastEmailSentAt?: string | null;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+  referrer?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: string;
+  title: string;
+  hero: {
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    richText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    media?: (string | null) | Media;
+  };
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  title: string;
+  /**
+   * Brief summary shown on listing pages (max 300 chars)
+   */
+  excerpt: string;
+  featuredImage: string | Media;
+  /**
+   * Alt text for accessibility
+   */
+  featuredImageAlt: string;
+  content: (
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        alignment?: ('left' | 'center' | 'right' | 'justify') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'paragraph';
+      }
+    | {
+        text: string;
+        level?: ('h2' | 'h3' | 'h4' | 'h5' | 'h6') | null;
+        alignment?: ('left' | 'center' | 'right') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'heading';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'rich-text';
+      }
+    | {
+        image: string | Media;
+        alt: string;
+        caption?: string | null;
+        size?: ('small' | 'medium' | 'large' | 'full') | null;
+        alignment?: ('left' | 'center' | 'right') | null;
+        /**
+         * Optional URL to link the image
+         */
+        linkTo?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'image';
+      }
+    | {
+        items: {
+          text: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          };
+          id?: string | null;
+        }[];
+        startNumber?: number | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ordered-list';
+      }
+    | {
+        items: {
+          text: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          };
+          id?: string | null;
+        }[];
+        style?: ('disc' | 'circle' | 'square') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'unordered-list';
+      }
+    | {
+        quote: string;
+        /**
+         * e.g. Warren Buffett
+         */
+        attribution?: string | null;
+        size?: ('small' | 'medium' | 'large') | null;
+        alignment?: ('left' | 'center' | 'right') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'pull-quote';
+      }
+    | {
+        title?: string | null;
+        dataPoints: {
+          /**
+           * e.g. Revenue Growth
+           */
+          label: string;
+          /**
+           * e.g. +24.5%
+           */
+          value: string;
+          /**
+           * e.g. YoY (optional)
+           */
+          unit?: string | null;
+          /**
+           * Highlight as negative value
+           */
+          isNegative?: boolean | null;
+          id?: string | null;
+        }[];
+        layout?: ('horizontal' | 'vertical' | 'grid') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'data-box';
+      }
+    | {
+        caption?: string | null;
+        headers: {
+          text: string;
+          id?: string | null;
+        }[];
+        rows: {
+          cells?:
+            | {
+                text?: string | null;
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[];
+        stripedRows?: boolean | null;
+        compactMode?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'table';
+      }
+    | {
+        /**
+         * Optional label shown in TOC
+         */
+        label?: string | null;
+        style?: ('line' | 'dots' | 'spacer') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'section-marker';
+      }
+    | {
+        height?: ('small' | 'medium' | 'large' | 'xlarge') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'spacer';
+      }
+    | {
+        content?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'disclaimer';
+      }
+    | {
+        items: {
+          title: string;
+          content: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          };
+          defaultOpen?: boolean | null;
+          id?: string | null;
+        }[];
+        allowMultipleOpen?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'accordion';
+      }
+  )[];
+  categories: (string | Category)[];
+  tags?: (string | Tag)[] | null;
+  /**
+   * Manual override for related posts
+   */
+  relatedPosts?: (string | Post)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  status: 'draft' | 'review' | 'approved' | 'published';
+  /**
+   * Auto-set when published
+   */
+  publishedAt?: string | null;
+  author: string | Author;
+  /**
+   * Auto-calculated (min read)
+   */
+  readTime?: number | null;
+  views?: number | null;
+  upvotes?: number | null;
+  upvotedBy?:
+    | {
+        ip?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  createdBy?: (string | null) | User;
+  /**
+   * Edit requests for published posts
+   */
+  editRequests?:
+    | {
+        requestedBy?: (string | null) | User;
+        requestDate?: string | null;
+        reason: string;
+        urgency?: ('low' | 'medium' | 'high') | null;
+        requestStatus?: ('pending' | 'approved' | 'rejected') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  name: string;
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -972,6 +1411,26 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
+        relationTo: 'authors';
+        value: string | Author;
+      } | null)
+    | ({
+        relationTo: 'aceone-briefs';
+        value: string | AceoneBrief;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'newsletter-subscribers';
+        value: string | NewsletterSubscriber;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: string | Page;
       } | null)
@@ -980,12 +1439,8 @@ export interface PayloadLockedDocument {
         value: string | Post;
       } | null)
     | ({
-        relationTo: 'media';
-        value: string | Media;
-      } | null)
-    | ({
-        relationTo: 'categories';
-        value: string | Category;
+        relationTo: 'tags';
+        value: string | Tag;
       } | null)
     | ({
         relationTo: 'users';
@@ -1052,6 +1507,195 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors_select".
+ */
+export interface AuthorsSelect<T extends boolean = true> {
+  name?: T;
+  profileImage?: T;
+  designation?: T;
+  title?: T;
+  bio?: T;
+  expertise?:
+    | T
+    | {
+        area?: T;
+        id?: T;
+      };
+  email?: T;
+  twitter?: T;
+  linkedin?: T;
+  user?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aceone-briefs_select".
+ */
+export interface AceoneBriefsSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
+  author?: T;
+  coverImage?: T;
+  publishedAt?: T;
+  emailSubject?: T;
+  emailPreviewText?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  status?: T;
+  htmlEmailContent?: T;
+  plainTextContent?: T;
+  sentAt?: T;
+  recipientCount?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  color?: T;
+  icon?: T;
+  order?: T;
+  generateSlug?: T;
+  slug?: T;
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
+  folder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        square?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        small?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        medium?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        large?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        xlarge?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-subscribers_select".
+ */
+export interface NewsletterSubscribersSelect<T extends boolean = true> {
+  email?: T;
+  status?: T;
+  source?: T;
+  consentNewsletter?: T;
+  consentMarketing?: T;
+  subscribedAt?: T;
+  unsubscribedAt?: T;
+  lastEmailSentAt?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  referrer?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1194,10 +1838,168 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
+  excerpt?: T;
+  featuredImage?: T;
+  featuredImageAlt?: T;
+  content?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              content?: T;
+              alignment?: T;
+              id?: T;
+              blockName?: T;
+            };
+        heading?:
+          | T
+          | {
+              text?: T;
+              level?: T;
+              alignment?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'rich-text'?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        image?:
+          | T
+          | {
+              image?: T;
+              alt?: T;
+              caption?: T;
+              size?: T;
+              alignment?: T;
+              linkTo?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'ordered-list'?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              startNumber?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'unordered-list'?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              style?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'pull-quote'?:
+          | T
+          | {
+              quote?: T;
+              attribution?: T;
+              size?: T;
+              alignment?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'data-box'?:
+          | T
+          | {
+              title?: T;
+              dataPoints?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    unit?: T;
+                    isNegative?: T;
+                    id?: T;
+                  };
+              layout?: T;
+              id?: T;
+              blockName?: T;
+            };
+        table?:
+          | T
+          | {
+              caption?: T;
+              headers?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              rows?:
+                | T
+                | {
+                    cells?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              stripedRows?: T;
+              compactMode?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'section-marker'?:
+          | T
+          | {
+              label?: T;
+              style?: T;
+              id?: T;
+              blockName?: T;
+            };
+        spacer?:
+          | T
+          | {
+              height?: T;
+              id?: T;
+              blockName?: T;
+            };
+        disclaimer?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        accordion?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    title?: T;
+                    content?: T;
+                    defaultOpen?: T;
+                    id?: T;
+                  };
+              allowMultipleOpen?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
   categories?: T;
+  tags?: T;
+  relatedPosts?: T;
   meta?:
     | T
     | {
@@ -1205,131 +2007,41 @@ export interface PostsSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
+  status?: T;
   publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
+  author?: T;
+  readTime?: T;
+  views?: T;
+  upvotes?: T;
+  upvotedBy?:
     | T
     | {
+        ip?: T;
         id?: T;
-        name?: T;
+      };
+  createdBy?: T;
+  editRequests?:
+    | T
+    | {
+        requestedBy?: T;
+        requestDate?: T;
+        reason?: T;
+        urgency?: T;
+        requestStatus?: T;
+        id?: T;
       };
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
+ * via the `definition` "tags_select".
  */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  caption?: T;
-  folder?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        square?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        small?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        medium?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        large?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        xlarge?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        og?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories_select".
- */
-export interface CategoriesSelect<T extends boolean = true> {
-  title?: T;
-  generateSlug?: T;
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
   slug?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1339,6 +2051,7 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1753,55 +2466,14 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    doc?:
-      | ({
-          relationTo: 'pages';
-          value: string | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: string | Post;
-        } | null);
+    doc?: {
+      relationTo: 'pages';
+      value: string | Page;
+    } | null;
     global?: string | null;
     user?: (string | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,22 +1,25 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from 'payload'
 
-import {
-  BlocksFeature,
-  FixedToolbarFeature,
-  HeadingFeature,
-  HorizontalRuleFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-
+import { isAdmin } from '../../access/isAdmin'
+import { canEditPost, canReadPost } from '../../access/canEditPost'
 import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Banner } from '../../blocks/Banner/config'
-import { Code } from '../../blocks/Code/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
-import { populateAuthors } from './hooks/populateAuthors'
-import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
+
+import { Paragraph } from '../../blocks/Paragraph/config'
+import { Heading } from '../../blocks/Heading/config'
+import { RichTextBlock } from '../../blocks/RichTextBlock/config'
+import { ImageBlock } from '../../blocks/ImageBlock/config'
+import { OrderedList } from '../../blocks/OrderedList/config'
+import { UnorderedList } from '../../blocks/UnorderedList/config'
+import { PullQuote } from '../../blocks/PullQuote/config'
+import { DataBox } from '../../blocks/DataBox/config'
+import { Table } from '../../blocks/Table/config'
+import { SectionMarker } from '../../blocks/SectionMarker/config'
+import { Spacer } from '../../blocks/Spacer/config'
+import { Disclaimer } from '../../blocks/Disclaimer/config'
+import { Accordion } from '../../blocks/Accordion/config'
+
+import { revalidatePost, revalidateDelete } from './hooks/revalidatePost'
 
 import {
   MetaDescriptionField,
@@ -25,44 +28,23 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { slugField } from 'payload'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
     create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    delete: isAdmin,
+    read: canReadPost,
+    update: canEditPost,
   },
-  // This config controls what's populated by default when a post is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'posts'>
   defaultPopulate: {
     title: true,
     slug: true,
     categories: true,
-    meta: {
-      image: true,
-      description: true,
-    },
+    meta: { image: true, description: true },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
-    livePreview: {
-      url: ({ data, req }) =>
-        generatePreviewPath({
-          slug: data?.slug,
-          collection: 'posts',
-          req,
-        }),
-    },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: data?.slug as string,
-        collection: 'posts',
-        req,
-      }),
+    defaultColumns: ['title', 'status', 'author', 'updatedAt'],
     useAsTitle: 'title',
   },
   fields: [
@@ -70,164 +52,221 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'title',
       type: 'text',
       required: true,
+      minLength: 10,
+      maxLength: 120,
     },
     {
       type: 'tabs',
       tabs: [
         {
+          label: 'Content',
           fields: [
             {
-              name: 'heroImage',
+              name: 'excerpt',
+              type: 'textarea',
+              required: true,
+              maxLength: 300,
+              admin: { description: 'Brief summary shown on listing pages (max 300 chars)' },
+            },
+            {
+              name: 'featuredImage',
               type: 'upload',
               relationTo: 'media',
+              required: true,
+            },
+            {
+              name: 'featuredImageAlt',
+              type: 'text',
+              required: true,
+              admin: { description: 'Alt text for accessibility' },
             },
             {
               name: 'content',
-              type: 'richText',
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                  ]
-                },
-              }),
-              label: false,
+              type: 'blocks',
               required: true,
+              minRows: 1,
+              blocks: [
+                Paragraph,
+                Heading,
+                RichTextBlock,
+                ImageBlock,
+                OrderedList,
+                UnorderedList,
+                PullQuote,
+                DataBox,
+                Table,
+                SectionMarker,
+                Spacer,
+                Disclaimer,
+                Accordion,
+              ],
             },
           ],
-          label: 'Content',
         },
         {
+          label: 'Meta',
           fields: [
-            {
-              name: 'relatedPosts',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
-              hasMany: true,
-              relationTo: 'posts',
-            },
             {
               name: 'categories',
               type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              hasMany: true,
               relationTo: 'categories',
+              hasMany: true,
+              required: true,
+              minRows: 1,
+              admin: { position: 'sidebar' },
+            },
+            {
+              name: 'tags',
+              type: 'relationship',
+              relationTo: 'tags',
+              hasMany: true,
+              admin: { position: 'sidebar' },
+            },
+            {
+              name: 'relatedPosts',
+              type: 'relationship',
+              relationTo: 'posts',
+              hasMany: true,
+              filterOptions: ({ id }) => ({ id: { not_in: [id] } }),
+              admin: { description: 'Manual override for related posts' },
             },
           ],
-          label: 'Meta',
         },
         {
           name: 'meta',
           label: 'SEO',
           fields: [
-            OverviewField({
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-              imagePath: 'meta.image',
-            }),
-            MetaTitleField({
-              hasGenerateFn: true,
-            }),
-            MetaImageField({
-              relationTo: 'media',
-            }),
-
+            OverviewField({ titlePath: 'meta.title', descriptionPath: 'meta.description', imagePath: 'meta.image' }),
+            MetaTitleField({ hasGenerateFn: true }),
+            MetaImageField({ relationTo: 'media' }),
             MetaDescriptionField({}),
-            PreviewField({
-              // if the `generateUrl` function is configured
-              hasGenerateFn: true,
-
-              // field paths to match the target field for data
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-            }),
+            PreviewField({ hasGenerateFn: true, titlePath: 'meta.title', descriptionPath: 'meta.description' }),
           ],
         },
       ],
+    },
+    // Sidebar fields
+    {
+      name: 'status',
+      type: 'select',
+      required: true,
+      defaultValue: 'draft',
+      options: [
+        { label: 'Draft', value: 'draft' },
+        { label: 'In Review', value: 'review' },
+        { label: 'Approved', value: 'approved' },
+        { label: 'Published', value: 'published' },
+      ],
+      admin: { position: 'sidebar' },
     },
     {
       name: 'publishedAt',
       type: 'date',
       admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
         position: 'sidebar',
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
-              return new Date()
-            }
-            return value
-          },
-        ],
-      },
-    },
-    {
-      name: 'authors',
-      type: 'relationship',
-      admin: {
-        position: 'sidebar',
-      },
-      hasMany: true,
-      relationTo: 'users',
-    },
-    // This field is only used to populate the user data via the `populateAuthors` hook
-    // This is because the `user` collection has access control locked to protect user privacy
-    // GraphQL will also not return mutated user data that differs from the underlying schema
-    {
-      name: 'populatedAuthors',
-      type: 'array',
-      access: {
-        update: () => false,
-      },
-      admin: {
-        disabled: true,
+        date: { pickerAppearance: 'dayAndTime' },
         readOnly: true,
+        description: 'Auto-set when published',
       },
+    },
+    {
+      name: 'author',
+      type: 'relationship',
+      relationTo: 'authors',
+      required: true,
+      admin: { position: 'sidebar' },
+    },
+    {
+      name: 'readTime',
+      type: 'number',
+      admin: { position: 'sidebar', readOnly: true, description: 'Auto-calculated (min read)' },
+    },
+    {
+      name: 'views',
+      type: 'number',
+      defaultValue: 0,
+      admin: { position: 'sidebar', readOnly: true },
+    },
+    {
+      name: 'upvotes',
+      type: 'number',
+      defaultValue: 0,
+      admin: { position: 'sidebar', readOnly: true },
+    },
+    {
+      name: 'upvotedBy',
+      type: 'array',
+      admin: { disabled: true },
+      fields: [{ name: 'ip', type: 'text' }],
+    },
+    // Which user created this post — used for author-level access control
+    {
+      name: 'createdBy',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: { disabled: true },
+      access: { update: () => false },
+    },
+    {
+      name: 'editRequests',
+      type: 'array',
+      admin: { position: 'sidebar', description: 'Edit requests for published posts' },
       fields: [
+        { name: 'requestedBy', type: 'relationship', relationTo: 'users' },
+        { name: 'requestDate', type: 'date' },
+        { name: 'reason', type: 'textarea', required: true },
         {
-          name: 'id',
-          type: 'text',
+          name: 'urgency',
+          type: 'select',
+          defaultValue: 'medium',
+          options: [
+            { label: 'Low', value: 'low' },
+            { label: 'Medium', value: 'medium' },
+            { label: 'High', value: 'high' },
+          ],
         },
         {
-          name: 'name',
-          type: 'text',
+          name: 'requestStatus',
+          type: 'select',
+          defaultValue: 'pending',
+          options: [
+            { label: 'Pending', value: 'pending' },
+            { label: 'Approved', value: 'approved' },
+            { label: 'Rejected', value: 'rejected' },
+          ],
         },
       ],
     },
     slugField(),
   ],
   hooks: {
-    afterChange: [revalidatePost],
-    afterRead: [populateAuthors],
-    afterDelete: [revalidateDelete],
-  },
-  versions: {
-    drafts: {
-      autosave: {
-        interval: 100, // We set this interval for optimal live preview
+    beforeChange: [
+      ({ data, req, operation }) => {
+        // Auto-set createdBy on first create
+        if (operation === 'create' && req.user) {
+          data.createdBy = req.user.id
+        }
+
+        // Auto-set publishedAt when status changes to published
+        if (data.status === 'published' && !data.publishedAt) {
+          data.publishedAt = new Date().toISOString()
+        }
+
+        // Enforce status transition by role
+        const user = req.user as any
+        if (user && operation === 'update') {
+          if (data.status === 'published' && user.role !== 'admin') {
+            delete data.status
+          }
+          if (data.status === 'approved' && user.role === 'author') {
+            delete data.status
+          }
+        }
+
+        return data
       },
-      schedulePublish: true,
-    },
-    maxPerDoc: 50,
+    ],
+    afterChange: [revalidatePost],
+    afterDelete: [revalidateDelete],
   },
 }
