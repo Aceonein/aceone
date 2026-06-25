@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
+import { catColor } from '@/utilities/catColor'
 
 type Post = {
   id: string
@@ -13,11 +14,11 @@ type Post = {
   views?: number | null
   upvotes?: number | null
   featuredImage?: { url?: string | null; alt?: string | null } | string | null
-  categories?: Array<{ title?: string | null; id?: string | null } | string> | null
+  categories?: Array<{ title?: string | null; id?: string | null; color?: string | null } | string> | null
   author?: { name?: string | null } | string | null
 }
 
-type Category = { id: string; title?: string | null; slug?: string | null }
+type Category = { id: string; title?: string | null; slug?: string | null; color?: string | null }
 
 function fmtDate(iso?: string | null) {
   if (!iso) return ''
@@ -44,6 +45,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
   const cat = typeof post.categories?.[0] === 'object' ? post.categories[0] : null
   const author = typeof post.author === 'object' ? post.author : null
   const img = typeof post.featuredImage === 'object' ? post.featuredImage : null
+  const accent = catColor(cat?.color)
 
   return (
     <Link href={`/posts/${post.slug}`} className={featured ? 'ao-card-featured' : undefined} style={{
@@ -72,10 +74,12 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
 
       {cat?.title && (
         <div style={{
+          display: 'flex', alignItems: 'center', gap: 6,
           fontFamily: mono, fontSize: 9, fontWeight: 700,
           letterSpacing: '0.16em', textTransform: 'uppercase',
-          color: 'var(--ao-accent)', marginBottom: 12,
+          color: accent, marginBottom: 12,
         }}>
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, flexShrink: 0, display: 'block' }} />
           {cat.title}
         </div>
       )}
@@ -118,6 +122,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
 function PostListItem({ post, index }: { post: Post; index: number }) {
   const cat = typeof post.categories?.[0] === 'object' ? post.categories[0] : null
   const author = typeof post.author === 'object' ? post.author : null
+  const accent = catColor(cat?.color)
 
   return (
     <Link href={`/posts/${post.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
@@ -141,7 +146,8 @@ function PostListItem({ post, index }: { post: Post; index: number }) {
 
         <div style={{ padding: '20px 24px' }}>
           {cat?.title && (
-            <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontFamily: mono, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: accent, marginBottom: 6 }}>
+              <span style={{ width: 4, height: 4, borderRadius: '50%', background: accent, flexShrink: 0, display: 'block' }} />
               {cat.title}
             </div>
           )}
@@ -189,16 +195,16 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
   })
 
   const catTabs = [
-    { cat: 'all', label: 'All' },
+    { cat: 'all', label: 'All', color: null },
     ...(categories.length > 0
-      ? categories.map(c => ({ cat: catSlug(c.title), label: c.title ?? '' }))
+      ? categories.map(c => ({ cat: catSlug(c.title), label: c.title ?? '', color: c.color ?? null }))
       : [
-          { cat: 'personal-finance', label: 'Personal Finance' },
-          { cat: 'investing', label: 'Investing' },
-          { cat: 'markets', label: 'Markets' },
-          { cat: 'policy', label: 'Policy' },
-          { cat: 'crypto', label: 'Crypto' },
-          { cat: 'deep-dives', label: 'Deep Dives' },
+          { cat: 'personal-finance', label: 'Personal Finance', color: null },
+          { cat: 'investing',        label: 'Investing',        color: null },
+          { cat: 'markets',          label: 'Markets',          color: null },
+          { cat: 'policy',           label: 'Policy',           color: null },
+          { cat: 'crypto',           label: 'Crypto',           color: null },
+          { cat: 'deep-dives',       label: 'Deep Dives',       color: null },
         ]
     ),
   ]
@@ -289,19 +295,28 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
         }}>
           {/* Category tabs */}
           <div style={{ display: 'flex', alignItems: 'stretch', flex: 1, overflowX: 'auto', scrollbarWidth: 'none' }}>
-            {catTabs.map(({ cat, label }) => (
-              <button key={cat} onClick={() => setActivecat(cat)} style={{
-                flexShrink: 0, display: 'flex', alignItems: 'center',
-                padding: '0 18px', height: '100%',
-                fontFamily: mono, fontSize: 10, fontWeight: 400,
-                letterSpacing: '0.12em', textTransform: 'uppercase',
-                color: activecat === cat ? 'var(--ao-t1)' : 'var(--ao-t3)',
-                background: activecat === cat ? 'var(--ao-bg-2)' : 'none',
-                border: 'none',
-                borderRight: '1px solid var(--ao-border)',
-                cursor: 'pointer', whiteSpace: 'nowrap',
-              }}>{label}</button>
-            ))}
+            {catTabs.map(({ cat, label, color }) => {
+              const tabAccent = color ? catColor(color) : null
+              const isActive = activecat === cat
+              return (
+                <button key={cat} onClick={() => setActivecat(cat)} style={{
+                  flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '0 18px', height: '100%',
+                  fontFamily: mono, fontSize: 10, fontWeight: 400,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
+                  color: isActive ? 'var(--ao-t1)' : 'var(--ao-t3)',
+                  background: isActive ? 'var(--ao-bg-2)' : 'none',
+                  border: 'none',
+                  borderRight: '1px solid var(--ao-border)',
+                  cursor: 'pointer', whiteSpace: 'nowrap',
+                }}>
+                  {tabAccent && (
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: tabAccent, flexShrink: 0, display: 'block', opacity: isActive ? 1 : 0.5 }} />
+                  )}
+                  {label}
+                </button>
+              )
+            })}
           </div>
 
           {/* Search */}

@@ -310,6 +310,32 @@ html[data-theme='light'] {
   opacity: initial;
 }
 
+/* ── Highlight palette — full spectrum, theme-aware ── */
+:root {
+  --ao-hl-indigo:     #3B3FD8;
+  --ao-hl-cobalt:     #1E4ED8;
+  --ao-hl-teal:       #0B766E;
+  --ao-hl-emerald:    #047857;
+  --ao-hl-amber:      #A16207;
+  --ao-hl-crimson:    #991B1B;
+  --ao-hl-violet:     #5B21B6;
+  --ao-hl-rose:       #9F1239;
+  --ao-hl-slate:      #1E3A8A;
+  --ao-hl-chartreuse: #3F6212;
+}
+[data-theme='dark'] {
+  --ao-hl-indigo:     #6b6ff0;
+  --ao-hl-cobalt:     #5B8AF0;
+  --ao-hl-teal:       #2DD4BF;
+  --ao-hl-emerald:    #34D399;
+  --ao-hl-amber:      #FCD34D;
+  --ao-hl-crimson:    #F87171;
+  --ao-hl-violet:     #A78BFA;
+  --ao-hl-rose:       #FB7185;
+  --ao-hl-slate:      #93C5FD;
+  --ao-hl-chartreuse: #84CC16;
+}
+
 /* ── Mobile responsive (≤ 900px) ── */
 @media (max-width: 900px) {
   /* Header nav */
