@@ -46,7 +46,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
   const img = typeof post.featuredImage === 'object' ? post.featuredImage : null
 
   return (
-    <Link href={`/posts/${post.slug}`} style={{
+    <Link href={`/posts/${post.slug}`} className={featured ? 'ao-card-featured' : undefined} style={{
       display: 'block', textDecoration: 'none',
       borderRight: '1px solid var(--ao-border)',
       borderBottom: '1px solid var(--ao-border)',
@@ -121,7 +121,7 @@ function PostListItem({ post, index }: { post: Post; index: number }) {
 
   return (
     <Link href={`/posts/${post.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
-      <div style={{
+      <div className="ao-list-row" style={{
         display: 'grid', gridTemplateColumns: '80px 1fr auto',
         alignItems: 'stretch', gap: 0,
         borderBottom: '1px solid var(--ao-border)',
@@ -155,7 +155,7 @@ function PostListItem({ post, index }: { post: Post; index: number }) {
           )}
         </div>
 
-        <div style={{
+        <div className="ao-list-meta" style={{
           padding: '20px 0',
           borderLeft: '1px solid var(--ao-border)',
           minWidth: 120,
@@ -210,13 +210,13 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section style={{
+      <section className="ao-hero-section" style={{
         marginTop: 'var(--ao-nav-h)',
         borderBottom: '1px solid var(--ao-border)',
         minHeight: '58vh',
         display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
       }}>
-        <div style={{
+        <div className="ao-hero-inner" style={{
           maxWidth: 1280, margin: '0 auto', width: '100%',
           padding: '56px 32px 48px',
           boxSizing: 'border-box',
@@ -305,7 +305,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
           </div>
 
           {/* Search */}
-          <div style={{
+          <div className="ao-filter-search" style={{
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '0 16px', borderLeft: '1px solid var(--ao-border)',
             minWidth: 180,
@@ -348,7 +348,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
 
       {/* ── Section header ───────────────────────────────────────── */}
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{
+        <div className="ao-section-header" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '20px 0', borderBottom: '1px solid var(--ao-border)',
         }}>
@@ -373,7 +373,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
             No posts found.
           </p>
         ) : view === 'card' ? (
-          <div style={{
+          <div className="ao-card-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',
             borderLeft: '1px solid var(--ao-border)',
           }}>

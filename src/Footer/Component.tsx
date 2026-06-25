@@ -43,9 +43,9 @@ const cols = [
 export async function Footer() {
   return (
     <footer style={{ background: bg, borderTop: `1px solid ${bdr}`, marginTop: 'auto' }} id="newsletter-foot">
-      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', borderBottom: `1px solid ${bdr}` }}>
+      <div className="ao-footer-grid" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', borderBottom: `1px solid ${bdr}` }}>
         {/* Brand col */}
-        <div style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
+        <div className="ao-footer-brand" style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#f0efe9', marginBottom: 14 }}>ACEONE/</div>
           <p style={{ fontSize: 13, fontWeight: 400, color: t2, lineHeight: 1.7, maxWidth: 260 }}>
             The financially literate friend that young Indians never had.
@@ -53,7 +53,7 @@ export async function Footer() {
         </div>
         {/* Link cols */}
         {cols.map((col) => (
-          <div key={col.heading} style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
+          <div key={col.heading} className="ao-footer-link-col" style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: t3, marginBottom: 20 }}>{col.heading}</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {col.links.map(({ label, href }) => (
@@ -66,7 +66,7 @@ export async function Footer() {
         ))}
       </div>
       {/* Bottom bar */}
-      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 32px' }}>
+      <div className="ao-footer-bottom" style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 32px' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: t3 }}>
           © 2026 Aceone · Anti-Debt. Pro-Decision.
         </span>

@@ -56,7 +56,7 @@ export const HeaderClient: React.FC = () => {
         </Link>
 
         {/* Nav links */}
-        <nav style={{ display: 'flex', alignItems: 'stretch' }}>
+        <nav className="ao-nav-links" style={{ display: 'flex', alignItems: 'stretch' }}>
           {navLinks.map(({ href, label }) => (
             <Link key={href} href={href} style={{
               display: 'flex', alignItems: 'center',

@@ -58,7 +58,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
 
       {/* Breadcrumb bar */}
       <div style={{ borderBottom: '1px solid var(--ao-border)', background: 'var(--ao-bg)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: 36, display: 'flex', alignItems: 'center', gap: 6, fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)' }}>
+        <div className="ao-breadcrumb-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: 36, display: 'flex', alignItems: 'center', gap: 6, fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)' }}>
           <Link href="/" style={{ color: 'var(--ao-t3)', textDecoration: 'none' }}>Home</Link>
           <span>/</span>
           {cat?.title && (
@@ -72,10 +72,10 @@ export default async function PostPage({ params: paramsPromise }: Args) {
       </div>
 
       {/* 3-col body */}
-      <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '200px 1fr 200px', minHeight: 'calc(100vh - var(--ao-nav-h) - 36px)', borderLeft: '1px solid var(--ao-border)' }}>
+      <div className="ao-article-3col" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '200px 1fr 200px', minHeight: 'calc(100vh - var(--ao-nav-h) - 36px)', borderLeft: '1px solid var(--ao-border)' }}>
 
         {/* Left sidebar */}
-        <aside style={{ borderRight: '1px solid var(--ao-border)', padding: '32px 20px', position: 'sticky', top: 'calc(var(--ao-nav-h) + 36px + 2px)', alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 28 }}>
+        <aside className="ao-sidebar-left" style={{ borderRight: '1px solid var(--ao-border)', padding: '32px 20px', position: 'sticky', top: 'calc(var(--ao-nav-h) + 36px + 2px)', alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 28 }}>
           {cat?.title && (
             <div>
               <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Category</div>
@@ -137,7 +137,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
         </aside>
 
         {/* Main */}
-        <article style={{ borderRight: '1px solid var(--ao-border)', padding: '40px 48px 80px' }}>
+        <article className="ao-article-main" style={{ borderRight: '1px solid var(--ao-border)', padding: '40px 48px 80px' }}>
           {/* Category label */}
           {cat?.title && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
@@ -184,7 +184,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
         </article>
 
         {/* Right sidebar */}
-        <aside style={{ padding: '32px 20px', position: 'sticky', top: 'calc(var(--ao-nav-h) + 36px + 2px)', alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 28 }}>
+        <aside className="ao-sidebar-right" style={{ padding: '32px 20px', position: 'sticky', top: 'calc(var(--ao-nav-h) + 36px + 2px)', alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 28 }}>
           {/* Newsletter */}
           <div style={{ background: 'var(--ao-nl-bg)', padding: 20 }}>
             <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-nl-t2)', marginBottom: 8 }}>The Brief</div>

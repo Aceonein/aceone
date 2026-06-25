@@ -309,3 +309,46 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+/* ── Mobile responsive (≤ 900px) ── */
+@media (max-width: 900px) {
+  /* Header nav */
+  .ao-nav-links { display: none !important; }
+
+  /* Hero */
+  .ao-hero-section { min-height: 42vh !important; }
+  .ao-hero-inner { padding: 32px 16px 24px !important; }
+
+  /* Filter bar */
+  .ao-filter-search { display: none !important; }
+
+  /* Section header */
+  .ao-section-header { padding: 14px 16px !important; }
+
+  /* Card grid */
+  .ao-card-grid { grid-template-columns: 1fr !important; }
+  .ao-card-featured { grid-column: span 1 !important; }
+
+  /* List view */
+  .ao-list-row { grid-template-columns: 48px 1fr !important; }
+  .ao-list-meta { display: none !important; }
+
+  /* Footer */
+  .ao-footer-grid { grid-template-columns: 1fr 1fr !important; }
+  .ao-footer-brand { grid-column: span 2 !important; padding: 28px 20px !important; }
+  .ao-footer-link-col { padding: 24px 20px !important; }
+  .ao-footer-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; padding: 16px 20px !important; }
+
+  /* Article */
+  .ao-article-3col { grid-template-columns: 1fr !important; }
+  .ao-sidebar-left { display: none !important; }
+  .ao-sidebar-right { display: none !important; }
+  .ao-article-main { padding: 24px 16px 60px !important; border-right: none !important; }
+  .ao-breadcrumb-inner { padding: 0 16px !important; }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  @keyframes ao-fade-up { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ao-bob { 0%, 100% { transform: none; } }
+}
