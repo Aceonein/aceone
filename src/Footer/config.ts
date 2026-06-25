@@ -10,20 +10,51 @@ export const Footer: GlobalConfig = {
   },
   fields: [
     {
-      name: 'navItems',
+      name: 'brandTagline',
+      type: 'text',
+      defaultValue: 'The financially literate friend that young Indians never had.',
+    },
+    {
+      name: 'copyrightText',
+      type: 'text',
+      defaultValue: '© 2026 Aceone · Anti-Debt. Pro-Decision.',
+    },
+    {
+      name: 'columns',
       type: 'array',
-      fields: [
-        link({
-          appearances: false,
-        }),
-      ],
-      maxRows: 6,
+      maxRows: 4,
       admin: {
         initCollapsed: true,
-        components: {
-          RowLabel: '@/Footer/RowLabel#RowLabel',
-        },
       },
+      fields: [
+        {
+          name: 'heading',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'links',
+          type: 'array',
+          fields: [
+            link({ appearances: false }),
+          ],
+          admin: {
+            initCollapsed: true,
+          },
+        },
+      ],
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      maxRows: 5,
+      admin: {
+        initCollapsed: true,
+      },
+      fields: [
+        { name: 'platform', type: 'select', options: ['Twitter / X', 'LinkedIn', 'YouTube', 'Instagram', 'GitHub'], required: true },
+        { name: 'url', type: 'text', required: true },
+      ],
     },
   ],
   hooks: {

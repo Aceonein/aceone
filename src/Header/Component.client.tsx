@@ -4,7 +4,23 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-export const HeaderClient: React.FC = () => {
+function resolveNavItem(item: any): { href: string; label: string } {
+  const l = item?.link ?? {}
+  const href =
+    l.type === 'custom'
+      ? (l.url ?? '#')
+      : l.reference?.value?.slug
+        ? `/${l.reference.value.slug}`
+        : '#'
+  return { href, label: l.label ?? '' }
+}
+
+const FALLBACK_NAV = [
+  { href: '/', label: 'Blog' },
+  { href: '/brief', label: 'The Brief' },
+]
+
+export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) => {
   const pathname = usePathname()
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
@@ -26,10 +42,7 @@ export const HeaderClient: React.FC = () => {
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href)
 
-  const navLinks = [
-    { href: '/', label: 'Blog' },
-    { href: '/brief', label: 'The Brief' },
-  ] as const
+  const links = navItems.length > 0 ? navItems.map(resolveNavItem) : FALLBACK_NAV
 
   return (
     <header style={{
@@ -57,18 +70,22 @@ export const HeaderClient: React.FC = () => {
 
         {/* Nav links */}
         <nav className="ao-nav-links" style={{ display: 'flex', alignItems: 'stretch' }}>
-          {navLinks.map(({ href, label }) => (
-            <Link key={href} href={href} style={{
-              display: 'flex', alignItems: 'center',
-              padding: '0 18px', borderRight: '1px solid var(--ao-border)',
-              fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 400,
-              letterSpacing: '0.1em', textTransform: 'uppercase',
-              color: isActive(href) ? 'var(--ao-t1)' : 'var(--ao-t3)',
-              textDecoration: 'none', whiteSpace: 'nowrap',
-              borderBottom: isActive(href) ? '2px solid var(--ao-accent)' : '2px solid transparent',
-              transition: 'color 0.2s',
-            }}>{label}</Link>
-          ))}
+          {links.map(({ href, label }) => {
+            const active = isActive(href)
+            return (
+              <Link key={href} href={href} style={{
+                display: 'flex', alignItems: 'center',
+                padding: '0 18px', borderRight: '1px solid var(--ao-border)',
+                fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: active ? 700 : 400,
+                letterSpacing: '0.1em', textTransform: 'uppercase',
+                color: active ? 'var(--ao-bg)' : 'var(--ao-t3)',
+                background: active ? 'var(--ao-t1)' : 'none',
+                textDecoration: 'none', whiteSpace: 'nowrap',
+                borderBottom: active ? '2px solid var(--ao-accent)' : '2px solid transparent',
+                transition: 'color 0.2s, background 0.2s',
+              }}>{label}</Link>
+            )
+          })}
         </nav>
 
         {/* Spacer */}
