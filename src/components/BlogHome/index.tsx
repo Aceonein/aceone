@@ -311,6 +311,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
                   background: isActive ? 'var(--ao-t1)' : 'none',
                   border: 'none',
                   borderRight: '1px solid var(--ao-border)',
+                  borderBottom: isActive ? '2px solid var(--ao-accent)' : '2px solid transparent',
                   cursor: 'pointer', whiteSpace: 'nowrap',
                 }}>
                   {tabAccent && (
