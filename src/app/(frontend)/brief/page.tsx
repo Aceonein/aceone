@@ -47,10 +47,10 @@ export default async function BriefPage() {
         {/* Animation behind hero content */}
         <BriefHeroAnimation />
 
-        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 360px', position: 'relative', zIndex: 1 }}>
+        <div style={{ width: '100%', display: 'grid', gridTemplateColumns: '1fr 380px', position: 'relative', zIndex: 1 }}>
 
           {/* Left — headline */}
-          <div style={{ borderRight: '1px solid var(--ao-border)', padding: '56px 48px 52px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 0, minHeight: '52vh' }}>
+          <div style={{ borderRight: '1px solid var(--ao-border)', padding: '56px 48px 52px max(48px, calc((100vw - 1280px) / 2 + 48px))', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 0, minHeight: '52vh' }}>
             <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 22, display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ width: 24, height: 1, background: 'var(--ao-border-2)', display: 'block', flexShrink: 0 }} />
               Newsletter Archive
