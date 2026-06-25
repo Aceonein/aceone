@@ -41,6 +41,7 @@ export const NewsletterSubscribers: CollectionConfig = {
         { label: 'Homepage Footer', value: 'homepage_footer' },
         { label: 'Aceone Brief Page', value: 'aceone_brief_page' },
         { label: 'Blog Article', value: 'blog_article' },
+        { label: 'Unknown', value: 'unknown' },
       ],
       admin: { position: 'sidebar' },
     },
