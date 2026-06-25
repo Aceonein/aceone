@@ -46,8 +46,9 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         if (type === 'heading') {
           const Tag = (block.level ?? 'h2') as 'h2' | 'h3' | 'h4'
           const sizes: Record<string, number> = { h2: 32, h3: 24, h4: 19 }
+          const id = block.text ? block.text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : undefined
           return (
-            <Tag key={i} id={block.id ?? undefined} style={{ fontFamily: s.serif, fontSize: sizes[Tag] ?? 24, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.015em', color: s.t1, marginBottom: 14, marginTop: 46, transition: 'color 0.4s' }}>
+            <Tag key={i} id={id} style={{ fontFamily: s.serif, fontSize: sizes[Tag] ?? 24, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.015em', color: s.t1, marginBottom: 14, marginTop: 46, transition: 'color 0.4s' }}>
               {block.text}
             </Tag>
           )
