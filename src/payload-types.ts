@@ -438,9 +438,11 @@ export interface Category {
   title: string;
   description?: string | null;
   /**
-   * Hex color for UI e.g. #00c896
+   * Highlight color used across the site for this category
    */
-  color?: string | null;
+  color?:
+    | ('indigo' | 'cobalt' | 'teal' | 'emerald' | 'amber' | 'crimson' | 'violet' | 'rose' | 'slate' | 'chartreuse')
+    | null;
   /**
    * Optional SVG icon
    */

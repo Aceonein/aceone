@@ -30,6 +30,8 @@ export async function generateStaticParams() {
 
 type Args = { params: Promise<{ slug?: string }> }
 
+import { catColor } from '@/utilities/catColor'
+
 const mono = 'var(--font-mono)'
 
 export default async function PostPage({ params: paramsPromise }: Args) {
@@ -43,6 +45,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
 
   const author = typeof post.author === 'object' ? post.author : null
   const cat = typeof (post as any).categories?.[0] === 'object' ? (post as any).categories[0] : null
+  const accent = catColor(cat?.color)
   const tags: any[] = (post as any).tags ?? []
   const img = typeof (post as any).featuredImage === 'object' ? (post as any).featuredImage : null
   const date = (post as any).publishedAt
@@ -141,8 +144,8 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           {/* Category label */}
           {cat?.title && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-              <span style={{ display: 'inline-block', width: 24, height: 2, background: 'var(--ao-accent)' }} />
-              <span style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-accent)' }}>{cat.title}</span>
+              <span style={{ display: 'inline-block', width: 24, height: 2, background: accent }} />
+              <span style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: accent }}>{cat.title}</span>
             </div>
           )}
 
