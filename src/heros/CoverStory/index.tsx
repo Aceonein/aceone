@@ -137,6 +137,7 @@ export const CoverStoryHero: React.FC<Props> = async ({ coverStoryOverride }) =>
 
         <Link
           href={`/posts/${post.slug}`}
+          className="ao-cta"
           style={{
             display: 'inline-block',
             padding: '12px 28px',

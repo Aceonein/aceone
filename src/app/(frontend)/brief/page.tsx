@@ -78,6 +78,7 @@ export default async function BriefPage() {
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', padding: '0 24px', flexShrink: 0 }}>
               <a
                 href="#newsletter"
+                className="ao-cta"
                 style={{
                   display: 'flex', alignItems: 'center',
                   height: 48, padding: '0 20px',

@@ -278,7 +278,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           <div style={{ background: 'var(--ao-bg-2)', border: '1px solid var(--ao-border)', padding: 18 }}>
             <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>The Brief</div>
             <p style={{ fontSize: 12, color: 'var(--ao-t2)', lineHeight: 1.6, marginBottom: 14 }}>Weekly financial clarity. Every Sunday.</p>
-            <Link href="#newsletter" style={{ display: 'block', textAlign: 'center', padding: '9px 0', background: 'var(--ao-t1)', color: 'var(--ao-bg)', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
+            <Link href="#newsletter" className="ao-cta" style={{ display: 'block', textAlign: 'center', padding: '9px 0', background: 'var(--ao-t1)', color: 'var(--ao-bg)', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
               Subscribe →
             </Link>
           </div>

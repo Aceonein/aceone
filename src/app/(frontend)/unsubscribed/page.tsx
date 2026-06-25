@@ -69,6 +69,7 @@ export default function UnsubscribedPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
           <Link
             href="/#newsletter"
+            className="ao-cta"
             style={{
               display: 'inline-block',
               padding: '12px 32px',

@@ -373,8 +373,18 @@ html[data-theme='light'] {
   .ao-breadcrumb-inner { padding: 0 16px !important; }
 }
 
+/* ── CTA hover ── */
+.ao-cta {
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.ao-cta:hover {
+  background: var(--ao-accent) !important;
+  color: #fff !important;
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   @keyframes ao-fade-up { from { opacity: 0; } to { opacity: 1; } }
   @keyframes ao-bob { 0%, 100% { transform: none; } }
+  .ao-cta { transition: none; }
 }

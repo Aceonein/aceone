@@ -110,7 +110,7 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
               : <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
             }
           </button>
-          <Link href="#newsletter" style={{
+          <Link href="#newsletter" className="ao-cta" style={{
             display: 'flex', alignItems: 'center',
             padding: '0 20px', flexShrink: 0,
             borderLeft: '1px solid var(--ao-border)',
@@ -118,7 +118,6 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
             letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'var(--ao-bg)', background: 'var(--ao-t1)',
             textDecoration: 'none', whiteSpace: 'nowrap',
-            transition: 'opacity 0.2s',
           }}>Subscribe</Link>
         </div>
       </div>

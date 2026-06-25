@@ -51,7 +51,8 @@ export const NewsletterSection: React.FC = () => {
             <button
               type="submit"
               disabled={state === 'loading'}
-              style={{ padding: '0 26px', height: 50, background: 'var(--ao-nl-t1)', color: 'var(--ao-nl-bg)', fontSize: 14, fontWeight: 600, borderRadius: 0, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s', opacity: state === 'loading' ? 0.7 : 1 }}
+              className="ao-cta"
+              style={{ padding: '0 26px', height: 50, background: 'var(--ao-nl-t1)', color: 'var(--ao-nl-bg)', fontSize: 14, fontWeight: 600, borderRadius: 0, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', opacity: state === 'loading' ? 0.7 : 1 }}
             >
               {state === 'loading' ? '…' : 'Subscribe →'}
             </button>

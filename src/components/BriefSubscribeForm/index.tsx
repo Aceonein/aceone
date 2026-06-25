@@ -59,6 +59,7 @@ export const BriefSubscribeForm: React.FC<{ readers: number }> = ({ readers }) =
       <button
         type="submit"
         disabled={state === 'loading'}
+        className="ao-cta"
         style={{
           display: 'block', width: '100%', padding: '13px 0', cursor: 'pointer',
           background: 'var(--ao-t1)', color: 'var(--ao-bg)',
