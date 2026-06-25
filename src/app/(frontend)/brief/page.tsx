@@ -75,20 +75,19 @@ export default async function BriefPage() {
               </div>
             ))}
             {/* Subscribe CTA */}
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', padding: '0 24px', flexShrink: 0 }}>
-              <a
-                href="#newsletter"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  padding: '10px 20px', textDecoration: 'none',
-                  fontFamily: mono, fontSize: 11, fontWeight: 700,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: 'var(--ao-bg)', background: 'var(--ao-t1)',
-                }}
-              >
-                Subscribe →
-              </a>
-            </div>
+            <a
+              href="#newsletter"
+              style={{
+                marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10,
+                padding: '0 32px', textDecoration: 'none',
+                fontFamily: mono, fontSize: 11, fontWeight: 700,
+                letterSpacing: '0.1em', textTransform: 'uppercase',
+                color: 'var(--ao-bg)', background: 'var(--ao-t1)',
+                flexShrink: 0,
+              }}
+            >
+              Subscribe →
+            </a>
           </div>
         </div>
       </section>
