@@ -10,11 +10,13 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 let ratelimit: Ratelimit | null = null
 function getRatelimit() {
-  if (!ratelimit && process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  const rawUrl = process.env.UPSTASH_REDIS_REST_URL?.replace(/^["']|["']$/g, '')
+  const rawToken = process.env.UPSTASH_REDIS_REST_TOKEN?.replace(/^["']|["']$/g, '')
+  if (!ratelimit && rawUrl?.startsWith('https://') && rawToken) {
     ratelimit = new Ratelimit({
       redis: new Redis({
-        url: process.env.UPSTASH_REDIS_REST_URL,
-        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+        url: rawUrl,
+        token: rawToken,
       }),
       limiter: Ratelimit.slidingWindow(3, '1 h'),
       prefix: 'ao:newsletter',
