@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         { email, source: source || 'unknown', consent_type: 'newsletter', consent_given: true, ip_address: ip, user_agent: metadata?.userAgent || '' },
         ...(consent.marketing ? [{ email, source: source || 'unknown', consent_type: 'marketing', consent_given: true, ip_address: ip, user_agent: metadata?.userAgent || '' }] : []),
       ]
-      void sb.from('consent_logs').insert(consentRows).then(({ error }) => {
+      void sb.from('consent_logs').insert(consentRows as any).then(({ error }) => {
         if (error) console.error('Consent log failed (non-fatal):', error)
       })
     }
