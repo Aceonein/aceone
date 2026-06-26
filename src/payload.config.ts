@@ -70,24 +70,26 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    s3Storage({
-      collections: {
-        media: {
-          prefix: 'media',
-          generateFileURL: ({ filename, prefix }) =>
-            `${process.env.R2_PUBLIC_URL}/${prefix}/${filename}`,
-        },
-      },
-      bucket: process.env.R2_BUCKET || '',
-      config: {
-        credentials: {
-          accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
-        },
-        region: 'auto',
-        endpoint: process.env.R2_ENDPOINT || '',
-      },
-    }),
+    ...(process.env.R2_BUCKET && process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY && process.env.R2_ENDPOINT
+      ? [s3Storage({
+          collections: {
+            media: {
+              prefix: 'media',
+              generateFileURL: ({ filename, prefix }) =>
+                `${process.env.R2_PUBLIC_URL}/${prefix}/${filename}`,
+            },
+          },
+          bucket: process.env.R2_BUCKET,
+          config: {
+            credentials: {
+              accessKeyId: process.env.R2_ACCESS_KEY_ID,
+              secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+            },
+            region: 'auto',
+            endpoint: process.env.R2_ENDPOINT,
+          },
+        })]
+      : []),
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
