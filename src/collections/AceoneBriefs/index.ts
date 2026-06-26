@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '../../access/isAdmin'
-import { anyone } from '../../access/anyone'
 import { slugField } from 'payload'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { convertRichTextToEmailHTML, stripHTML } from '@/lib/email/rich-text-to-html'
@@ -10,7 +9,7 @@ export const AceoneBriefs: CollectionConfig = {
   access: {
     create: isAdmin,
     delete: isAdmin,
-    read: anyone,
+    read: () => true,
     update: isAdmin,
   },
   admin: {

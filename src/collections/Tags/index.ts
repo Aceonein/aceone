@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '../../access/isAdmin'
-import { anyone } from '../../access/anyone'
 import { authenticated } from '../../access/authenticated'
 
 export const Tags: CollectionConfig = {
@@ -8,7 +7,7 @@ export const Tags: CollectionConfig = {
   access: {
     create: authenticated,
     delete: isAdmin,
-    read: anyone,
+    read: () => true,
     update: isAdmin,
   },
   admin: {

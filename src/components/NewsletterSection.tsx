@@ -61,9 +61,14 @@ export const NewsletterSection: React.FC = () => {
         </p>
 
         {state === 'done' ? (
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: 'var(--ao-nl-t1)', letterSpacing: '0.04em' }}>
-            ✓ You&apos;re in. See you Sunday.
-          </p>
+          <div style={{ padding: '8px 0 24px', textAlign: 'center' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ao-accent)', marginBottom: 14 }}>
+              ✓ You&apos;re in
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(32px,5vw,52px)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--ao-nl-t1)', lineHeight: 1.1, margin: 0, textWrap: 'balance' as any }}>
+              See you Sunday.
+            </p>
+          </div>
         ) : (
           <>
             <form onSubmit={submit} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
