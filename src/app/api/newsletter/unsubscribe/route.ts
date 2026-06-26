@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { verifyUnsubscribeToken } from '@/lib/email/tokens'
+import { getSupabase } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -38,6 +39,18 @@ export async function GET(request: NextRequest) {
         unsubscribedAt: new Date().toISOString(),
       },
     })
+
+    // Mark consent as revoked in Supabase audit log (non-blocking)
+    const sb = getSupabase()
+    if (sb) {
+      void (sb.from('consent_logs') as any)
+        .update({ revoked_at: new Date().toISOString() })
+        .eq('email', email)
+        .is('revoked_at', null)
+        .then(({ error }: { error: any }) => {
+          if (error) console.error('Consent revoke failed (non-fatal):', error)
+        })
+    }
 
     return NextResponse.redirect(new URL('/unsubscribed', request.url))
   } catch (err) {

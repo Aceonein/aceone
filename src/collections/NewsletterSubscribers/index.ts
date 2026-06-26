@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin } from '../../access/isAdmin'
+import { getSupabase } from '@/lib/supabase'
 
 export const NewsletterSubscribers: CollectionConfig = {
   slug: 'newsletter-subscribers',
@@ -88,5 +89,18 @@ export const NewsletterSubscribers: CollectionConfig = {
       admin: { disabled: true },
     },
   ],
+  hooks: {
+    afterDelete: [
+      async ({ doc }) => {
+        const email = doc?.email
+        if (!email) return
+        const sb = getSupabase()
+        if (!sb) return
+        await (sb.from('consent_logs') as any)
+          .update({ email: '[deleted]', ip_address: null, user_agent: null, revoked_at: new Date().toISOString() })
+          .eq('email', email)
+      },
+    ],
+  },
   timestamps: true,
 }
