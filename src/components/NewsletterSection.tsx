@@ -1,15 +1,20 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type State = 'idle' | 'loading' | 'done' | 'already' | 'invalid' | 'error'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const SUBSCRIBED_KEY = 'ao_subscribed'
 
 export const NewsletterSection: React.FC = () => {
   const [email, setEmail] = useState('')
   const [state, setState] = useState<State>('idle')
   const [touched, setTouched] = useState(false)
+
+  useEffect(() => {
+    if (localStorage.getItem(SUBSCRIBED_KEY)) setState('done')
+  }, [])
 
   const emailValid = EMAIL_RE.test(email)
   const showInlineError = touched && email.length > 0 && !emailValid
@@ -25,7 +30,7 @@ export const NewsletterSection: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, consent: { newsletter: true } }),
       })
-      if (res.ok) { setState('done'); return }
+      if (res.ok) { localStorage.setItem(SUBSCRIBED_KEY, '1'); setState('done'); return }
       if (res.status === 409) { setState('already'); return }
       if (res.status === 400) { setState('invalid'); return }
       setState('error')
@@ -103,9 +108,18 @@ export const NewsletterSection: React.FC = () => {
           </>
         )}
 
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgba(255,255,255,0.32)', transition: 'color 0.4s' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ao-t3)', transition: 'color 0.4s' }}>
           Join <strong>1,000+ readers</strong> · No spam · Unsubscribe anytime
         </p>
+        {state !== 'done' && (
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ao-t3)', marginTop: 10, lineHeight: 1.6, opacity: 0.8 }}>
+            By subscribing you agree to our{' '}
+            <a href="/terms" style={{ color: 'var(--ao-t3)', textDecoration: 'underline' }}>Terms</a>
+            {' '}and{' '}
+            <a href="/privacy-policy" style={{ color: 'var(--ao-t3)', textDecoration: 'underline' }}>Privacy Policy</a>.
+            Unsubscribe anytime.
+          </p>
+        )}
       </div>
     </section>
   )

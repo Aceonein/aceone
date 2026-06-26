@@ -19,6 +19,7 @@ const spaceMono = Space_Mono({
 })
 
 import { AdminBar } from '@/components/AdminBar'
+import { CookieConsent } from '@/components/CookieConsent'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
@@ -51,6 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Header />
           {children}
           <Footer />
+          <CookieConsent />
         </Providers>
       </body>
     </html>

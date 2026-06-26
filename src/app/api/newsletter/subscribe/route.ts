@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { generateUnsubscribeToken } from '@/lib/email/tokens'
+import { supabase } from '@/lib/supabase'
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
@@ -46,6 +47,15 @@ export async function POST(request: NextRequest) {
         userAgent: metadata?.userAgent || '',
         referrer: metadata?.referrer || '',
       },
+    })
+
+    // Log consent to Supabase (non-blocking audit trail)
+    const consentRows = [
+      { email, source: source || 'unknown', consent_type: 'newsletter', consent_given: true, ip_address: ip, user_agent: metadata?.userAgent || '' },
+      ...(consent.marketing ? [{ email, source: source || 'unknown', consent_type: 'marketing', consent_given: true, ip_address: ip, user_agent: metadata?.userAgent || '' }] : []),
+    ]
+    void supabase.from('consent_logs').insert(consentRows).then(({ error }) => {
+      if (error) console.error('Consent log failed (non-fatal):', error)
     })
 
     // Send welcome email (non-blocking — failure doesn't break subscribe)
