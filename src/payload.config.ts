@@ -1,4 +1,5 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { s3Storage } from '@payloadcms/storage-s3'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -67,7 +68,27 @@ export default buildConfig({
   collections: [Authors, AceoneBriefs, Categories, Media, NewsletterSubscribers, Pages, Posts, Tags, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
-  plugins,
+  plugins: [
+    ...plugins,
+    s3Storage({
+      collections: {
+        media: {
+          prefix: 'media',
+          generateFileURL: ({ filename, prefix }) =>
+            `${process.env.R2_PUBLIC_URL}/${prefix}/${filename}`,
+        },
+      },
+      bucket: process.env.R2_BUCKET || '',
+      config: {
+        credentials: {
+          accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
+        },
+        region: 'auto',
+        endpoint: process.env.R2_ENDPOINT || '',
+      },
+    }),
+  ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {
