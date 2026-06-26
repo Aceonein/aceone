@@ -94,7 +94,7 @@ async function sendWelcomeEmail(email: string) {
           <p style="font-size:15px;line-height:1.7;color:#a0a8b8;margin:0 0 32px;">
             While you wait, browse past issues in the archive.
           </p>
-          <a href="${baseUrl}/brief"
+          <a href="${baseUrl}/the-brief"
              style="display:inline-block;padding:14px 32px;background:#edeae3;color:#0d0f14;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;">
             Browse Archive →
           </a>
@@ -113,7 +113,7 @@ async function sendWelcomeEmail(email: string) {
   </table>
 </body>
 </html>`,
-    text: `Welcome to The Aceone Brief.\n\nEvery Sunday at 12:30 PM IST — one email, the week's most important financial decision explained clearly.\n\nBrowse past issues: ${baseUrl}/brief\n\nUnsubscribe: ${unsubUrl}`,
+    text: `Welcome to The Aceone Brief.\n\nEvery Sunday at 12:30 PM IST — one email, the week's most important financial decision explained clearly.\n\nBrowse past issues: ${baseUrl}/the-brief\n\nUnsubscribe: ${unsubUrl}`,
     tags: ['welcome', 'aceone-brief'],
   })
 }

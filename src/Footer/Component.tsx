@@ -38,7 +38,7 @@ const FALLBACK_COLS = [
     { label: 'Policy', href: '/?cat=policy' },
     { label: 'Crypto', href: '/?cat=crypto' },
   ]},
-  { heading: 'Company', links: [{ label: 'The Brief', href: '/brief' }, { label: 'Admin', href: '/admin' }] },
+  { heading: 'Company', links: [{ label: 'The Brief', href: '/the-brief' }, { label: 'Admin', href: '/admin' }] },
   { heading: 'Legal', links: [{ label: 'Privacy policy', href: '/privacy' }, { label: 'Terms', href: '/terms' }] },
 ]
 

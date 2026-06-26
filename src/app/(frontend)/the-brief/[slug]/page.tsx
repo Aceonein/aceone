@@ -131,7 +131,7 @@ export default async function BriefIssuePage({ params }: { params: Promise<{ slu
       {/* Back */}
       <div style={{ borderBottom: '1px solid var(--ao-border)', padding: '16px 48px', maxWidth: 1280, margin: '0 auto' }}>
         <Link
-          href="/brief"
+          href="/the-brief"
           style={{
             fontFamily: mono,
             fontSize: 10,
@@ -273,7 +273,7 @@ export default async function BriefIssuePage({ params }: { params: Promise<{ slu
                 More Issues
               </div>
               <Link
-                href="/brief"
+                href="/the-brief"
                 style={{
                   fontFamily: mono,
                   fontSize: 11,

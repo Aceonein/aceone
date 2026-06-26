@@ -54,7 +54,7 @@ function BriefCard({ issue }: { issue: any }) {
 
   return (
     <Link
-      href={`/brief/${issue.slug}`}
+      href={`/the-brief/${issue.slug}`}
       style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column' }}
     >
       {imgUrl && (

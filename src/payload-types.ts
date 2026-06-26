@@ -482,7 +482,7 @@ export interface NewsletterSubscriber {
   id: string;
   email: string;
   status: 'active' | 'unsubscribed' | 'bounced';
-  source?: ('homepage_footer' | 'aceone_brief_page' | 'blog_article') | null;
+  source?: ('homepage_footer' | 'aceone_brief_page' | 'blog_article' | 'unknown') | null;
   /**
    * Consented to receive newsletter
    */

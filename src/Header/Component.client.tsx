@@ -17,7 +17,7 @@ function resolveNavItem(item: any): { href: string; label: string } {
 
 const FALLBACK_NAV = [
   { href: '/', label: 'Blog' },
-  { href: '/brief', label: 'The Brief' },
+  { href: '/the-brief', label: 'The Brief' },
 ]
 
 export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) => {
