@@ -3,8 +3,25 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { generateUnsubscribeToken } from '@/lib/email/tokens'
 import { getSupabase } from '@/lib/supabase'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+let ratelimit: Ratelimit | null = null
+function getRatelimit() {
+  if (!ratelimit && process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    ratelimit = new Ratelimit({
+      redis: new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      }),
+      limiter: Ratelimit.slidingWindow(3, '1 h'),
+      prefix: 'ao:newsletter',
+    })
+  }
+  return ratelimit
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +39,14 @@ export async function POST(request: NextRequest) {
       request.headers.get('x-forwarded-for')?.split(',')[0] ||
       request.headers.get('x-real-ip') ||
       'unknown'
+
+    const rl = getRatelimit()
+    if (rl) {
+      const { success } = await rl.limit(ip)
+      if (!success) {
+        return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 })
+      }
+    }
 
     const payload = await getPayload({ config: configPromise })
 
