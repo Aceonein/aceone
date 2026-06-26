@@ -88,7 +88,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
     relatedPosts = rel.docs
   }
 
-  const fullUrl = `https://aceone.in/posts/${post.slug}`
+  const fullUrl = `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://blog.aceone.in'}/posts/${post.slug}`
 
   return (
     <main style={{ background: 'var(--ao-bg)', minHeight: '100vh', paddingTop: 'var(--ao-nav-h)' }}>

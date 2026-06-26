@@ -37,7 +37,7 @@ export async function convertRichTextToEmailHTML(content: any, coverImageUrl: st
                 You're receiving this because you subscribed to The Aceone Brief.
               </p>
               <p style="font-size:13px;color:#7a8196;margin:8px 0;">
-                <a href="https://aceone.in" style="color:#00c896;text-decoration:none;">Visit Website</a>
+                <a href="${process.env.NEXT_PUBLIC_SERVER_URL || 'https://blog.aceone.in'}" style="color:#00c896;text-decoration:none;">Visit Website</a>
               </p>
               <p style="font-size:13px;color:#7a8196;margin:8px 0;">
                 <a href="{{unsubscribe_url}}" style="color:#7a8196;text-decoration:underline;">Unsubscribe</a>

@@ -67,7 +67,7 @@ async function sendWelcomeEmail(email: string) {
   const { getEmailProvider } = await import('@/lib/email')
   const provider = getEmailProvider()
 
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://aceone.in'
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://blog.aceone.in'
   const token = generateUnsubscribeToken(email)
   const unsubUrl = `${baseUrl}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}&token=${token}`
 
