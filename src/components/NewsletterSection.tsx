@@ -121,7 +121,7 @@ export const NewsletterSection: React.FC = () => {
             By subscribing you agree to our{' '}
             <a href="/terms" style={{ color: 'var(--ao-t3)', textDecoration: 'underline' }}>Terms</a>
             {' '}and{' '}
-            <a href="/privacy-policy" style={{ color: 'var(--ao-t3)', textDecoration: 'underline' }}>Privacy Policy</a>.
+            <a href="/privacy" style={{ color: 'var(--ao-t3)', textDecoration: 'underline' }}>Privacy Policy</a>.
             Unsubscribe anytime.
           </p>
         )}

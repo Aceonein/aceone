@@ -687,5 +687,151 @@ export const seed = async ({ payload }: { payload: Payload; req: PayloadRequest 
     payload.logger.info(`Created brief: ${brief.title}`)
   }
 
+  // ── Legal Pages ───────────────────────────────────────────────────────────
+  await createLegalPages(payload)
+
   payload.logger.info('Seed complete.')
+}
+
+async function createLegalPages(payload: Payload) {
+  const privacyContent = richDoc(
+    heading('1. Who We Are'),
+    para('Aceone ("we", "our", "us") operates the website at blog.aceone.in and the newsletter "The Aceone Brief". We are an independent financial media platform based in Mumbai, India.'),
+    para('For data-related queries, contact us at: hello@aceone.in'),
+
+    heading('2. Data We Collect'),
+    para('We collect only what is necessary to deliver the newsletter and improve the platform:'),
+    ul(['Email address — to send The Aceone Brief', 'IP address — captured at signup for DPDP audit trail purposes only; not used for tracking', 'Browser/device metadata (user agent, referrer) — to understand how subscribers find us', 'Consent records — timestamps and scope of consent given at signup']),
+    para('We do not collect your name, phone number, payment details, or any government-issued ID.'),
+
+    heading('3. How We Use Your Data'),
+    para('Your data is used solely for the purposes you consented to:'),
+    ul(['Sending The Aceone Brief to your email address (newsletter consent)', 'Sending occasional product updates about Aceone (marketing consent, only if opted in)', 'Maintaining an audit trail of consent records as required by the DPDP Act 2023', 'Analysing aggregate (non-identifiable) readership trends to improve content']),
+    para('We do not sell your data, share it with advertisers, or use it for automated decision-making that affects you.'),
+
+    heading('4. Data Storage and Security'),
+    para('Your subscriber data is stored in two systems:'),
+    ul(['MongoDB Atlas — subscriber records (email, status, preferences). Cluster hosted in Mumbai, India (ap-south-1 region), in compliance with DPDP data localisation requirements.', 'Supabase — immutable consent audit log. Stores consent type, timestamp, and IP address. Records are never deleted; only marked as revoked on unsubscribe.']),
+    para('Emails are sent via Resend (a US-based transactional email service). By subscribing, you acknowledge that your email address is transmitted to Resend for the sole purpose of email delivery.'),
+    para('We use HTTPS throughout. Access to subscriber data is restricted to authorised team members only.'),
+
+    heading('5. Your Rights Under DPDP Act 2023'),
+    para('As a data principal under the Digital Personal Data Protection Act 2023, you have the right to:'),
+    ul(['Access — request a copy of the personal data we hold about you', 'Correction — request correction of inaccurate data', 'Erasure — request deletion of your personal data (right to be forgotten)', 'Withdraw consent — unsubscribe at any time via the link in any email, or by emailing us', 'Grievance redressal — raise a complaint with us before escalating to the Data Protection Board of India']),
+    para('To exercise any of these rights, email hello@aceone.in from your subscribed email address. We will respond within 30 days.'),
+    para('Note: consent audit logs (Supabase) are maintained as legally required records and cannot be fully deleted, but they will be anonymised on erasure requests.'),
+
+    heading('6. Cookies'),
+    para('We use a single first-party localStorage entry (ao_cookie_consent) to remember your cookie consent preference. This contains only your decision (accepted/rejected) and a timestamp. No tracking cookies are set without your explicit consent. If you reject cookies, your experience on the site is not affected.'),
+
+    heading('7. Third-Party Services'),
+    para('We use the following third-party services, each with their own privacy policies:'),
+    ul(['Resend — email delivery (resend.com/privacy)', 'Vercel — website hosting (vercel.com/legal/privacy-policy)', 'Supabase — consent log storage (supabase.com/privacy)', 'MongoDB Atlas — database (mongodb.com/legal/privacy-policy)']),
+
+    heading('8. Retention'),
+    para('We retain your subscriber data for as long as your subscription is active. If you unsubscribe, your email and personal data are deleted from operational systems within 30 days. Consent audit records are anonymised (IP and user agent removed) but the consent event record is retained as required by law.'),
+
+    heading('9. Children'),
+    para('Our service is not directed at persons under 18 years of age. We do not knowingly collect data from minors. If you believe a minor has subscribed, contact us immediately.'),
+
+    heading('10. Changes to This Policy'),
+    para('We may update this policy periodically. Material changes will be communicated to active subscribers via email before taking effect. The "last updated" date reflects the most recent revision.'),
+
+    heading('11. Contact & Grievance Officer'),
+    para('Grievance Officer: Aman Khan'),
+    para('Email: hello@aceone.in'),
+    para('Address: Mumbai, Maharashtra, India'),
+    para('Response time: within 30 days'),
+  )
+
+  const termsContent = richDoc(
+    heading('1. Acceptance'),
+    para('By accessing blog.aceone.in or subscribing to The Aceone Brief, you agree to these Terms of Service. If you do not agree, do not use the service.'),
+    para('These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Mumbai, Maharashtra.'),
+
+    heading('2. The Service'),
+    para('Aceone operates a financial media platform publishing articles and a weekly newsletter, The Aceone Brief, at blog.aceone.in. The service is free to read and subscribe to.'),
+    para('We reserve the right to modify, suspend, or discontinue the service at any time with reasonable notice to active subscribers.'),
+
+    heading('3. Newsletter Subscription'),
+    para('By subscribing to The Aceone Brief:'),
+    ul(['You consent to receive a weekly email newsletter from Aceone', 'You confirm you are 18 years of age or older', 'You confirm the email address provided belongs to you', 'You understand you can unsubscribe at any time via the link in any email']),
+    para('We aim to send one email per week (every Sunday at 12:30 PM IST). We may occasionally send additional emails about significant Aceone updates. We will never send unsolicited commercial emails beyond the scope of your consent.'),
+
+    heading('4. Not Financial Advice'),
+    para('All content published by Aceone — including articles, newsletter issues, data boxes, and commentary — is for informational and educational purposes only. It does not constitute financial advice, investment advice, trading advice, or any other form of advice.'),
+    para('Aceone is not a SEBI-registered investment adviser, research analyst, or portfolio manager. Nothing published should be construed as a recommendation to buy, sell, or hold any security, mutual fund, or financial product.'),
+    para('Past performance discussed in our content does not guarantee future results. All investments carry risk, including the possible loss of principal. Always consult a qualified, SEBI-registered financial adviser before making investment decisions.'),
+
+    heading('5. Intellectual Property'),
+    para('All content on blog.aceone.in — including articles, newsletter issues, data analysis, graphics, and design — is the intellectual property of Aceone and its contributors, protected under the Copyright Act, 1957.'),
+    para('You may share individual articles with attribution ("Source: Aceone, blog.aceone.in") and a link to the original. You may not reproduce, republish, or distribute content in bulk, commercially, or without attribution.'),
+
+    heading('6. User Conduct'),
+    para('You agree not to:'),
+    ul(['Use the service for any unlawful purpose', 'Attempt to scrape, crawl, or systematically download content', 'Misrepresent Aceone\'s content as your own', 'Attempt to gain unauthorised access to any part of the platform', 'Use our content to generate AI training datasets without written permission']),
+
+    heading('7. Accuracy of Information'),
+    para('We make reasonable efforts to ensure the accuracy of information published. However, financial data, regulations, and market conditions change rapidly. Aceone does not warrant that any information is current, complete, or error-free.'),
+    para('Any reliance you place on information from Aceone is strictly at your own risk.'),
+
+    heading('8. Limitation of Liability'),
+    para('To the fullest extent permitted by applicable law, Aceone shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from your use of, or inability to use, the service or any content published — including financial losses arising from investment decisions influenced by our content.'),
+
+    heading('9. Third-Party Links'),
+    para('Our content may link to third-party websites for reference. These links are provided for convenience only. Aceone does not endorse, control, or take responsibility for the content, privacy practices, or services of any third-party site.'),
+
+    heading('10. Privacy'),
+    para('Your use of the service is also governed by our Privacy Policy (/privacy), which explains how we collect and handle your personal data in compliance with the Digital Personal Data Protection Act 2023.'),
+
+    heading('11. Changes to Terms'),
+    para('We may update these terms from time to time. Material changes will be communicated to active subscribers via email at least 14 days before taking effect. Continued use of the service after the effective date constitutes acceptance of the updated terms.'),
+
+    heading('12. Contact'),
+    para('Questions about these terms:'),
+    para('Email: hello@aceone.in'),
+    para('Aceone, Mumbai, Maharashtra, India'),
+  )
+
+  const legalPages = [
+    {
+      title: 'Privacy Policy',
+      slug: 'privacy',
+      content: privacyContent,
+      metaTitle: 'Privacy Policy — Aceone',
+      metaDesc: 'How Aceone collects, uses, and protects your personal data under the Digital Personal Data Protection Act, 2023.',
+    },
+    {
+      title: 'Terms of Service',
+      slug: 'terms',
+      content: termsContent,
+      metaTitle: 'Terms of Service — Aceone',
+      metaDesc: 'Terms governing your use of Aceone and subscription to The Aceone Brief newsletter.',
+    },
+  ]
+
+  for (const page of legalPages) {
+    const existing = await payload.find({ collection: 'pages', where: { slug: { equals: page.slug } }, limit: 1, overrideAccess: true })
+    if (existing.docs.length > 0) {
+      payload.logger.info(`Skipping ${page.slug} page — already exists`)
+      continue
+    }
+    await payload.create({
+      collection: 'pages',
+      data: {
+        title: page.title,
+        slug: page.slug,
+        hero: { type: 'none' },
+        layout: [{
+          blockType: 'content',
+          columns: [{ size: 'full', richText: page.content }],
+        }],
+        meta: { title: page.metaTitle, description: page.metaDesc },
+        publishedAt: new Date().toISOString(),
+        _status: 'published',
+      } as any,
+      overrideAccess: true,
+    })
+    payload.logger.info(`Created page: /${page.slug}`)
+  }
 }
