@@ -347,7 +347,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
           {/* View toggle */}
           <div style={{ display: 'flex', alignItems: 'stretch', borderLeft: '1px solid var(--ao-border)' }}>
             {(['card', 'list'] as const).map(v => (
-              <button key={v} onClick={() => setView(v)} style={{
+              <button key={v} onClick={() => setView(v)} aria-label={v === 'card' ? 'Grid view' : 'List view'} aria-pressed={v === view} style={{
                 width: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 background: v === view ? 'var(--ao-t1)' : 'none',
                 border: 'none',
