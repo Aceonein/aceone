@@ -76,16 +76,16 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Log consent to Supabase
+    // Log consent to Supabase (non-blocking audit trail)
     const sb = getSupabase()
-    console.log('[supabase] client:', sb ? 'ok' : 'null')
     if (sb) {
       const consentRows = [
         { email, source: source || 'unknown', consent_type: 'newsletter', consent_given: true, ip_address: ip, user_agent: metadata?.userAgent || '' },
         ...(consent.marketing ? [{ email, source: source || 'unknown', consent_type: 'marketing', consent_given: true, ip_address: ip, user_agent: metadata?.userAgent || '' }] : []),
       ]
-      const { error: sbError } = await sb.from('consent_logs').insert(consentRows as any)
-      console.log('[supabase] insert result:', sbError ? JSON.stringify(sbError) : 'ok')
+      void sb.from('consent_logs').insert(consentRows as any).then(({ error }) => {
+        if (error) console.error('Consent log failed (non-fatal):', error)
+      })
     }
 
     // Send welcome email (non-blocking — failure doesn't break subscribe)
