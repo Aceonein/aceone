@@ -47,8 +47,11 @@ export const Posts: CollectionConfig<'posts'> = {
     defaultColumns: ['title', 'status', 'author', 'updatedAt'],
     useAsTitle: 'title',
     livePreview: {
-      url: ({ data }) =>
-        `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/posts/${data?.slug}`,
+      url: ({ data }) => {
+        const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+        const previewSecret = process.env.PREVIEW_SECRET
+        return `${baseURL}/next/preview?path=/posts/${data?.slug}&previewSecret=${previewSecret}`
+      },
     },
     components: {
       edit: {
