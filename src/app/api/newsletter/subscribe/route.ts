@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, message: 'Successfully subscribed' })
   } catch (err: any) {
     console.error('Subscribe error:', err)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error', detail: err?.message || String(err) }, { status: 500 })
   }
 }
 
