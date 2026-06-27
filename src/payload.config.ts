@@ -97,7 +97,7 @@ export default buildConfig({
     {
       method: 'post',
       path: '/next/seed',
-      handler: async (req, res) => {
+      handler: async (req: any, res: any) => {
         try {
           const { seed: seedFn } = await import('@/endpoints/seed')
           await seedFn({ payload: req.payload, req })
@@ -108,7 +108,7 @@ export default buildConfig({
         }
       },
     },
-  ],
+  ] as any,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
