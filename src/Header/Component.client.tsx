@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-function resolveNavItem(item: any): { href: string; label: string } {
+function resolveItem(item: any): { href: string; label: string; type: 'text' | 'cta'; alignment: 'left' | 'right' } {
   const l = item?.link ?? {}
   const href =
     l.type === 'custom'
@@ -12,12 +12,18 @@ function resolveNavItem(item: any): { href: string; label: string } {
       : l.reference?.value?.slug
         ? `/${l.reference.value.slug}`
         : '#'
-  return { href, label: l.label ?? '' }
+  return {
+    href,
+    label: l.label ?? '',
+    type: item?.type ?? 'text',
+    alignment: item?.alignment ?? 'left',
+  }
 }
 
 const FALLBACK_NAV = [
-  { href: '/', label: 'Blog' },
-  { href: '/the-brief', label: 'The Brief' },
+  { href: '/', label: 'Blog', type: 'text' as const, alignment: 'left' as const },
+  { href: '/the-brief', label: 'The Brief', type: 'text' as const, alignment: 'left' as const },
+  { href: '#newsletter', label: 'Subscribe', type: 'cta' as const, alignment: 'right' as const },
 ]
 
 export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) => {
@@ -42,7 +48,45 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href)
 
-  const links = navItems.length > 0 ? navItems.map(resolveNavItem) : FALLBACK_NAV
+  const items = navItems.length > 0 ? navItems.map(resolveItem) : FALLBACK_NAV
+  const leftItems = items.filter(i => i.alignment === 'left')
+  const rightItems = items.filter(i => i.alignment === 'right')
+
+  const renderItem = (item: ReturnType<typeof resolveItem>, side: 'left' | 'right') => {
+    const active = item.type === 'text' && isActive(item.href)
+    const borderSide = side === 'left'
+      ? { borderRight: '1px solid var(--ao-border)' }
+      : { borderLeft: '1px solid var(--ao-border)' }
+
+    if (item.type === 'cta') {
+      return (
+        <Link key={`${item.href}-${item.label}`} href={item.href} className="ao-cta" style={{
+          display: 'flex', alignItems: 'center',
+          padding: '0 20px', flexShrink: 0,
+          ...borderSide,
+          fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
+          letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: 'var(--ao-bg)', background: 'var(--ao-t1)',
+          textDecoration: 'none', whiteSpace: 'nowrap',
+        }}>{item.label}</Link>
+      )
+    }
+
+    return (
+      <Link key={`${item.href}-${item.label}`} href={item.href} style={{
+        display: 'flex', alignItems: 'center',
+        padding: '0 18px',
+        ...borderSide,
+        fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: active ? 700 : 400,
+        letterSpacing: '0.1em', textTransform: 'uppercase',
+        color: active ? 'var(--ao-bg)' : 'var(--ao-t3)',
+        background: active ? 'var(--ao-t1)' : 'none',
+        textDecoration: 'none', whiteSpace: 'nowrap',
+        borderBottom: active ? '2px solid var(--ao-accent)' : '2px solid transparent',
+        transition: 'color 0.2s, background 0.2s',
+      }}>{item.label}</Link>
+    )
+  }
 
   return (
     <header style={{
@@ -68,24 +112,9 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
           }}>ACEONE/</span>
         </Link>
 
-        {/* Nav links */}
+        {/* Left nav items */}
         <nav className="ao-nav-links" style={{ display: 'flex', alignItems: 'stretch' }}>
-          {links.map(({ href, label }) => {
-            const active = isActive(href)
-            return (
-              <Link key={href} href={href} style={{
-                display: 'flex', alignItems: 'center',
-                padding: '0 18px', borderRight: '1px solid var(--ao-border)',
-                fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: active ? 700 : 400,
-                letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: active ? 'var(--ao-bg)' : 'var(--ao-t3)',
-                background: active ? 'var(--ao-t1)' : 'none',
-                textDecoration: 'none', whiteSpace: 'nowrap',
-                borderBottom: active ? '2px solid var(--ao-accent)' : '2px solid transparent',
-                transition: 'color 0.2s, background 0.2s',
-              }}>{label}</Link>
-            )
-          })}
+          {leftItems.map(item => renderItem(item, 'left'))}
         </nav>
 
         {/* Spacer */}
@@ -93,6 +122,7 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
 
         {/* Right controls */}
         <div style={{ display: 'flex', alignItems: 'stretch' }}>
+          {rightItems.map(item => renderItem(item, 'right'))}
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
@@ -110,15 +140,6 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
               : <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
             }
           </button>
-          <Link href="#newsletter" className="ao-cta" style={{
-            display: 'flex', alignItems: 'center',
-            padding: '0 20px', flexShrink: 0,
-            borderLeft: '1px solid var(--ao-border)',
-            fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
-            letterSpacing: '0.1em', textTransform: 'uppercase',
-            color: 'var(--ao-bg)', background: 'var(--ao-t1)',
-            textDecoration: 'none', whiteSpace: 'nowrap',
-          }}>Subscribe</Link>
         </div>
       </div>
     </header>

@@ -16,11 +16,31 @@ export const Header: GlobalConfig = {
       name: 'navItems',
       type: 'array',
       fields: [
-        link({
-          appearances: false,
-        }),
+        {
+          name: 'type',
+          type: 'select',
+          defaultValue: 'text',
+          required: true,
+          options: [
+            { label: 'Text link', value: 'text' },
+            { label: 'CTA button', value: 'cta' },
+          ],
+          admin: { width: '50%' },
+        },
+        {
+          name: 'alignment',
+          type: 'select',
+          defaultValue: 'left',
+          required: true,
+          options: [
+            { label: 'Left', value: 'left' },
+            { label: 'Right', value: 'right' },
+          ],
+          admin: { width: '50%' },
+        },
+        link({ appearances: false }),
       ],
-      maxRows: 6,
+      maxRows: 8,
       admin: {
         initCollapsed: true,
         components: {
