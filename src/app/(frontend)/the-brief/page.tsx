@@ -38,14 +38,14 @@ export default async function BriefPage() {
     <main style={{ background: 'var(--ao-bg)', minHeight: '100vh', paddingTop: 'var(--ao-nav-h)' }}>
 
       {/* ── Hero ── */}
-      <section style={{
+      <section className="ao-brief-hero" style={{
         borderBottom: '1px solid var(--ao-border)',
         position: 'relative', overflow: 'hidden',
       }}>
         {/* Animation behind hero content */}
         <BriefHeroAnimation />
 
-        <div style={{ maxWidth: 1280, margin: '0 auto', width: '100%', position: 'relative', zIndex: 1, padding: '56px 48px 0', boxSizing: 'border-box' }}>
+        <div className="ao-brief-hero-inner" style={{ maxWidth: 1280, margin: '0 auto', width: '100%', position: 'relative', zIndex: 1, padding: '56px 48px 0', boxSizing: 'border-box' }}>
           <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 22, display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ width: 24, height: 1, background: 'var(--ao-border-2)', display: 'block', flexShrink: 0 }} />
             Newsletter Archive
@@ -61,21 +61,21 @@ export default async function BriefPage() {
           </p>
 
           {/* Stats row + subscribe CTA */}
-          <div style={{ display: 'flex', alignItems: 'stretch', borderTop: '1px solid var(--ao-border)' }}>
+          <div className="ao-brief-stats" style={{ display: 'flex', alignItems: 'stretch', borderTop: '1px solid var(--ao-border)' }}>
             {[
               { value: `• ${briefs.length}`, label: 'Editions' },
               { value: totalReaders.toLocaleString(), label: 'Readers' },
               { value: 'Every Sunday', label: 'Frequency' },
               { value: 'Free', label: 'Forever' },
             ].map(({ value, label }, i) => (
-              <div key={label} style={{ padding: '20px 24px', borderRight: '1px solid var(--ao-border)' }}>
+              <div key={label} className="ao-brief-stat-item" style={{ padding: '20px 24px', borderRight: '1px solid var(--ao-border)' }}>
                 <div style={{ fontFamily: mono, fontSize: i === 0 ? 18 : 16, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1, marginBottom: 5 }}>{value}</div>
                 <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ao-t3)' }}>{label}</div>
               </div>
             ))}
             <a
               href="#newsletter"
-              className="ao-cta"
+              className="ao-cta ao-brief-hero-cta"
               style={{
                 marginLeft: 'auto', display: 'flex', alignItems: 'center',
                 padding: '0 24px', flexShrink: 0,

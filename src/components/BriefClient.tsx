@@ -20,7 +20,7 @@ function BriefContent({ content }: { content: any }) {
   }
 
   return (
-    <div>
+    <div className="ao-brief-body">
       {nodes.map((node: any, i: number) => {
         if (node.type === 'heading') {
           const Tag = node.tag as 'h2' | 'h3'
@@ -65,6 +65,7 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
   const [activeYear, setActiveYear] = useState<number | 'all'>('all')
   const [activeMonth, setActiveMonth] = useState<number | 'all'>('all')
   const [activeId, setActiveId] = useState<string>(briefs[0]?.id ?? '')
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
   const filtered = useMemo(() => briefs.filter(b => {
     if (!b.publishedAt) return activeYear === 'all'
@@ -98,14 +99,25 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
   )
 
   return (
-    <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '260px 1fr', borderLeft: '1px solid var(--ao-border)', borderBottom: '1px solid var(--ao-border)' }}>
+    <div className="ao-brief-client" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: `${sidebarOpen ? 260 : 0}px 1fr`, borderLeft: '1px solid var(--ao-border)', borderBottom: '1px solid var(--ao-border)', transition: 'grid-template-columns 0.25s ease', overflow: 'hidden' }}>
 
       {/* ── Sidebar ── */}
-      <aside style={{ borderRight: '1px solid var(--ao-border)', display: 'flex', flexDirection: 'column' }}>
-
+      <aside
+        className="ao-brief-sidebar"
+        style={{
+          display: 'flex', flexDirection: 'column',
+          borderRight: '1px solid var(--ao-border)',
+          overflow: 'hidden',
+          position: 'sticky', top: 'var(--ao-nav-h)',
+          height: 'calc(100vh - var(--ao-nav-h))',
+          alignSelf: 'start',
+          minWidth: 0,
+          transition: 'opacity 0.2s ease',
+          opacity: sidebarOpen ? 1 : 0,
+        }}
+      >
         {/* Filters */}
-        <div style={{ padding: '24px 20px', borderBottom: '1px solid var(--ao-border)' }}>
-          {/* Year */}
+        <div style={{ padding: '24px 20px', borderBottom: '1px solid var(--ao-border)', flexShrink: 0 }}>
           <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Year</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
             <FilterPill label="All" active={activeYear === 'all'} onClick={() => { setActiveYear('all'); setActiveMonth('all') }} />
@@ -113,8 +125,6 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
               <FilterPill key={y} label={String(y)} active={activeYear === y} onClick={() => { setActiveYear(y); setActiveMonth('all') }} />
             ))}
           </div>
-
-          {/* Month */}
           <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Month</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             <FilterPill label="All" active={activeMonth === 'all'} onClick={() => setActiveMonth('all')} />
@@ -125,7 +135,7 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
         </div>
 
         {/* Issue count */}
-        <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--ao-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--ao-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <span style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ao-t3)' }}>Editions</span>
           <span style={{ fontFamily: mono, fontSize: 12, fontWeight: 700, color: 'var(--ao-t1)' }}>{filtered.length}</span>
         </div>
@@ -134,7 +144,7 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
         <div style={{ overflowY: 'auto', flex: 1 }}>
           {filtered.length === 0 ? (
             <p style={{ fontFamily: mono, fontSize: 11, color: 'var(--ao-t3)', padding: '24px 20px' }}>No issues found.</p>
-          ) : filtered.map((b, i) => {
+          ) : filtered.map((b) => {
             const isActive = b.id === (activeId || briefs[0]?.id)
             return (
               <button
@@ -180,37 +190,66 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
       </aside>
 
       {/* ── Issue viewer ── */}
-      <div style={{ padding: '40px 52px 80px', minHeight: '60vh' }}>
-        {activeBrief ? (
-          <>
-            {/* Issue header */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 28, padding: '5px 14px', background: 'var(--ao-bg-2)', border: '1px solid var(--ao-border)' }}>
-              {activeBrief.issueNumber && (
-                <span style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, color: 'var(--ao-accent)' }}>ISSUE #{activeBrief.issueNumber}</span>
+      <div className="ao-brief-content" style={{ position: 'relative', minHeight: '60vh', minWidth: 0 }}>
+
+        {/* Toggle tab — always on left edge of content */}
+        <button
+          className="ao-brief-toggle-tab"
+          onClick={() => setSidebarOpen(o => !o)}
+          aria-label={sidebarOpen ? 'Collapse filters' : 'Expand filters'}
+          style={{
+            position: 'absolute', left: 0, top: 0,
+            width: 20, height: '100%', minHeight: 80,
+            background: 'var(--ao-bg-2)',
+            border: 'none', borderRight: '1px solid var(--ao-border)',
+            cursor: 'pointer', zIndex: 2,
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            justifyContent: 'flex-start', paddingTop: 28, gap: 4,
+            color: 'var(--ao-t3)', transition: 'background 0.15s',
+          }}
+        >
+          <span style={{ fontFamily: mono, fontSize: 10, lineHeight: 1, userSelect: 'none' }}>
+            {sidebarOpen ? '‹' : '›'}
+          </span>
+          {!sidebarOpen && (
+            <span style={{ fontFamily: mono, fontSize: 7, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ao-t3)', writingMode: 'vertical-rl', marginTop: 8 }}>
+              Filter
+            </span>
+          )}
+        </button>
+
+        {/* Content with left offset for tab */}
+        <div className="ao-brief-content-inner" style={{ padding: '40px 52px 80px', paddingLeft: 44 }}>
+          {activeBrief ? (
+            <>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 28, padding: '5px 14px', background: 'var(--ao-bg-2)', border: '1px solid var(--ao-border)' }}>
+                {activeBrief.issueNumber && (
+                  <span style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, color: 'var(--ao-accent)' }}>ISSUE #{activeBrief.issueNumber}</span>
+                )}
+                {activeBrief.issueNumber && activeBrief.publishedAt && <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ao-border-2)', display: 'block' }} />}
+                {activeBrief.publishedAt && (
+                  <span style={{ fontFamily: mono, fontSize: 9, color: 'var(--ao-t3)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                    {new Date(activeBrief.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()}
+                  </span>
+                )}
+              </div>
+
+              <h2 style={{ fontFamily: sans, fontSize: 'clamp(22px,3vw,40px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--ao-t1)', marginBottom: 16 }}>
+                {activeBrief.title}
+              </h2>
+
+              {activeBrief.subtitle && (
+                <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--ao-t2)', marginBottom: 36, paddingBottom: 28, borderBottom: '1px solid var(--ao-border)' }}>
+                  {activeBrief.subtitle}
+                </p>
               )}
-              {activeBrief.issueNumber && activeBrief.publishedAt && <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--ao-border-2)', display: 'block' }} />}
-              {activeBrief.publishedAt && (
-                <span style={{ fontFamily: mono, fontSize: 9, color: 'var(--ao-t3)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                  {new Date(activeBrief.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()}
-                </span>
-              )}
-            </div>
 
-            <h2 style={{ fontFamily: sans, fontSize: 'clamp(24px,3vw,40px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--ao-t1)', marginBottom: 16 }}>
-              {activeBrief.title}
-            </h2>
-
-            {activeBrief.subtitle && (
-              <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--ao-t2)', marginBottom: 36, paddingBottom: 28, borderBottom: '1px solid var(--ao-border)' }}>
-                {activeBrief.subtitle}
-              </p>
-            )}
-
-            <BriefContent content={activeBrief.content} />
-          </>
-        ) : (
-          <p style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t3)' }}>Select an issue from the list.</p>
-        )}
+              <BriefContent content={activeBrief.content} />
+            </>
+          ) : (
+            <p style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t3)' }}>Select an issue from the list.</p>
+          )}
+        </div>
       </div>
     </div>
   )

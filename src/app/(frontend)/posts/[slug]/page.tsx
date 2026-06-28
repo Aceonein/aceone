@@ -97,7 +97,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
 
       {/* Breadcrumb */}
-      <div style={{ borderBottom: '1px solid var(--ao-border)', background: 'var(--ao-bg)' }}>
+      <div style={{ position: 'sticky', top: 'var(--ao-nav-h)', zIndex: 50, borderBottom: '1px solid var(--ao-border)', background: 'var(--ao-bg)' }}>
         <div className="ao-breadcrumb-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: 36, display: 'flex', alignItems: 'center', gap: 6, fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)' }}>
           <Link href="/" style={{ color: 'var(--ao-t3)', textDecoration: 'none' }}>Home</Link>
           <span>/</span>
@@ -117,46 +117,42 @@ export default async function PostPage({ params: paramsPromise }: Args) {
         {/* ── Left sidebar ── */}
         <aside className="ao-sidebar-left" style={{ borderRight: '1px solid var(--ao-border)', padding: '32px 20px', position: 'sticky', top: 'calc(var(--ao-nav-h) + 36px + 2px)', alignSelf: 'start', display: 'flex', flexDirection: 'column', gap: 0, maxHeight: 'calc(100vh - var(--ao-nav-h) - 60px)', overflowY: 'auto' }}>
 
-          {/* Category badge */}
-          {cat?.title && (
-            <div style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Category</div>
-              <Link href={`/?cat=${(cat.title as string).toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
-                <span style={{ display: 'inline-block', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent, border: `1px solid ${accent}`, padding: '4px 10px' }}>
-                  {cat.title}
-                </span>
-              </Link>
-            </div>
-          )}
-
-          {/* Published */}
-          {date && (
-            <div style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Published</div>
-              <div style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t2)' }}>{date}</div>
-            </div>
-          )}
-
-          {/* Read time */}
-          {(post as any).readTime && (
-            <div style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Read time</div>
-              <div style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t2)' }}>{(post as any).readTime} min</div>
-            </div>
-          )}
-
-          {/* Views */}
-          {views != null && (
-            <div style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Views</div>
-              <div style={{ fontFamily: mono, fontSize: 22, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1 }}>
-                {views > 999 ? `${(views / 1000).toFixed(1)}k` : views}
+          {/* Meta grid — 2-col on mobile */}
+          <div className="ao-meta-grid">
+            {cat?.title && (
+              <div className="ao-meta-item ao-meta-cat" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
+                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Category</div>
+                <Link href={`/?cat=${(cat.title as string).toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
+                  <span style={{ display: 'inline-block', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent, border: `1px solid ${accent}`, padding: '4px 10px' }}>
+                    {cat.title}
+                  </span>
+                </Link>
               </div>
-            </div>
-          )}
+            )}
+            {date && (
+              <div className="ao-meta-item" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
+                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Published</div>
+                <div style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t2)' }}>{date}</div>
+              </div>
+            )}
+            {(post as any).readTime && (
+              <div className="ao-meta-item" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
+                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Read time</div>
+                <div style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t2)' }}>{(post as any).readTime} min</div>
+              </div>
+            )}
+            {views != null && (
+              <div className="ao-meta-item" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
+                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Views</div>
+                <div style={{ fontFamily: mono, fontSize: 22, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1 }}>
+                  {views > 999 ? `${(views / 1000).toFixed(1)}k` : views}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Upvote */}
-          <div style={{ marginBottom: 20 }}>
+          <div className="ao-sidebar-actions" style={{ marginBottom: 20 }}>
             <UpvoteButton slug={decodedSlug} initial={upvotes} />
           </div>
 
@@ -196,20 +192,20 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           )}
 
           {/* Title */}
-          <h1 style={{ fontFamily: sans, fontSize: 'clamp(32px,4vw,52px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.025em', color: 'var(--ao-t1)', marginBottom: 24, maxWidth: 780 }}>
+          <h1 className="ao-article-title" style={{ fontFamily: sans, fontSize: 'clamp(32px,4vw,52px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.025em', color: 'var(--ao-t1)', marginBottom: 24, maxWidth: 780 }}>
             {post.title}
           </h1>
 
           {/* Excerpt / lead */}
           {(post as any).excerpt && (
-            <p style={{ fontSize: 17, lineHeight: 1.72, color: 'var(--ao-t2)', marginBottom: 32, paddingLeft: 18, borderLeft: '2px solid var(--ao-border-2)', maxWidth: 640 }}>
+            <p className="ao-article-excerpt" style={{ fontSize: 17, lineHeight: 1.72, color: 'var(--ao-t2)', marginBottom: 32, paddingLeft: 18, borderLeft: '2px solid var(--ao-border-2)', maxWidth: 640 }}>
               {(post as any).excerpt}
             </p>
           )}
 
           {/* Author row */}
           {author && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, paddingBottom: 28, borderBottom: '1px solid var(--ao-border)', marginBottom: 36 }}>
+            <div className="ao-author-row" style={{ display: 'flex', alignItems: 'center', gap: 14, paddingBottom: 28, borderBottom: '1px solid var(--ao-border)', marginBottom: 36 }}>
               <div style={{ width: 34, height: 34, background: 'var(--ao-bg-2)', border: `1px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: mono, fontSize: 12, fontWeight: 700, color: accent, flexShrink: 0 }}>
                 {author.name?.charAt(0) ?? 'A'}
               </div>
@@ -226,8 +222,35 @@ export default async function PostPage({ params: paramsPromise }: Args) {
                   {views > 999 ? `${(views / 1000).toFixed(1)}k` : views} views
                 </div>
               )}
+              <UpvoteButton slug={decodedSlug} initial={upvotes} compact />
             </div>
           )}
+
+          {/* Mobile meta — share + tags (hidden on desktop) */}
+          <div className="ao-mobile-meta" style={{ display: 'none', marginBottom: 28 }}>
+            {/* Share */}
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>Share</div>
+              <ShareButtons url={fullUrl} title={post.title} horizontal />
+            </div>
+            {/* Tags */}
+            {tags.length > 0 && (
+              <div>
+                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>Tags</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {tags.slice(0, 8).map((tag: any, i: number) => {
+                    const label = typeof tag === 'object' ? (tag.title ?? tag.name ?? '') : tag
+                    return (
+                      <span key={i} style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ao-t2)', border: '1px solid var(--ao-border-2)', padding: '4px 8px' }}>
+                        {label}
+                      </span>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+            <div style={{ borderBottom: '1px solid var(--ao-border)', marginTop: 20 }} />
+          </div>
 
           {/* Cover image */}
           {img?.url ? (
@@ -271,17 +294,18 @@ export default async function PostPage({ params: paramsPromise }: Args) {
             </div>
           )}
 
-          {/* TOC */}
-          <TOCClient items={toc} />
-
-          {/* Newsletter mini */}
-          <div style={{ background: 'var(--ao-bg-2)', border: '1px solid var(--ao-border)', padding: 18 }}>
-            <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>The Brief</div>
-            <p style={{ fontSize: 12, color: 'var(--ao-t2)', lineHeight: 1.6, marginBottom: 14 }}>Weekly financial clarity. Every Sunday.</p>
-            <Link href="#newsletter" className="ao-cta" style={{ display: 'block', textAlign: 'center', padding: '9px 0', background: 'var(--ao-t1)', color: 'var(--ao-bg)', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
-              Subscribe →
-            </Link>
+          {/* TOC + Newsletter — desktop only */}
+          <div className="ao-sidebar-desktop-only">
+            <TOCClient items={toc} />
+            <div style={{ background: 'var(--ao-bg-2)', border: '1px solid var(--ao-border)', padding: 18, marginTop: 32 }}>
+              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>The Brief</div>
+              <p style={{ fontSize: 12, color: 'var(--ao-t2)', lineHeight: 1.6, marginBottom: 14 }}>Weekly financial clarity. Every Sunday.</p>
+              <Link href="#newsletter" className="ao-cta" style={{ display: 'block', textAlign: 'center', padding: '9px 0', background: 'var(--ao-t1)', color: 'var(--ao-bg)', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
+                Subscribe →
+              </Link>
+            </div>
           </div>
+
         </aside>
       </div>
 

@@ -336,20 +336,24 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={13} height={13} style={{ color: 'var(--ao-t3)', flexShrink: 0 }}>
               <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
             </svg>
-            {activecat !== 'all' && (
-              <button
-                onClick={() => setActivecat('all')}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0,
-                  fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: 'var(--ao-bg)', background: 'var(--ao-accent)',
-                  border: 'none', padding: '3px 8px', cursor: 'pointer',
-                }}
-              >
-                {catTabs.find(c => c.cat === activecat)?.label}
-                <span style={{ opacity: 0.7 }}>×</span>
-              </button>
-            )}
+            {activecat !== 'all' && (() => {
+              const activeCatTab = catTabs.find(c => c.cat === activecat)
+              const chipColor = activeCatTab?.color ? catColor(activeCatTab.color) : 'var(--ao-accent)'
+              return (
+                <button
+                  onClick={() => setActivecat('all')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0,
+                    fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
+                    color: '#fff', background: chipColor,
+                    border: 'none', padding: '3px 8px', cursor: 'pointer',
+                  }}
+                >
+                  {activeCatTab?.label}
+                  <span style={{ opacity: 0.7 }}>×</span>
+                </button>
+              )
+            })()}
             <input
               value={query}
               onChange={e => setQuery(e.target.value)}

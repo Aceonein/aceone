@@ -18,12 +18,13 @@ export function ReadingProgress() {
 
   return (
     <div style={{
-      position: 'fixed', top: 'var(--ao-nav-h)', left: 0, right: 0, zIndex: 999,
+      position: 'fixed', top: 'calc(var(--ao-nav-h) + 36px)', left: 0, right: 0, zIndex: 999,
       height: 2, background: 'var(--ao-border)',
     }}>
       <div style={{
-        height: '100%', background: 'var(--ao-accent)',
-        width: `${pct}%`, transition: 'width 0.1s linear',
+        height: '100%', width: '100%', background: 'var(--ao-accent)',
+        transform: `scaleX(${pct / 100})`, transformOrigin: 'left',
+        transition: 'transform 0.1s linear',
       }} />
     </div>
   )

@@ -129,7 +129,7 @@ export default async function BriefIssuePage({ params }: { params: Promise<{ slu
   return (
     <main style={{ background: 'var(--ao-bg)', minHeight: '100vh', paddingTop: 'var(--ao-nav-h)' }}>
       {/* Back */}
-      <div style={{ borderBottom: '1px solid var(--ao-border)', padding: '16px 48px', maxWidth: 1280, margin: '0 auto' }}>
+      <div className="ao-brief-back" style={{ borderBottom: '1px solid var(--ao-border)', padding: '16px 48px', maxWidth: 1280, margin: '0 auto' }}>
         <Link
           href="/the-brief"
           style={{
@@ -147,7 +147,7 @@ export default async function BriefIssuePage({ params }: { params: Promise<{ slu
       </div>
 
       {/* Article */}
-      <article style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 48px 100px', display: 'grid', gridTemplateColumns: '1fr 300px', gap: 64 }}>
+      <article className="ao-brief-article" style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 48px 100px', display: 'grid', gridTemplateColumns: '1fr 300px', gap: 64 }}>
         {/* Main */}
         <div>
           {/* Meta */}

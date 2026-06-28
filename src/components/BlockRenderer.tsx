@@ -33,7 +33,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
   if (!blocks?.length) return null
 
   return (
-    <div style={{ maxWidth: 680 }}>
+    <div className="ao-article-content" style={{ maxWidth: 680 }}>
       {blocks.map((block: any, i: number) => {
         const type = block.blockType
 
@@ -108,10 +108,10 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 0 }}>
               {(block.dataPoints ?? []).map((dp: any, j: number) => (
                 <div key={j}>
-                  <div style={{ fontFamily: s.serif, fontSize: 28, fontWeight: 700, lineHeight: 1, color: dp.isNegative ? '#ef4444' : s.acc, marginBottom: 4, transition: 'color 0.4s' }}>
+                  <div className="ao-data-value" style={{ fontFamily: s.serif, fontSize: 28, fontWeight: 700, lineHeight: 1, color: dp.isNegative ? '#ef4444' : s.acc, marginBottom: 4, transition: 'color 0.4s' }}>
                     {dp.value}{dp.unit && <span style={{ fontSize: 15, fontWeight: 400, marginLeft: 3 }}>{dp.unit}</span>}
                   </div>
-                  <div style={{ fontSize: 12.5, color: s.t3, lineHeight: 1.4, transition: 'color 0.4s' }}>{dp.label}</div>
+                  <div className="ao-data-label" style={{ fontSize: 12.5, color: s.t3, lineHeight: 1.4, transition: 'color 0.4s' }}>{dp.label}</div>
                 </div>
               ))}
             </div>
@@ -119,7 +119,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         )
 
         if (type === 'table') return (
-          <div key={i} style={{ margin: '36px 0', overflowX: 'auto' }}>
+          <div key={i} className="ao-article-table" style={{ margin: '36px 0', overflowX: 'auto' }}>
             {block.caption && <div style={{ fontFamily: s.mono, fontSize: 11, color: s.t3, marginBottom: 10 }}>{block.caption}</div>}
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, color: s.t2 }}>
               {block.headers?.length > 0 && (

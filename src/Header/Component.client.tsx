@@ -55,8 +55,8 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
   useEffect(() => { setMenuOpen(false) }, [pathname])
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
+    document.documentElement.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.documentElement.style.overflow = '' }
   }, [menuOpen])
 
   const toggleTheme = () => {
@@ -104,8 +104,8 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
         ...borderSide,
         fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: active ? 700 : 400,
         letterSpacing: '0.1em', textTransform: 'uppercase',
-        color: active ? '#0a0a08' : 'var(--ao-t3)',
-        background: active ? '#ffffff' : 'none',
+        color: active ? 'var(--ao-bg)' : 'var(--ao-t3)',
+        background: active ? 'var(--ao-t1)' : 'none',
         textDecoration: 'none', whiteSpace: 'nowrap',
         borderBottom: active ? '2px solid var(--ao-accent)' : '2px solid transparent',
         transition: 'color 0.2s, background 0.2s',
@@ -161,24 +161,24 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
 
           <div style={{ flex: 1 }} />
 
-          <div style={{ display: 'flex', alignItems: 'stretch' }}>
+          <div className="ao-nav-cta-right" style={{ display: 'flex', alignItems: 'stretch' }}>
             {rightItems.map(item => renderItem(item, 'right'))}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 48, flexShrink: 0, background: 'none', border: 'none',
-                borderLeft: '1px solid var(--ao-border)',
-                cursor: 'pointer', color: 'var(--ao-t3)', transition: 'color 0.2s',
-              }}
-            >
-              {theme === 'dark'
-                ? <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>
-                : <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
-              }
-            </button>
           </div>
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 48, flexShrink: 0, background: 'none', border: 'none',
+              borderLeft: '1px solid var(--ao-border)',
+              cursor: 'pointer', color: 'var(--ao-t3)', transition: 'color 0.2s',
+            }}
+          >
+            {theme === 'dark'
+              ? <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>
+              : <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+            }
+          </button>
         </div>
       </header>
 
@@ -209,8 +209,8 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
                   fontFamily: 'var(--font-mono)', fontSize: 12,
                   fontWeight: active ? 700 : 400,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: active ? 'var(--ao-t1)' : 'var(--ao-t2)',
-                  background: active ? 'rgba(255,255,255,0.07)' : 'transparent',
+                  color: active ? 'var(--ao-bg)' : 'var(--ao-t2)',
+                  background: active ? 'var(--ao-t1)' : 'transparent',
                   textDecoration: 'none',
                 }}
               >
@@ -261,11 +261,11 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
                         borderBottom: '1px solid var(--ao-border)',
                         borderLeft: active ? '3px solid var(--ao-accent)' : '3px solid transparent',
                         paddingLeft: active ? '37px' : '40px',
-                        background: active ? 'rgba(255,255,255,0.07)' : 'var(--ao-bg-2)',
+                        background: active ? 'var(--ao-t1)' : 'var(--ao-bg-2)',
                         fontFamily: 'var(--font-mono)', fontSize: 11,
                         fontWeight: active ? 600 : 400,
                         letterSpacing: '0.04em',
-                        color: active ? 'var(--ao-t1)' : 'var(--ao-t2)',
+                        color: active ? 'var(--ao-bg)' : 'var(--ao-t2)',
                         textDecoration: 'none',
                       }}
                     >
@@ -278,25 +278,6 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
             )
           })}
 
-          {/* CTA pinned bottom */}
-          {ctaItem && (
-            <div style={{ padding: 20, marginTop: 'auto', borderTop: '1px solid var(--ao-border)' }}>
-              <Link
-                href={ctaItem.href}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                  padding: '16px 24px', width: '100%', boxSizing: 'border-box',
-                  fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
-                  letterSpacing: '0.14em', textTransform: 'uppercase',
-                  color: 'var(--ao-bg)', background: 'var(--ao-t1)',
-                  textDecoration: 'none',
-                }}
-              >
-                {ctaItem.label} →
-              </Link>
-            </div>
-          )}
         </div>
       )}
     </>

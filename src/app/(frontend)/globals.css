@@ -339,6 +339,7 @@ html[data-theme='light'] {
 /* ── Desktop defaults for mobile-only elements ── */
 .ao-hamburger { display: none; }
 .ao-list-meta-inline { display: none; }
+.ao-mobile-meta { display: none; }
 
 /* ── Mobile responsive (≤ 900px) ── */
 @media (max-width: 900px) {
@@ -367,7 +368,8 @@ html[data-theme='light'] {
   .ao-nl-label { margin-bottom: 14px !important; }
   .ao-nl-heading { font-size: clamp(28px,8vw,40px) !important; margin-bottom: 12px !important; }
   .ao-nl-desc { font-size: 14px !important; margin-bottom: 20px !important; }
-  .ao-nl-form input { min-width: 0; box-sizing: border-box !important; }
+  .ao-nl-form input { min-width: 0; box-sizing: border-box !important; height: 38px !important; font-size: 12px !important; padding: 0 12px !important; }
+  .ao-nl-form button { height: 38px !important; padding: 0 16px !important; font-size: 12px !important; }
 
   /* Footer */
   .ao-footer-grid { grid-template-columns: 1fr 1fr !important; }
@@ -377,12 +379,39 @@ html[data-theme='light'] {
   .ao-social-label { display: none !important; }
 
   /* Article */
-  .ao-article-3col { grid-template-columns: 1fr !important; }
+  .ao-article-3col { grid-template-columns: 1fr !important; overflow-x: hidden !important; }
   .ao-sidebar-left { display: none !important; }
-  .ao-sidebar-right { display: none !important; }
-  .ao-article-main { padding: 24px 16px 60px !important; border-right: none !important; }
+  .ao-mobile-meta { display: block !important; }
+  .ao-sidebar-desktop-only { display: none !important; }
+  .ao-sidebar-right { position: static !important; max-height: none !important; overflow-y: visible !important; border-top: 1px solid var(--ao-border) !important; padding: 20px 16px !important; gap: 20px !important; }
+  .ao-article-main { padding: 24px 16px 60px !important; border-right: none !important; min-width: 0 !important; overflow-x: hidden !important; }
+  .ao-nav-cta-right a { padding: 0 14px !important; font-size: 10px !important; }
   .ao-breadcrumb-inner { padding: 0 16px !important; }
+
+  .ao-author-row { margin-bottom: 12px !important; padding-bottom: 16px !important; }
+
+  /* Article typography */
+  .ao-article-title { font-size: clamp(24px,7vw,32px) !important; margin-bottom: 16px !important; }
+  .ao-article-excerpt { font-size: 14px !important; margin-bottom: 24px !important; }
+  .ao-article-content p { font-size: 15px !important; line-height: 1.75 !important; margin-bottom: 20px !important; }
+  .ao-article-content h2 { font-size: 22px !important; margin-top: 36px !important; margin-bottom: 12px !important; }
+  .ao-article-content h3 { font-size: 18px !important; margin-top: 28px !important; }
+  .ao-article-content h4 { font-size: 15px !important; }
+  .ao-article-content li { font-size: 14px !important; }
+  .ao-article-content blockquote p { font-size: 18px !important; }
+  .ao-data-value { font-size: 20px !important; }
+  .ao-data-value span { font-size: 12px !important; }
+  .ao-data-label { font-size: 11px !important; }
+  .ao-article-table table { font-size: 12px !important; }
+  .ao-article-table th { font-size: 9px !important; padding: 8px 10px !important; }
+  .ao-article-table td { padding: 8px 10px !important; }
 }
+
+/* ── Tablet: hide sidebar-only items (900–1100px) ── */
+@media (max-width: 1100px) {
+  .ao-sidebar-desktop-only { display: none !important; }
+}
+
 
 /* ── CTA hover ── */
 .ao-cta {
@@ -391,6 +420,46 @@ html[data-theme='light'] {
 .ao-cta:hover {
   background: var(--ao-accent) !important;
   color: #fff !important;
+}
+
+/* ── The Brief — mobile ── */
+@media (max-width: 900px) {
+  /* Hero */
+  .ao-brief-hero-inner { padding: 28px 16px 0 !important; }
+  .ao-brief-stats { flex-wrap: nowrap !important; overflow-x: auto !important; }
+  .ao-brief-stat-item { padding: 14px 14px !important; flex-shrink: 0 !important; }
+  .ao-brief-hero-cta { display: none !important; }
+
+  /* Archive layout — single column, sidebar stacks above content */
+  .ao-brief-client { grid-template-columns: 1fr !important; overflow: visible !important; }
+  .ao-brief-sidebar {
+    position: static !important;
+    height: auto !important;
+    max-height: 280px;
+    overflow-y: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--ao-border);
+    opacity: 1 !important;
+  }
+  .ao-brief-toggle-tab { display: none !important; }
+  .ao-brief-content-inner { padding: 24px 16px 60px !important; }
+
+  /* Content font sizes */
+  .ao-brief-body h2 { font-size: 19px !important; margin: 24px 0 8px !important; }
+  .ao-brief-body h3 { font-size: 16px !important; }
+  .ao-brief-body p { font-size: 14px !important; line-height: 1.7 !important; margin-bottom: 14px !important; }
+  .ao-brief-body li { font-size: 14px !important; }
+
+  /* Issue page */
+  .ao-brief-back { padding: 12px 16px !important; }
+  .ao-brief-article {
+    padding: 28px 16px 60px !important;
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .ao-brief-article h1 { font-size: clamp(22px,6vw,32px) !important; }
+  .ao-brief-article p { font-size: 14px !important; line-height: 1.7 !important; }
+  .ao-brief-article li { font-size: 14px !important; }
 }
 
 /* ── Reduced motion ── */

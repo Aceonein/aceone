@@ -7,7 +7,7 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-export function UpvoteButton({ slug, initial }: { slug: string; initial: number }) {
+export function UpvoteButton({ slug, initial, compact }: { slug: string; initial: number; compact?: boolean }) {
   const [count, setCount] = useState(initial)
   const [voted, setVoted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -29,6 +29,32 @@ export function UpvoteButton({ slug, initial }: { slug: string; initial: number 
       }
     } catch {}
     setLoading(false)
+  }
+
+  if (compact) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, flexShrink: 0 }}>
+        <button
+          onClick={toggle}
+          disabled={loading}
+          aria-label="Upvote"
+          style={{
+            width: 34, height: 34,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: voted ? 'var(--ao-t1)' : 'var(--ao-bg-2)',
+            border: '1px solid var(--ao-border)',
+            cursor: 'pointer',
+            color: voted ? 'var(--ao-bg)' : 'var(--ao-t3)',
+            transition: 'all 0.2s',
+          }}
+        >
+          <svg viewBox="0 0 16 16" fill="currentColor" width={12} height={12}>
+            <path d="M8 2L2 9h4v5h4V9h4L8 2z" />
+          </svg>
+        </button>
+        <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1, textAlign: 'center', width: 34 }}>{count}</div>
+      </div>
+    )
   }
 
   return (
@@ -57,7 +83,7 @@ export function UpvoteButton({ slug, initial }: { slug: string; initial: number 
   )
 }
 
-export function ShareButtons({ url, title }: { url: string; title: string }) {
+export function ShareButtons({ url, title, horizontal }: { url: string; title: string; horizontal?: boolean }) {
   const [copied, setCopied] = useState(false)
 
   const copyLink = async () => {
@@ -108,17 +134,19 @@ export function ShareButtons({ url, title }: { url: string; title: string }) {
   ]
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: horizontal ? 'row' : 'column', flexWrap: horizontal ? 'wrap' : undefined, gap: horizontal ? 4 : 0 }}>
       {items.map(({ label, onClick, icon }) => (
         <button
           key={label}
           onClick={onClick}
           style={{
-            display: 'flex', alignItems: 'center', gap: 10,
-            padding: '10px 0', background: 'none', border: 'none',
-            borderBottom: '1px solid var(--ao-border)',
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: horizontal ? '7px 12px' : '10px 0',
+            background: horizontal ? 'var(--ao-bg-2)' : 'none',
+            border: horizontal ? '1px solid var(--ao-border)' : 'none',
+            borderBottom: horizontal ? '1px solid var(--ao-border)' : '1px solid var(--ao-border)',
             cursor: 'pointer', textAlign: 'left',
-            fontFamily: mono, fontSize: 11, color: 'var(--ao-t2)',
+            fontFamily: mono, fontSize: 10, color: 'var(--ao-t2)',
             letterSpacing: '0.04em',
           }}
         >
