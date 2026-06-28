@@ -24,7 +24,7 @@ const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   draft: { bg: 'rgba(255,255,255,0.06)', color: '#6b7296' },
   review: { bg: 'rgba(251,191,36,0.12)', color: '#fbbf24' },
   approved: { bg: 'rgba(34,197,94,0.12)', color: '#22c55e' },
-  published: { bg: 'rgba(72,120,232,0.15)', color: '#6fa0f8' },
+  published: { bg: 'rgba(107,111,240,0.12)', color: '#6b6ff0' },
 }
 
 function fmtDate(iso: string) {
@@ -34,7 +34,7 @@ function fmtDate(iso: string) {
 function StatusBadge({ status }: { status: string }) {
   const s = STATUS_COLORS[status] ?? { bg: 'rgba(255,255,255,0.06)', color: '#6b7296' }
   return (
-    <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 100, fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' as const, background: s.bg, color: s.color, whiteSpace: 'nowrap' as const }}>
+    <span style={{ display: 'inline-block', padding: '2px 10px', borderRadius: 0, fontSize: 10, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' as const, background: s.bg, color: s.color, whiteSpace: 'nowrap' as const }}>
       {STATUS_LABELS[status] ?? status}
     </span>
   )
@@ -43,7 +43,7 @@ function StatusBadge({ status }: { status: string }) {
 function StatCard({ label, count, status }: { label: string; count: number; status: string }) {
   const s = STATUS_COLORS[status] ?? { bg: 'rgba(255,255,255,0.06)', color: '#6b7296' }
   return (
-    <div style={{ padding: '20px 24px', border: `1px solid ${s.color}30`, borderRadius: 10, background: s.bg, display: 'flex', flexDirection: 'column' as const, gap: 6, minWidth: 110 }}>
+    <div style={{ padding: '20px 24px', border: `1px solid ${s.color}30`, borderRadius: 0, background: s.bg, display: 'flex', flexDirection: 'column' as const, gap: 6, minWidth: 110 }}>
       <div style={{ fontSize: 28, fontWeight: 700, color: s.color, lineHeight: 1 }}>{count}</div>
       <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: s.color, opacity: 0.75 }}>{label}</div>
     </div>
@@ -123,7 +123,7 @@ const BeforeDashboard: React.FC = () => {
 
           {/* Attention banner */}
           {needsAttention.length > 0 && (
-            <div style={{ marginBottom: 24, padding: '14px 18px', borderRadius: 8, border: '1px solid rgba(251,191,36,0.25)', background: 'rgba(251,191,36,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ marginBottom: 24, padding: '14px 18px', borderRadius: 0, border: '1px solid rgba(251,191,36,0.25)', background: 'rgba(251,191,36,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
               <span style={{ fontSize: 16 }}>⚠️</span>
               <span style={{ fontSize: 13, color: '#fbbf24', fontWeight: 500 }}>
                 {role === 'moderator'
@@ -142,7 +142,7 @@ const BeforeDashboard: React.FC = () => {
               <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: 'var(--theme-text-dim, #6b7296)', marginBottom: 12 }}>
                 {role === 'admin' ? 'All Posts' : role === 'moderator' ? 'Posts to Review' : 'Your Posts'}
               </div>
-              <div style={{ border: '1px solid var(--theme-border-color, rgba(255,255,255,0.06))', borderRadius: 10, overflow: 'hidden' }}>
+              <div style={{ border: '1px solid var(--theme-border-color, rgba(255,255,255,0.06))', borderRadius: 0, overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: 13 }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--theme-border-color, rgba(255,255,255,0.06))', background: 'rgba(255,255,255,0.02)' }}>
@@ -171,7 +171,7 @@ const BeforeDashboard: React.FC = () => {
                           {fmtDate(post.updatedAt)}
                         </td>
                         <td style={{ padding: '12px 16px', textAlign: 'right' as const }}>
-                          <a href={`/admin/collections/posts/${post.id}`} style={{ fontSize: 11, color: '#6fa0f8', textDecoration: 'none', fontWeight: 600, letterSpacing: '0.06em', whiteSpace: 'nowrap' as const }}>
+                          <a href={`/admin/collections/posts/${post.id}`} style={{ fontSize: 11, color: '#6b6ff0', textDecoration: 'none', fontWeight: 600, letterSpacing: '0.06em', whiteSpace: 'nowrap' as const }}>
                             Open →
                           </a>
                         </td>
@@ -182,7 +182,7 @@ const BeforeDashboard: React.FC = () => {
                 {tablePosts.length > 20 && (
                   <div style={{ padding: '10px 16px', borderTop: '1px solid var(--theme-border-color, rgba(255,255,255,0.06))', fontSize: 12, color: 'var(--theme-text-dim, #6b7296)' }}>
                     Showing 20 of {tablePosts.length} —{' '}
-                    <a href="/admin/collections/posts" style={{ color: '#6fa0f8', textDecoration: 'none' }}>view all</a>
+                    <a href="/admin/collections/posts" style={{ color: '#6b6ff0', textDecoration: 'none' }}>view all</a>
                   </div>
                 )}
               </div>
@@ -190,7 +190,7 @@ const BeforeDashboard: React.FC = () => {
           ) : (
             <div style={{ padding: '32px 0', textAlign: 'center' as const, color: 'var(--theme-text-dim, #6b7296)', fontSize: 13 }}>
               {role === 'author' ? 'No posts yet. ' : 'No posts to show. '}
-              <a href="/admin/collections/posts/create" style={{ color: '#6fa0f8', textDecoration: 'none' }}>
+              <a href="/admin/collections/posts/create" style={{ color: '#6b6ff0', textDecoration: 'none' }}>
                 Create your first post →
               </a>
             </div>

@@ -16,6 +16,7 @@
   --theme-success-500: #22c55e;
   --theme-error-500: #ef4444;
   --theme-warning-500: #f59e0b;
+  --ao-accent: #6b6ff0;
 }
 
 body {
@@ -33,38 +34,63 @@ nav[class*="nav"],
   border-right: 1px solid var(--theme-border-color) !important;
 }
 
+/* Nav brand — ACEONE/ wordmark */
 .nav__brand,
 [class*="nav__brand"] {
   font-family: 'Space Mono', monospace !important;
   font-size: 12px !important;
-  letter-spacing: 0.22em !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
   text-transform: uppercase !important;
-  opacity: 0.8;
+  color: var(--theme-text) !important;
+  opacity: 1 !important;
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 8px !important;
 }
 
+/* Sidebar group labels (Collections, Utilities, Globals) */
+[class*="nav__group-label"],
+[class*="nav__group"] > span,
+[class*="nav__label"] {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: var(--theme-text-dim) !important;
+  opacity: 0.6 !important;
+  margin-top: 16px !important;
+}
+
+/* Nav links */
 .nav__link,
 [class*="nav-cell"],
 [class*="nav__link"] {
+  font-family: 'DM Sans', sans-serif !important;
   font-size: 13px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.01em !important;
-  border-radius: 8px !important;
-  transition: background 0.18s, color 0.18s !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  border-radius: 0 !important;
+  color: var(--theme-text-dim) !important;
+  transition: background 0.15s, color 0.15s !important;
 }
 
 .nav__link:hover,
 [class*="nav__link"]:hover {
   background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--theme-text) !important;
 }
 
 .nav__link--active,
 [class*="nav__link--active"],
 [aria-current="page"] {
-  background: rgba(72, 120, 232, 0.12) !important;
-  color: #6fa0f8 !important;
+  background: rgba(107, 111, 240, 0.1) !important;
+  color: #8387f4 !important;
+  border-left: 2px solid var(--ao-accent) !important;
 }
 
-/* ── Toolbar ── */
+/* ── Toolbar / top header ── */
 .app-header,
 [class*="app-header"],
 [class*="step-nav"],
@@ -72,6 +98,23 @@ nav[class*="nav"],
   background: var(--theme-elevation-50) !important;
   border-bottom: 1px solid var(--theme-border-color) !important;
   font-family: 'DM Sans', sans-serif !important;
+}
+
+/* Breadcrumb text */
+[class*="step-nav__label"],
+[class*="step-nav__chevron"] {
+  color: var(--theme-text-dim) !important;
+  font-size: 13px !important;
+}
+
+/* Document title (h1 in post edit) */
+[class*="doc-header__title"],
+[class*="document__header"] h1 {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  color: var(--theme-text) !important;
+  letter-spacing: -0.01em !important;
 }
 
 /* ── Collection table ── */
@@ -91,36 +134,100 @@ thead tr,
 th,
 [class*="table__header-cell"] {
   font-family: 'Space Mono', monospace !important;
-  font-size: 10px !important;
-  font-weight: 400 !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
   color: var(--theme-text-dim) !important;
-  padding: 10px 16px !important;
+  padding: 12px 16px !important;
 }
 
 tbody tr,
 [class*="table__row"] {
   border-bottom: 1px solid var(--theme-border-color) !important;
-  transition: background 0.14s !important;
+  transition: background 0.12s !important;
 }
 
 tbody tr:hover,
 [class*="table__row"]:hover {
-  background: rgba(255, 255, 255, 0.025) !important;
+  background: rgba(107, 111, 240, 0.04) !important;
 }
 
 td,
 [class*="table__cell"] {
-  font-size: 13.5px !important;
+  font-size: 13px !important;
   padding: 14px 16px !important;
   color: var(--theme-text) !important;
   vertical-align: middle !important;
 }
 
-/* ── Cards / panels ── */
+/* Cell links */
+td a,
+[class*="table__cell"] a {
+  color: var(--theme-text) !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  transition: color 0.15s !important;
+}
+
+td a:hover,
+[class*="table__cell"] a:hover {
+  color: #8387f4 !important;
+}
+
+/* ── Dashboard collection cards ── */
+/* Payload renders dashboard cards with mostly empty visual — force text visible */
 .card,
-[class*="card"],
+[class*="card__"] {
+  border-radius: 0 !important;
+}
+
+[class*="card__title"] {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--theme-text) !important;
+  opacity: 1 !important;
+}
+
+[class*="card__body"],
+[class*="card__content"],
+[class*="card__count"],
+[class*="card__actions"] {
+  color: var(--theme-text) !important;
+  opacity: 1 !important;
+}
+
+[class*="card__count"],
+[class*="card__actions"] span {
+  color: var(--theme-text-dim) !important;
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+}
+
+/* Dashboard collection card wrapper */
+.card {
+  border: 1px solid var(--theme-border-color) !important;
+  background: var(--theme-elevation-50) !important;
+  transition: border-color 0.15s, background 0.15s !important;
+  position: relative !important;
+}
+
+.card:hover {
+  border-color: rgba(107, 111, 240, 0.3) !important;
+  background: var(--theme-elevation-100) !important;
+}
+
+/* card__click is a full-card anchor overlay — must be transparent */
+.card__click {
+  background: transparent !important;
+  position: absolute !important;
+  inset: 0 !important;
+}
+
+/* ── Form panels ── */
 .render-fields,
 [class*="render-fields"],
 .form-submit,
@@ -128,17 +235,14 @@ td,
 [class*="doc-controls"] {
   background: var(--theme-elevation-50) !important;
   border: 1px solid var(--theme-border-color) !important;
-  border-radius: 12px !important;
+  border-radius: 0 !important;
 }
 
-/* Force card title/label text visible — Payload dark mode zeroes this out */
-[class*="card"] h3,
-[class*="card"] h4,
-[class*="card"] p,
-[class*="card"] span:not([class*="icon"]),
-[class*="card__title"],
-[class*="card__body"] {
-  color: var(--theme-text) !important;
+/* Section / row dividers inside forms */
+[class*="row__"],
+[class*="field-description"] {
+  color: var(--theme-text-dim) !important;
+  font-size: 12px !important;
 }
 
 /* ── Inputs ── */
@@ -151,20 +255,25 @@ select,
 .field-type textarea {
   background: var(--theme-elevation-0) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   color: var(--theme-text) !important;
   font-family: 'DM Sans', sans-serif !important;
   font-size: 14px !important;
   padding: 10px 14px !important;
-  transition: border-color 0.18s, box-shadow 0.18s !important;
+  transition: border-color 0.15s !important;
 }
 
 input:focus,
 textarea:focus,
 [class*="text-input__input"]:focus {
-  border-color: rgba(72, 120, 232, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(72, 120, 232, 0.12) !important;
+  border-color: rgba(107, 111, 240, 0.5) !important;
   outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--theme-text-dim) !important;
+  opacity: 0.5 !important;
 }
 
 /* ── Buttons ── */
@@ -174,27 +283,32 @@ button[class*="button"] {
   font-family: 'DM Sans', sans-serif !important;
   font-size: 13px !important;
   font-weight: 600 !important;
-  border-radius: 8px !important;
-  transition: all 0.18s !important;
+  border-radius: 0 !important;
+  transition: background 0.15s, opacity 0.15s !important;
   letter-spacing: 0.01em !important;
 }
 
 .btn--style-primary,
 [class*="btn--style-primary"] {
-  background: #4878e8 !important;
+  background: var(--ao-accent) !important;
   color: #fff !important;
   border: none !important;
 }
 
 .btn--style-primary:hover {
-  background: #6090f0 !important;
+  background: #8387f4 !important;
 }
 
 .btn--style-secondary,
 [class*="btn--style-secondary"] {
   background: transparent !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   color: var(--theme-text) !important;
+}
+
+.btn--style-secondary:hover,
+[class*="btn--style-secondary"]:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* ── Labels / field names ── */
@@ -202,8 +316,8 @@ button[class*="button"] {
 [class*="field-label"],
 label {
   font-family: 'Space Mono', monospace !important;
-  font-size: 10.5px !important;
-  font-weight: 400 !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
   color: var(--theme-text-dim) !important;
@@ -211,40 +325,165 @@ label {
   display: block !important;
 }
 
-/* ── Status pills ── */
+/* ── Status workflow badges ── */
 [class*="status"],
 [class*="pill"] {
   font-family: 'Space Mono', monospace !important;
-  font-size: 10px !important;
-  font-weight: 400 !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
   letter-spacing: 0.12em !important;
   text-transform: uppercase !important;
-  border-radius: 100px !important;
-  padding: 3px 10px !important;
+  border-radius: 0 !important;
+  padding: 3px 8px !important;
 }
 
-/* ── Rich text editor ── */
+/* ── Tabs (Content / Meta / SEO) ── */
+[class*="tabs__tab"],
+[class*="doc-tab"] {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  border-radius: 0 !important;
+  color: var(--theme-text-dim) !important;
+  transition: color 0.15s !important;
+}
+
+[class*="tabs__tab--active"],
+[class*="doc-tab--active"] {
+  color: var(--theme-text) !important;
+  border-bottom: 2px solid var(--ao-accent) !important;
+}
+
+/* ── Rich text / Lexical editor ── */
 .rich-text,
 [class*="rich-text"],
 .lexical-editor,
-[class*="editor"] {
+[class*="editor__container"],
+[class*="EditorTheme"] {
   background: var(--theme-elevation-0) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 10px !important;
+  border-radius: 0 !important;
   font-family: 'DM Sans', sans-serif !important;
 }
 
+[class*="editor__container"] p,
+[class*="EditorTheme"] p {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: var(--theme-text) !important;
+}
+
+/* Lexical toolbar */
+[class*="toolbar"],
+[class*="rich-text__toolbar"] {
+  background: var(--theme-elevation-100) !important;
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  border-radius: 0 !important;
+}
+
+/* ── Upload / media ── */
+[class*="file-details"],
+[class*="upload__"] {
+  border: 1px solid var(--theme-border-color) !important;
+  border-radius: 0 !important;
+  background: var(--theme-elevation-50) !important;
+}
+
+/* ── Select / relationship fields ── */
+[class*="react-select"] [class*="control"],
+[class*="relationship"] [class*="control"] {
+  background: var(--theme-elevation-0) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0 !important;
+  color: var(--theme-text) !important;
+}
+
+[class*="react-select"] [class*="menu"],
+[class*="relationship"] [class*="menu"] {
+  background: var(--theme-elevation-100) !important;
+  border: 1px solid var(--theme-border-color) !important;
+  border-radius: 0 !important;
+}
+
+[class*="react-select"] [class*="option"]:hover,
+[class*="react-select"] [class*="option--is-focused"] {
+  background: rgba(107, 111, 240, 0.1) !important;
+}
+
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.18); }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.16); }
 
 /* ── Toast / notifications ── */
 [class*="toast"],
 [class*="notification"] {
   font-family: 'DM Sans', sans-serif !important;
-  border-radius: 10px !important;
+  border-radius: 0 !important;
   border: 1px solid var(--theme-border-color) !important;
   background: var(--theme-elevation-150) !important;
+  color: var(--theme-text) !important;
+}
+
+/* ── Checkbox / toggle ── */
+[class*="checkbox__input"],
+[class*="toggle__input"] {
+  border-radius: 0 !important;
+  accent-color: var(--ao-accent) !important;
+}
+
+/* ── Drag handles / list items ── */
+[class*="array__draggable"],
+[class*="blocks__draggable"] {
+  border: 1px solid var(--theme-border-color) !important;
+  border-radius: 0 !important;
+  background: var(--theme-elevation-50) !important;
+}
+
+/* ── Collapsible / accordion headers ── */
+[class*="collapsible__toggle"],
+[class*="array__row-header"],
+[class*="blocks__row-header"] {
+  border-radius: 0 !important;
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--theme-text-dim) !important;
+}
+
+/* ── Search bar ── */
+[class*="search-filter"],
+[class*="list-controls"] {
+  background: var(--theme-elevation-50) !important;
+  border-bottom: 1px solid var(--theme-border-color) !important;
+}
+
+[class*="search-filter"] input {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--theme-border-color) !important;
+  font-size: 14px !important;
+}
+
+[class*="search-filter"] input:focus {
+  border-bottom-color: var(--ao-accent) !important;
+}
+
+/* ── Pagination ── */
+[class*="pagination"] {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.1em !important;
+  color: var(--theme-text-dim) !important;
+}
+
+[class*="pagination__button--active"] {
+  color: var(--ao-accent) !important;
+  font-weight: 700 !important;
 }
