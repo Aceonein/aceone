@@ -177,12 +177,12 @@ export const seed = async ({ payload }: { payload: Payload; req: PayloadRequest 
 
   // ── Categories ────────────────────────────────────────────────────────────
   const catList = [
-    { title: 'Personal Finance', key: 'personal-finance', color: '#3b82f6' },
-    { title: 'Investing', key: 'investing', color: '#22c55e' },
-    { title: 'Markets', key: 'markets', color: '#f59e0b' },
-    { title: 'Policy', key: 'policy', color: '#a78bfa' },
-    { title: 'Crypto', key: 'crypto', color: '#06b6d4' },
-    { title: 'Deep Dives', key: 'deep-dives', color: '#f97316' },
+    { title: 'Personal Finance', key: 'personal-finance', color: 'cobalt' },
+    { title: 'Investing', key: 'investing', color: 'emerald' },
+    { title: 'Markets', key: 'markets', color: 'amber' },
+    { title: 'Policy', key: 'policy', color: 'violet' },
+    { title: 'Crypto', key: 'crypto', color: 'teal' },
+    { title: 'Deep Dives', key: 'deep-dives', color: 'crimson' },
   ]
   const cats: Record<string, string> = {}
   for (const c of catList) {
