@@ -38,19 +38,20 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
   footerCols = [],
 }) => {
   const pathname = usePathname()
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') return 'light'
+    const stored = localStorage.getItem('aceone-theme') as 'light' | 'dark' | null
+    const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    return stored ?? preferred
+  })
   const [menuOpen, setMenuOpen] = useState(false)
   const [openCols, setOpenCols] = useState<string[]>([])
   const toggleCol = (h: string) =>
     setOpenCols(cols => (cols.includes(h) ? cols.filter(c => c !== h) : [...cols, h]))
 
   useEffect(() => {
-    const stored = localStorage.getItem('aceone-theme') as 'light' | 'dark' | null
-    const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    const t = stored ?? preferred
-    setTheme(t)
-    document.documentElement.setAttribute('data-theme', t)
-  }, [])
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
   useEffect(() => { setMenuOpen(false) }, [pathname])
 
@@ -167,6 +168,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
+            suppressHydrationWarning
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               width: 48, flexShrink: 0, background: 'none', border: 'none',
