@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import { catColor } from '@/utilities/catColor'
 import { HeroGeometric } from '@/components/HeroGeometric'
+import { font, type as t } from '@/lib/ds'
 
 type Post = {
   id: string
@@ -39,8 +40,8 @@ function catSlug(title?: string | null) {
   return (title ?? '').toLowerCase().replace(/\s+/g, '-')
 }
 
-const mono = 'var(--font-mono)'
-const sans = 'var(--font-sans)'
+const mono = font.mono
+const sans = font.sans
 
 function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
   const cat = typeof post.categories?.[0] === 'object' ? post.categories[0] : null
@@ -75,9 +76,8 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
 
       {cat?.title && (
         <div style={{
+          ...t.label,
           display: 'flex', alignItems: 'center', gap: 6,
-          fontFamily: mono, fontSize: 9, fontWeight: 700,
-          letterSpacing: '0.16em', textTransform: 'uppercase',
           color: accent, marginBottom: 12,
         }}>
           <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, flexShrink: 0, display: 'block' }} />
@@ -86,9 +86,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
       )}
 
       <div style={{
-        fontFamily: sans,
-        fontSize: featured ? 24 : 17, fontWeight: 600, lineHeight: 1.25,
-        letterSpacing: '-0.015em',
+        ...(featured ? { ...t.itemTitle, fontSize: 24 } : t.itemTitle),
         color: 'var(--ao-t1)', marginBottom: 10,
       }}>
         {post.title}
@@ -96,7 +94,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
 
       {post.excerpt && (
         <div style={{
-          fontFamily: sans, fontSize: 13, fontWeight: 300, lineHeight: 1.6,
+          ...t.bodySm,
           color: 'var(--ao-t2)', marginBottom: 18,
           display: '-webkit-box', WebkitLineClamp: featured ? 3 : 2,
           WebkitBoxOrient: 'vertical', overflow: 'hidden',
@@ -152,7 +150,7 @@ function PostListItem({ post, index }: { post: Post; index: number }) {
               {cat.title}
             </div>
           )}
-          <div style={{ fontFamily: sans, fontSize: 15, fontWeight: 600, letterSpacing: '-0.01em', lineHeight: 1.35, color: 'var(--ao-t1)', marginBottom: 6 }}>
+          <div style={{ ...t.cardTitle, color: 'var(--ao-t1)', marginBottom: 6 }}>
             {post.title}
           </div>
           {post.excerpt && (
@@ -247,23 +245,14 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
             marginBottom: 32,
           }}>
             <span style={{ width: 28, height: 1, background: 'var(--ao-border-2)', display: 'block', flexShrink: 0 }} />
-            <span style={{
-              fontFamily: mono, fontSize: 10, fontWeight: 700,
-              letterSpacing: '0.18em', textTransform: 'uppercase',
-              color: 'var(--ao-t3)',
-            }}>
+            <span style={{ ...t.meta, color: 'var(--ao-t3)' }}>
               {eyebrow}
             </span>
           </div>
 
           {featuredPost ? (
             <>
-              <h1 style={{
-                fontFamily: sans,
-                fontSize: 'clamp(40px,5.2vw,72px)', fontWeight: 700,
-                lineHeight: 1.0, letterSpacing: '-0.03em',
-                color: 'var(--ao-t1)', marginBottom: 24, maxWidth: 860,
-              }}>
+              <h1 style={{ ...t.displayXl, color: 'var(--ao-t1)', marginBottom: 24, maxWidth: 860 }}>
                 {featuredPost.title}
               </h1>
               {featuredPost.excerpt && (
@@ -285,12 +274,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
               </Link>
             </>
           ) : (
-            <h1 style={{
-              fontFamily: sans,
-              fontSize: 'clamp(40px,5.2vw,72px)', fontWeight: 700,
-              lineHeight: 1.0, letterSpacing: '-0.03em',
-              color: 'var(--ao-t1)', maxWidth: 860,
-            }}>
+            <h1 style={{ ...t.displayXl, color: 'var(--ao-t1)', maxWidth: 860 }}>
               The smart money blog<br />for young India
             </h1>
           )}

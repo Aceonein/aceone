@@ -4,11 +4,12 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import React from 'react'
 import { NewsletterSection } from '@/components/NewsletterSection'
+import { font, type as t } from '@/lib/ds'
 
 export const dynamic = 'force-dynamic'
 
-const mono = 'var(--font-mono)'
-const sans = 'var(--font-sans)'
+const mono = font.mono
+const sans = font.sans
 
 function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-IN', {
@@ -43,9 +44,7 @@ function BriefContent({ content }: { content: any }) {
             <Tag
               key={i}
               style={{
-                fontSize: node.tag === 'h2' ? 24 : 18,
-                fontWeight: 700,
-                lineHeight: 1.25,
+                ...(node.tag === 'h2' ? t.h2 : t.h3),
                 color: 'var(--ao-t1)',
                 margin: '36px 0 12px',
               }}
@@ -68,7 +67,7 @@ function BriefContent({ content }: { content: any }) {
               }}
             >
               {(node.children ?? []).map((li: any, j: number) => (
-                <li key={j} style={{ fontSize: 16, lineHeight: 1.75, color: 'var(--ao-t2)' }}>
+                <li key={j} style={{ ...t.bodyBase, color: 'var(--ao-t2)' }}>
                   {nodeToText(li)}
                 </li>
               ))}
@@ -78,7 +77,7 @@ function BriefContent({ content }: { content: any }) {
         const text = nodeToText(node)
         if (!text.trim()) return <div key={i} style={{ height: 10 }} />
         return (
-          <p key={i} style={{ fontSize: 16, lineHeight: 1.8, color: 'var(--ao-t2)', marginBottom: 20 }}>
+          <p key={i} style={{ ...t.body, color: 'var(--ao-t2)', marginBottom: 20 }}>
             {text}
           </p>
         )
@@ -176,11 +175,7 @@ export default async function BriefIssuePage({ params }: { params: Promise<{ slu
 
           <h1
             style={{
-              fontFamily: sans,
-              fontSize: 'clamp(28px,3.5vw,48px)',
-              fontWeight: 700,
-              lineHeight: 1.1,
-              letterSpacing: '-0.025em',
+              ...t.displaySm,
               color: 'var(--ao-t1)',
               marginBottom: 20,
             }}
@@ -191,8 +186,7 @@ export default async function BriefIssuePage({ params }: { params: Promise<{ slu
           {brief.emailPreviewText && (
             <p
               style={{
-                fontSize: 17,
-                lineHeight: 1.65,
+                ...t.bodyLg,
                 color: 'var(--ao-t2)',
                 marginBottom: 40,
                 paddingBottom: 32,
@@ -261,11 +255,7 @@ export default async function BriefIssuePage({ params }: { params: Promise<{ slu
             <div style={{ borderTop: '1px solid var(--ao-border)', paddingTop: 24 }}>
               <div
                 style={{
-                  fontFamily: mono,
-                  fontSize: 9,
-                  fontWeight: 700,
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
+                  ...t.label,
                   color: 'var(--ao-t3)',
                   marginBottom: 12,
                 }}

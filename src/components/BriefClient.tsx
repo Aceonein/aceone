@@ -1,8 +1,9 @@
 'use client'
 import React, { useState, useMemo } from 'react'
+import { font, type as t, z } from '@/lib/ds'
 
-const mono = 'var(--font-mono)'
-const sans = 'var(--font-sans)'
+const mono = font.mono
+const sans = font.sans
 
 function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -10,7 +11,7 @@ function fmtDate(iso: string) {
 
 function BriefContent({ content }: { content: any }) {
   const nodes: any[] = content?.root?.children ?? []
-  if (!nodes.length) return <p style={{ fontSize: 15, color: 'var(--ao-t3)', fontStyle: 'italic' }}>Issue content coming soon.</p>
+  if (!nodes.length) return <p style={{ ...t.body, color: 'var(--ao-t3)', fontStyle: 'italic' }}>Issue content coming soon.</p>
 
   function nodeToText(node: any): string {
     if (!node) return ''
@@ -24,21 +25,21 @@ function BriefContent({ content }: { content: any }) {
       {nodes.map((node: any, i: number) => {
         if (node.type === 'heading') {
           const Tag = node.tag as 'h2' | 'h3'
-          return <Tag key={i} style={{ fontSize: node.tag === 'h2' ? 22 : 17, fontWeight: 700, lineHeight: 1.25, color: 'var(--ao-t1)', margin: '32px 0 10px' }}>{nodeToText(node)}</Tag>
+          return <Tag key={i} style={{ ...(node.tag === 'h2' ? t.h2Sm : t.h3), color: 'var(--ao-t1)', margin: '32px 0 10px' }}>{nodeToText(node)}</Tag>
         }
         if (node.type === 'list') {
           const Tag = node.listType === 'bullet' ? 'ul' : 'ol'
           return (
             <Tag key={i} style={{ margin: '8px 0 18px', paddingLeft: 22, display: 'flex', flexDirection: 'column', gap: 7 }}>
               {(node.children ?? []).map((li: any, j: number) => (
-                <li key={j} style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ao-t2)' }}>{nodeToText(li)}</li>
+                <li key={j} style={{ ...t.body, color: 'var(--ao-t2)' }}>{nodeToText(li)}</li>
               ))}
             </Tag>
           )
         }
         const text = nodeToText(node)
         if (!text.trim()) return <div key={i} style={{ height: 8 }} />
-        return <p key={i} style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--ao-t2)', marginBottom: 18 }}>{text}</p>
+        return <p key={i} style={{ ...t.body, color: 'var(--ao-t2)', marginBottom: 18 }}>{text}</p>
       })}
     </div>
   )
@@ -118,14 +119,14 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
       >
         {/* Filters */}
         <div style={{ padding: '24px 20px', borderBottom: '1px solid var(--ao-border)', flexShrink: 0 }}>
-          <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Year</div>
+          <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 10 }}>Year</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
             <FilterPill label="All" active={activeYear === 'all'} onClick={() => { setActiveYear('all'); setActiveMonth('all') }} />
             {years.map(y => (
               <FilterPill key={y} label={String(y)} active={activeYear === y} onClick={() => { setActiveYear(y); setActiveMonth('all') }} />
             ))}
           </div>
-          <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Month</div>
+          <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 10 }}>Month</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             <FilterPill label="All" active={activeMonth === 'all'} onClick={() => setActiveMonth('all')} />
             {availableMonths.map(m => (
@@ -136,7 +137,7 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
 
         {/* Issue count */}
         <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--ao-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-          <span style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ao-t3)' }}>Editions</span>
+          <span style={{ ...t.label, color: 'var(--ao-t3)' }}>Editions</span>
           <span style={{ fontFamily: mono, fontSize: 12, fontWeight: 700, color: 'var(--ao-t1)' }}>{filtered.length}</span>
         </div>
 
@@ -173,13 +174,13 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
                     <span style={{ fontFamily: mono, fontSize: 9, color: 'var(--ao-t3)' }}>{fmtDate(b.publishedAt)}</span>
                   )}
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: isActive ? 'var(--ao-t1)' : 'var(--ao-t2)', lineHeight: 1.35, marginBottom: b.tags?.length ? 8 : 0 }}>
+                <div style={{ ...t.listTitle, color: isActive ? 'var(--ao-t1)' : 'var(--ao-t2)', marginBottom: b.tags?.length ? 8 : 0 }}>
                   {b.title}
                 </div>
                 {b.tags && b.tags.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                     {b.tags.slice(0, 3).map(tag => (
-                      <span key={tag} style={{ fontFamily: mono, fontSize: 8, letterSpacing: '0.08em', color: 'var(--ao-t3)', border: '1px solid var(--ao-border)', padding: '2px 6px' }}>{tag}</span>
+                      <span key={tag} style={{ ...t.labelSm, color: 'var(--ao-t3)', border: '1px solid var(--ao-border)', padding: '2px 6px' }}>{tag}</span>
                     ))}
                   </div>
                 )}
@@ -202,7 +203,7 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
             width: 20, height: '100%', minHeight: 80,
             background: 'var(--ao-bg-2)',
             border: 'none', borderRight: '1px solid var(--ao-border)',
-            cursor: 'pointer', zIndex: 2,
+            cursor: 'pointer', zIndex: z.tab,
             display: 'flex', flexDirection: 'column', alignItems: 'center',
             justifyContent: 'flex-start', paddingTop: 28, gap: 4,
             color: 'var(--ao-t3)', transition: 'background 0.15s',
@@ -234,12 +235,12 @@ export function BriefClient({ briefs }: { briefs: Brief[] }) {
                 )}
               </div>
 
-              <h2 style={{ fontFamily: sans, fontSize: 'clamp(22px,3vw,40px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--ao-t1)', marginBottom: 16 }}>
+              <h2 style={{ ...t.displaySm, color: 'var(--ao-t1)', marginBottom: 16 }}>
                 {activeBrief.title}
               </h2>
 
               {activeBrief.subtitle && (
-                <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--ao-t2)', marginBottom: 36, paddingBottom: 28, borderBottom: '1px solid var(--ao-border)' }}>
+                <p style={{ ...t.bodyBase, color: 'var(--ao-t2)', marginBottom: 36, paddingBottom: 28, borderBottom: '1px solid var(--ao-border)' }}>
                   {activeBrief.subtitle}
                 </p>
               )}

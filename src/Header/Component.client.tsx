@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { font, z } from '@/lib/ds'
 
 function toRelative(url: string): string {
   try { const u = new URL(url); return u.pathname + u.search + u.hash } catch { return url }
@@ -90,7 +91,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
           display: 'flex', alignItems: 'center',
           padding: '0 20px', flexShrink: 0,
           ...borderSide,
-          fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
+          fontFamily: font.mono, fontSize: 11, fontWeight: 700,
           letterSpacing: '0.1em', textTransform: 'uppercase',
           color: 'var(--ao-bg)', background: 'var(--ao-t1)',
           textDecoration: 'none', whiteSpace: 'nowrap',
@@ -103,7 +104,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
         display: 'flex', alignItems: 'center',
         padding: '0 18px',
         ...borderSide,
-        fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: active ? 700 : 400,
+        fontFamily: font.mono, fontSize: 11, fontWeight: active ? 700 : 400,
         letterSpacing: '0.1em', textTransform: 'uppercase',
         color: active ? 'var(--ao-bg)' : 'var(--ao-t3)',
         background: active ? 'var(--ao-t1)' : 'none',
@@ -117,7 +118,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
   return (
     <>
       <header style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: z.header,
         height: 'var(--ao-nav-h)', background: 'var(--ao-nav-bg)',
         borderBottom: '1px solid var(--ao-border)',
         transition: 'background 0.3s, border-color 0.3s',
@@ -150,7 +151,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
             textDecoration: 'none', flexShrink: 0,
           }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
+              fontFamily: font.mono, fontSize: 12, fontWeight: 700,
               letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ao-t1)',
               transition: 'color 0.3s',
             }}>ACEONE/</span>
@@ -187,7 +188,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
       {/* Mobile menu overlay */}
       {menuOpen && (
         <div style={{
-          position: 'fixed', inset: 0, zIndex: 999,
+          position: 'fixed', inset: 0, zIndex: z.overlay,
           top: 'var(--ao-nav-h)',
           background: 'var(--ao-bg)',
           borderTop: '1px solid var(--ao-border)',
@@ -208,7 +209,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
                   paddingLeft: active ? '21px' : '24px',
                   borderBottom: '1px solid var(--ao-border)',
                   borderLeft: active ? '3px solid var(--ao-accent)' : '3px solid transparent',
-                  fontFamily: 'var(--font-mono)', fontSize: 12,
+                  fontFamily: font.mono, fontSize: 12,
                   fontWeight: active ? 700 : 400,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
                   color: active ? 'var(--ao-bg)' : 'var(--ao-t2)',
@@ -238,7 +239,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
                     border: 'none', borderBottomWidth: 1, borderBottomStyle: 'solid',
                     borderBottomColor: 'var(--ao-border)',
                     cursor: 'pointer', textAlign: 'left',
-                    fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
+                    fontFamily: font.mono, fontSize: 12, fontWeight: 700,
                     letterSpacing: '0.1em', textTransform: 'uppercase',
                     color: 'var(--ao-t1)',
                   }}
@@ -264,7 +265,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
                         borderLeft: active ? '3px solid var(--ao-accent)' : '3px solid transparent',
                         paddingLeft: active ? '37px' : '40px',
                         background: active ? 'var(--ao-t1)' : 'var(--ao-bg-2)',
-                        fontFamily: 'var(--font-mono)', fontSize: 11,
+                        fontFamily: font.mono, fontSize: 11,
                         fontWeight: active ? 600 : 400,
                         letterSpacing: '0.04em',
                         color: active ? 'var(--ao-bg)' : 'var(--ao-t2)',

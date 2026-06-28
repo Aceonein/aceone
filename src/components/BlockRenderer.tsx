@@ -1,4 +1,5 @@
 import React from 'react'
+import { font, type as t, transition } from '@/lib/ds'
 
 /* ponytail: inline styles keep this self-contained; no extra CSS file needed */
 
@@ -11,8 +12,8 @@ const s = {
   bg3: 'var(--ao-bg-3)',
   bdr: 'var(--ao-border)',
   bdr2: 'var(--ao-border-2)',
-  serif: 'var(--font-sans)',
-  mono: 'var(--font-mono)',
+  serif: font.sans,
+  mono: font.mono,
 }
 
 function richText(rt: any): string {
@@ -26,7 +27,7 @@ function richText(rt: any): string {
 
 function RichTextProse({ value }: { value: any }) {
   const text = richText(value)
-  return <>{text.split('\n\n').map((p, i) => <p key={i} style={{ fontSize: 17, fontWeight: 300, lineHeight: 1.8, color: s.t2, marginBottom: 24, transition: 'color 0.4s' }}>{p}</p>)}</>
+  return <>{text.split('\n\n').map((p, i) => <p key={i} style={{ ...t.bodyLg, color: s.t2, marginBottom: 24, transition: transition.xslow }}>{p}</p>)}</>
 }
 
 export function BlockRenderer({ blocks }: { blocks: any[] }) {
@@ -45,10 +46,10 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
 
         if (type === 'heading') {
           const Tag = (block.level ?? 'h2') as 'h2' | 'h3' | 'h4'
-          const sizes: Record<string, number> = { h2: 32, h3: 24, h4: 19 }
+          const headingType: Record<string, typeof t.h2 | typeof t.h3 | typeof t.h4> = { h2: t.h2, h3: t.h3, h4: t.h4 }
           const id = block.text ? block.text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : undefined
           return (
-            <Tag key={i} id={id} style={{ fontFamily: s.serif, fontSize: sizes[Tag] ?? 24, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.015em', color: s.t1, marginBottom: 14, marginTop: 46, transition: 'color 0.4s' }}>
+            <Tag key={i} id={id} style={{ ...(headingType[Tag] ?? t.h2), color: s.t1, marginBottom: 14, marginTop: 46, transition: `color ${transition.xslow}` }}>
               {block.text}
             </Tag>
           )
@@ -77,7 +78,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         if (type === 'ordered-list') return (
           <ol key={i} style={{ margin: '8px 0 28px', paddingLeft: 26, display: 'flex', flexDirection: 'column', gap: 10 }}>
             {(block.items ?? []).map((item: any, j: number) => (
-              <li key={j} style={{ fontSize: 16, fontWeight: 300, lineHeight: 1.72, color: s.t2, transition: 'color 0.4s' }}>{richText(item.text)}</li>
+              <li key={j} style={{ ...t.bodyBase, color: s.t2, transition: `color ${transition.xslow}` }}>{richText(item.text)}</li>
             ))}
           </ol>
         )
@@ -85,7 +86,7 @@ export function BlockRenderer({ blocks }: { blocks: any[] }) {
         if (type === 'unordered-list') return (
           <ul key={i} style={{ margin: '8px 0 28px', paddingLeft: 26, display: 'flex', flexDirection: 'column', gap: 10, listStyleType: 'none' }}>
             {(block.items ?? []).map((item: any, j: number) => (
-              <li key={j} style={{ fontSize: 16, fontWeight: 300, lineHeight: 1.72, color: s.t2, position: 'relative', paddingLeft: 18, transition: 'color 0.4s' }}>
+              <li key={j} style={{ ...t.bodyBase, color: s.t2, position: 'relative', paddingLeft: 18, transition: `color ${transition.xslow}` }}>
                 <span style={{ position: 'absolute', left: 0, top: 9, width: 5, height: 5, borderRadius: '50%', background: s.acc }} />
                 {richText(item.text)}
               </li>

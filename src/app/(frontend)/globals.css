@@ -69,6 +69,21 @@
   --ao-nl-t1:      #f0efe9;
   --ao-nl-t2:      rgba(240,239,233,0.45);
   --ao-nav-h:      48px;
+
+  /* ── Spacing scale ── */
+  --ao-space-1: 4px;   --ao-space-2: 8px;   --ao-space-3: 12px;
+  --ao-space-4: 16px;  --ao-space-5: 20px;  --ao-space-6: 24px;
+  --ao-space-7: 28px;  --ao-space-8: 32px;  --ao-space-10: 40px;
+  --ao-space-12: 48px; --ao-space-14: 56px; --ao-space-16: 64px;
+
+  /* ── Z-index scale ── */
+  --ao-z-grain: 9999; --ao-z-header: 1000; --ao-z-overlay: 999;
+  --ao-z-sticky: 100; --ao-z-raised: 50;   --ao-z-tab: 2;
+
+  /* ── Transitions ── */
+  --ao-t-fast: 0.15s ease; --ao-t-base: 0.18s ease;
+  --ao-t-slow: 0.3s ease;  --ao-t-xslow: 0.4s ease;
+
   --ao-dot-pf:  #3b82f6;
   --ao-dot-inv: #22c55e;
   --ao-dot-mkt: #f59e0b;
@@ -104,7 +119,7 @@ html::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: var(--ao-z-grain);
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
   background-size: 280px 280px;

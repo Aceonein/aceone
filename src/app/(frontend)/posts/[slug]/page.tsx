@@ -15,6 +15,7 @@ import type { Post } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { catColor } from '@/utilities/catColor'
+import { font, type as t, z } from '@/lib/ds'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -31,8 +32,8 @@ export async function generateStaticParams() {
 
 type Args = { params: Promise<{ slug?: string }> }
 
-const mono = 'var(--font-mono)'
-const sans = 'var(--font-sans)'
+const mono = font.mono
+const sans = font.sans
 
 function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
@@ -121,7 +122,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           <div className="ao-meta-grid">
             {cat?.title && (
               <div className="ao-meta-item ao-meta-cat" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Category</div>
+                <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 10 }}>Category</div>
                 <Link href={`/?cat=${(cat.title as string).toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
                   <span style={{ display: 'inline-block', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: accent, border: `1px solid ${accent}`, padding: '4px 10px' }}>
                     {cat.title}
@@ -131,19 +132,19 @@ export default async function PostPage({ params: paramsPromise }: Args) {
             )}
             {date && (
               <div className="ao-meta-item" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Published</div>
+                <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 6 }}>Published</div>
                 <div style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t2)' }}>{date}</div>
               </div>
             )}
             {(post as any).readTime && (
               <div className="ao-meta-item" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Read time</div>
+                <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 6 }}>Read time</div>
                 <div style={{ fontFamily: mono, fontSize: 12, color: 'var(--ao-t2)' }}>{(post as any).readTime} min</div>
               </div>
             )}
             {views != null && (
               <div className="ao-meta-item" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 6 }}>Views</div>
+                <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 6 }}>Views</div>
                 <div style={{ fontFamily: mono, fontSize: 22, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1 }}>
                   {views > 999 ? `${(views / 1000).toFixed(1)}k` : views}
                 </div>
@@ -158,14 +159,14 @@ export default async function PostPage({ params: paramsPromise }: Args) {
 
           {/* Share */}
           <div style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
-            <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 10 }}>Share</div>
+            <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 10 }}>Share</div>
             <ShareButtons url={fullUrl} title={post.title} />
           </div>
 
           {/* Tags */}
           {tags.length > 0 && (
             <div>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 12 }}>Tags</div>
+              <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 12 }}>Tags</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {tags.slice(0, 8).map((tag: any, i: number) => {
                   const label = typeof tag === 'object' ? (tag.title ?? tag.name ?? '') : tag
@@ -192,13 +193,13 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           )}
 
           {/* Title */}
-          <h1 className="ao-article-title" style={{ fontFamily: sans, fontSize: 'clamp(32px,4vw,52px)', fontWeight: 700, lineHeight: 1.08, letterSpacing: '-0.025em', color: 'var(--ao-t1)', marginBottom: 24, maxWidth: 780 }}>
+          <h1 className="ao-article-title" style={{ ...t.displayMd, color: 'var(--ao-t1)', marginBottom: 24, maxWidth: 780 }}>
             {post.title}
           </h1>
 
           {/* Excerpt / lead */}
           {(post as any).excerpt && (
-            <p className="ao-article-excerpt" style={{ fontSize: 17, lineHeight: 1.72, color: 'var(--ao-t2)', marginBottom: 32, paddingLeft: 18, borderLeft: '2px solid var(--ao-border-2)', maxWidth: 640 }}>
+            <p className="ao-article-excerpt" style={{ ...t.bodyLg, color: 'var(--ao-t2)', marginBottom: 32, paddingLeft: 18, borderLeft: '2px solid var(--ao-border-2)', maxWidth: 640 }}>
               {(post as any).excerpt}
             </p>
           )}
@@ -230,13 +231,13 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           <div className="ao-mobile-meta" style={{ display: 'none', marginBottom: 28 }}>
             {/* Share */}
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>Share</div>
+              <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 8 }}>Share</div>
               <ShareButtons url={fullUrl} title={post.title} horizontal />
             </div>
             {/* Tags */}
             {tags.length > 0 && (
               <div>
-                <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>Tags</div>
+                <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 8 }}>Tags</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {tags.slice(0, 8).map((tag: any, i: number) => {
                     const label = typeof tag === 'object' ? (tag.title ?? tag.name ?? '') : tag
@@ -276,7 +277,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           {/* Related posts */}
           {relatedPosts.length > 0 && (
             <div>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 14 }}>Related</div>
+              <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 14 }}>Related</div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {relatedPosts.map((rp: any) => {
                   const rpCat = typeof rp.categories?.[0] === 'object' ? rp.categories[0] : null
@@ -298,7 +299,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           <div className="ao-sidebar-desktop-only">
             <TOCClient items={toc} />
             <div style={{ background: 'var(--ao-bg-2)', border: '1px solid var(--ao-border)', padding: 18, marginTop: 32 }}>
-              <div style={{ fontFamily: mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 8 }}>The Brief</div>
+              <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 8 }}>The Brief</div>
               <p style={{ fontSize: 12, color: 'var(--ao-t2)', lineHeight: 1.6, marginBottom: 14 }}>Weekly financial clarity. Every Sunday.</p>
               <Link href="#newsletter" className="ao-cta" style={{ display: 'block', textAlign: 'center', padding: '9px 0', background: 'var(--ao-t1)', color: 'var(--ao-bg)', fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'none' }}>
                 Subscribe →

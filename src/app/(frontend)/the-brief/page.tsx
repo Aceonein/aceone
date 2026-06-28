@@ -8,8 +8,9 @@ import { BriefClient } from '@/components/BriefClient'
 export const dynamic = 'force-dynamic'
 export const revalidate = 60
 
-const mono = 'var(--font-mono)'
-const sans = 'var(--font-sans)'
+import { font, type as t } from '@/lib/ds'
+const mono = font.mono
+const sans = font.sans
 
 export default async function BriefPage() {
   const payload = await getPayload({ config: configPromise })
@@ -46,12 +47,12 @@ export default async function BriefPage() {
         <BriefHeroAnimation />
 
         <div className="ao-brief-hero-inner" style={{ maxWidth: 1280, margin: '0 auto', width: '100%', position: 'relative', zIndex: 1, padding: '56px 48px 0', boxSizing: 'border-box' }}>
-          <div style={{ fontFamily: mono, fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ao-t3)', marginBottom: 22, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ ...t.meta, color: 'var(--ao-t3)', marginBottom: 22, display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ width: 24, height: 1, background: 'var(--ao-border-2)', display: 'block', flexShrink: 0 }} />
             Newsletter Archive
           </div>
 
-          <h1 style={{ fontFamily: sans, fontSize: 'clamp(32px,4.5vw,58px)', fontWeight: 700, lineHeight: 1.05, letterSpacing: '-0.03em', color: 'var(--ao-t1)', marginBottom: 20, maxWidth: 580 }}>
+          <h1 style={{ ...t.displayLg, color: 'var(--ao-t1)', marginBottom: 20, maxWidth: 580 }}>
             Market intelligence,{' '}
             <span style={{ color: 'var(--ao-accent)' }}>distilled.</span>
           </h1>
@@ -70,7 +71,7 @@ export default async function BriefPage() {
             ].map(({ value, label }, i) => (
               <div key={label} className="ao-brief-stat-item" style={{ padding: '20px 24px', borderRight: '1px solid var(--ao-border)' }}>
                 <div style={{ fontFamily: mono, fontSize: i === 0 ? 18 : 16, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1, marginBottom: 5 }}>{value}</div>
-                <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ao-t3)' }}>{label}</div>
+                <div style={{ ...t.label, color: 'var(--ao-t3)' }}>{label}</div>
               </div>
             ))}
             <a

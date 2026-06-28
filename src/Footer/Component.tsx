@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { font, type as typ } from '@/lib/ds'
 
 const XIcon = () => (
   <svg viewBox="0 0 16 16" fill="currentColor" width={14} height={14}>
@@ -76,13 +77,13 @@ export async function Footer() {
       <div className="ao-footer-grid" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: `2fr ${cols.map(() => '1fr').join(' ')}`, borderBottom: `1px solid ${bdr}` }}>
         {/* Brand col */}
         <div className="ao-footer-brand" style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#f0efe9', marginBottom: 14 }}>ACEONE/</div>
+          <div style={{ ...typ.brand, color: '#f0efe9', marginBottom: 14 }}>ACEONE/</div>
           <p style={{ fontSize: 13, fontWeight: 400, color: t2, lineHeight: 1.7, maxWidth: 260 }}>{tagline}</p>
         </div>
         {/* Link cols */}
         {cols.map((col: any, i: number) => (
           <div key={i} className="ao-footer-link-col" style={{ padding: '40px 32px', borderRight: `1px solid ${bdr}` }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: t3, marginBottom: 20 }}>{col.heading}</div>
+            <div style={{ ...typ.meta, color: t3, marginBottom: 20 }}>{col.heading}</div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {col.links.map(({ label, href }: any) => (
                 <li key={href}>
@@ -95,19 +96,19 @@ export async function Footer() {
       </div>
       {/* Bottom bar */}
       <div className="ao-footer-bottom" style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 32px' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: t3 }}>{copyright}</span>
+        <span style={{ fontFamily: font.mono, fontSize: 11, color: t3 }}>{copyright}</span>
         <div style={{ display: 'flex', alignItems: 'stretch' }}>
           {socials.length > 0
             ? socials.map(({ platform, url }) => {
                 const Icon = SOCIAL_ICONS[platform]
                 return (
-                  <a key={platform} href={url} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 11, color: t3, textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
+                  <a key={platform} href={url} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: font.mono, fontSize: 11, color: t3, textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
                     {Icon && <Icon />}<span className="ao-social-label">{platform}</span>
                   </a>
                 )
               })
             : [{ Icon: XIcon, label: 'Twitter / X' }, { Icon: LinkedInIcon, label: 'LinkedIn' }, { Icon: YouTubeIcon, label: 'YouTube' }].map(({ Icon, label }) => (
-                <a key={label} href="#" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 11, color: t3, textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
+                <a key={label} href="#" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: font.mono, fontSize: 11, color: t3, textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
                   <Icon /><span className="ao-social-label">{label}</span>
                 </a>
               ))
