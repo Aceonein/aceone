@@ -79,6 +79,7 @@ export default async function BriefPage() {
               style={{
                 marginLeft: 'auto', display: 'flex', alignItems: 'center',
                 padding: '0 24px', flexShrink: 0,
+                height: 'var(--ao-nav-h)', alignSelf: 'center',
                 textDecoration: 'none', whiteSpace: 'nowrap',
                 fontFamily: mono, fontSize: 11, fontWeight: 700,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
