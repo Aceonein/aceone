@@ -29,19 +29,20 @@ function ul(items: string[]) {
   return {
     type: 'list' as const,
     listType: 'bullet' as const,
+    tag: 'ul' as const,
     start: 1,
     version: 1,
     direction: 'ltr' as const,
     format: '' as const,
     indent: 0,
-    children: items.map((text) => ({
+    children: items.map((text, i) => ({
       type: 'listitem' as const,
       version: 1,
       children: [{ type: 'text', text, version: 1 }],
       direction: 'ltr' as const,
       format: '' as const,
       indent: 0,
-      value: 1,
+      value: i + 1,
     })),
   }
 }
