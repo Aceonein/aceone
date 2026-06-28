@@ -4,14 +4,19 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
+function toRelative(url: string): string {
+  try { const u = new URL(url); return u.pathname + u.search + u.hash } catch { return url }
+}
+
 function resolveItem(item: any): { href: string; label: string; type: 'text' | 'cta'; alignment: 'left' | 'right' } {
   const l = item?.link ?? {}
-  const href =
+  const raw =
     l.type === 'custom'
       ? (l.url ?? '#')
       : l.reference?.value?.slug
         ? `/${l.reference.value.slug}`
         : '#'
+  const href = raw.startsWith('http') ? toRelative(raw) : raw
   return {
     href,
     label: l.label ?? '',
