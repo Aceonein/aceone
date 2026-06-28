@@ -31,9 +31,18 @@ const FALLBACK_NAV = [
   { href: '#newsletter', label: 'Subscribe', type: 'cta' as const, alignment: 'right' as const },
 ]
 
-export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) => {
+type FooterCol = { heading: string; links: { href: string; label: string }[] }
+
+export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[] }> = ({
+  navItems = [],
+  footerCols = [],
+}) => {
   const pathname = usePathname()
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [openCols, setOpenCols] = useState<string[]>([])
+  const toggleCol = (h: string) =>
+    setOpenCols(cols => (cols.includes(h) ? cols.filter(c => c !== h) : [...cols, h]))
 
   useEffect(() => {
     const stored = localStorage.getItem('aceone-theme') as 'light' | 'dark' | null
@@ -43,6 +52,13 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
     document.documentElement.setAttribute('data-theme', t)
   }, [])
 
+  useEffect(() => { setMenuOpen(false) }, [pathname])
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark'
     setTheme(next)
@@ -50,12 +66,16 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
     localStorage.setItem('aceone-theme', next)
   }
 
-  const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href)
+  const isActive = (href: string) => {
+    if (href.includes('?') || href.startsWith('#')) return false
+    return href === '/' ? pathname === '/' : pathname.startsWith(href)
+  }
 
   const items = navItems.length > 0 ? navItems.map(resolveItem) : FALLBACK_NAV
   const leftItems = items.filter(i => i.alignment === 'left')
   const rightItems = items.filter(i => i.alignment === 'right')
+  const ctaItem = rightItems.find(i => i.type === 'cta')
+  const mainNavItems = [...leftItems, ...rightItems.filter(i => i.type !== 'cta')]
 
   const renderItem = (item: ReturnType<typeof resolveItem>, side: 'left' | 'right') => {
     const active = item.type === 'text' && isActive(item.href)
@@ -84,8 +104,8 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
         ...borderSide,
         fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: active ? 700 : 400,
         letterSpacing: '0.1em', textTransform: 'uppercase',
-        color: active ? 'var(--ao-bg)' : 'var(--ao-t3)',
-        background: active ? 'var(--ao-t1)' : 'none',
+        color: active ? 'var(--ao-t1)' : 'var(--ao-t3)',
+        background: active ? 'var(--ao-accent-dim)' : 'none',
         textDecoration: 'none', whiteSpace: 'nowrap',
         borderBottom: active ? '2px solid var(--ao-accent)' : '2px solid transparent',
         transition: 'color 0.2s, background 0.2s',
@@ -94,59 +114,191 @@ export const HeaderClient: React.FC<{ navItems?: any[] }> = ({ navItems = [] }) 
   }
 
   return (
-    <header style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-      height: 'var(--ao-nav-h)', background: 'var(--ao-nav-bg)',
-      borderBottom: '1px solid var(--ao-border)',
-      transition: 'background 0.3s, border-color 0.3s',
-    }}>
-      <div style={{
-        maxWidth: 1280, margin: '0 auto',
-        height: '100%', display: 'flex', alignItems: 'stretch',
+    <>
+      <header style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
+        height: 'var(--ao-nav-h)', background: 'var(--ao-nav-bg)',
+        borderBottom: '1px solid var(--ao-border)',
+        transition: 'background 0.3s, border-color 0.3s',
       }}>
-        {/* Brand */}
-        <Link href="/" style={{
-          display: 'flex', alignItems: 'center',
-          padding: '0 20px', borderRight: '1px solid var(--ao-border)',
-          textDecoration: 'none', flexShrink: 0,
+        <div style={{
+          maxWidth: 1280, margin: '0 auto',
+          height: '100%', display: 'flex', alignItems: 'stretch',
         }}>
-          <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
-            letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ao-t1)',
-            transition: 'color 0.3s',
-          }}>ACEONE/</span>
-        </Link>
-
-        {/* Left nav items */}
-        <nav className="ao-nav-links" style={{ display: 'flex', alignItems: 'stretch' }}>
-          {leftItems.map(item => renderItem(item, 'left'))}
-        </nav>
-
-        {/* Spacer */}
-        <div style={{ flex: 1 }} />
-
-        {/* Right controls */}
-        <div style={{ display: 'flex', alignItems: 'stretch' }}>
-          {rightItems.map(item => renderItem(item, 'right'))}
+          {/* Hamburger — mobile only, extreme left */}
           <button
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
+            className="ao-hamburger"
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 48, flexShrink: 0,
-              background: 'none', border: 'none',
-              borderLeft: '1px solid var(--ao-border)',
-              cursor: 'pointer', color: 'var(--ao-t3)',
-              transition: 'color 0.2s',
+              alignItems: 'center', justifyContent: 'center',
+              width: 48, flexShrink: 0, background: 'none', border: 'none',
+              borderRight: '1px solid var(--ao-border)',
+              cursor: 'pointer', color: 'var(--ao-t1)',
             }}
           >
-            {theme === 'dark'
-              ? <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>
-              : <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+            {menuOpen
+              ? <svg viewBox="0 0 20 20" fill="currentColor" width={16} height={16}><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
+              : <svg viewBox="0 0 20 20" fill="currentColor" width={16} height={16}><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" /></svg>
             }
           </button>
+
+          <Link href="/" style={{
+            display: 'flex', alignItems: 'center',
+            padding: '0 20px', borderRight: '1px solid var(--ao-border)',
+            textDecoration: 'none', flexShrink: 0,
+          }}>
+            <span style={{
+              fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
+              letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ao-t1)',
+              transition: 'color 0.3s',
+            }}>ACEONE/</span>
+          </Link>
+
+          <nav className="ao-nav-links" style={{ display: 'flex', alignItems: 'stretch' }}>
+            {leftItems.map(item => renderItem(item, 'left'))}
+          </nav>
+
+          <div style={{ flex: 1 }} />
+
+          <div style={{ display: 'flex', alignItems: 'stretch' }}>
+            {rightItems.map(item => renderItem(item, 'right'))}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 48, flexShrink: 0, background: 'none', border: 'none',
+                borderLeft: '1px solid var(--ao-border)',
+                cursor: 'pointer', color: 'var(--ao-t3)', transition: 'color 0.2s',
+              }}
+            >
+              {theme === 'dark'
+                ? <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 011.414-1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>
+                : <svg viewBox="0 0 20 20" fill="currentColor" width={14} height={14}><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+              }
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Mobile menu overlay */}
+      {menuOpen && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 999,
+          top: 'var(--ao-nav-h)',
+          background: 'var(--ao-bg)',
+          borderTop: '1px solid var(--ao-border)',
+          display: 'flex', flexDirection: 'column',
+          overflowY: 'auto',
+        }}>
+          {/* Main nav */}
+          {mainNavItems.map(item => {
+            const active = isActive(item.href)
+            return (
+              <Link
+                key={`mob-${item.href}-${item.label}`}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  display: 'flex', alignItems: 'center',
+                  padding: '18px 24px',
+                  paddingLeft: active ? '21px' : '24px',
+                  borderBottom: '1px solid var(--ao-border)',
+                  borderLeft: active ? '3px solid var(--ao-accent)' : '3px solid transparent',
+                  fontFamily: 'var(--font-mono)', fontSize: 12,
+                  fontWeight: active ? 700 : 400,
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                  color: active ? 'var(--ao-t1)' : 'var(--ao-t2)',
+                  background: active ? 'var(--ao-accent-dim)' : 'transparent',
+                  textDecoration: 'none',
+                }}
+              >
+                {item.label}
+                <span style={{ marginLeft: 'auto', color: 'var(--ao-t3)', fontSize: 10 }}>→</span>
+              </Link>
+            )
+          })}
+
+          {/* Footer cols — accordions */}
+          {footerCols.map(col => {
+            const open = openCols.includes(col.heading)
+            return (
+              <div key={col.heading}>
+                <button
+                  onClick={() => toggleCol(col.heading)}
+                  aria-expanded={open}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center',
+                    padding: '18px 24px',
+                    borderBottom: '1px solid var(--ao-border)',
+                    background: open ? 'var(--ao-bg-2)' : 'transparent',
+                    border: 'none', borderBottomWidth: 1, borderBottomStyle: 'solid',
+                    borderBottomColor: 'var(--ao-border)',
+                    cursor: 'pointer', textAlign: 'left',
+                    fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
+                    letterSpacing: '0.1em', textTransform: 'uppercase',
+                    color: 'var(--ao-t1)',
+                  }}
+                >
+                  {col.heading}
+                  <span style={{
+                    marginLeft: 'auto', color: 'var(--ao-t3)', fontSize: 13,
+                    display: 'inline-flex', transform: open ? 'rotate(45deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.2s ease',
+                  }}>+</span>
+                </button>
+                {open && col.links.map(({ href, label }) => {
+                  const active = isActive(href)
+                  return (
+                    <Link
+                      key={`mob-col-${href}-${label}`}
+                      href={href}
+                      onClick={() => setMenuOpen(false)}
+                      style={{
+                        display: 'flex', alignItems: 'center',
+                        padding: '14px 24px 14px 40px',
+                        borderBottom: '1px solid var(--ao-border)',
+                        borderLeft: active ? '3px solid var(--ao-accent)' : '3px solid transparent',
+                        paddingLeft: active ? '37px' : '40px',
+                        background: active ? 'var(--ao-accent-dim)' : 'var(--ao-bg-2)',
+                        fontFamily: 'var(--font-mono)', fontSize: 11,
+                        fontWeight: active ? 600 : 400,
+                        letterSpacing: '0.04em',
+                        color: active ? 'var(--ao-t1)' : 'var(--ao-t2)',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      {label}
+                      <span style={{ marginLeft: 'auto', color: 'var(--ao-t3)', fontSize: 10 }}>→</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            )
+          })}
+
+          {/* CTA pinned bottom */}
+          {ctaItem && (
+            <div style={{ padding: 20, marginTop: 'auto', borderTop: '1px solid var(--ao-border)' }}>
+              <Link
+                href={ctaItem.href}
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  padding: '16px 24px', width: '100%', boxSizing: 'border-box',
+                  fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
+                  letterSpacing: '0.14em', textTransform: 'uppercase',
+                  color: 'var(--ao-bg)', background: 'var(--ao-t1)',
+                  textDecoration: 'none',
+                }}
+              >
+                {ctaItem.label} →
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+    </>
   )
 }

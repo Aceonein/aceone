@@ -23,7 +23,6 @@ import { CookieConsent } from '@/components/CookieConsent'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
-import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
@@ -36,7 +35,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html className={cn(spaceGrotesk.variable, spaceMono.variable)} lang="en" suppressHydrationWarning>
       <head>
-        <InitTheme />
+        {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('aceone-theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',s==='dark'||s==='light'?s:d);}catch(e){}})();` }} />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
         <style>{`.ao-cta{transition:background .18s ease,color .18s ease}.ao-cta:hover{background:var(--ao-accent)!important;color:#fff!important}@media(prefers-reduced-motion:reduce){.ao-cta{transition:none}}`}</style>

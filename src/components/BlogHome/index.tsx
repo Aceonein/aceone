@@ -160,6 +160,16 @@ function PostListItem({ post, index }: { post: Post; index: number }) {
               {post.excerpt}
             </div>
           )}
+          <div className="ao-list-meta-inline" style={{
+            flexWrap: 'wrap', gap: '4px 14px', marginTop: 8,
+            fontFamily: mono, fontSize: 9, color: 'var(--ao-t3)',
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+          }}>
+            {author?.name && <span>{author.name}</span>}
+            {post.publishedAt && <span>{fmtDate(post.publishedAt)}</span>}
+            {post.readTime && <span>{post.readTime} min</span>}
+            {post.views != null && <span>{fmtViews(post.views)} views</span>}
+          </div>
         </div>
 
         <div className="ao-list-meta" style={{
@@ -184,6 +194,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
   const [activecat, setActivecat] = useState('all')
   const [query, setQuery] = useState('')
   const [view, setView] = useState<'card' | 'list'>('card')
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const filterRef = useRef<HTMLDivElement>(null)
 
   const filtered = posts.filter(p => {
@@ -290,56 +301,63 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
       <div ref={filterRef} style={{
         position: 'sticky', top: 'var(--ao-nav-h)', zIndex: 100,
         background: 'var(--ao-bg)',
-        borderBottom: '1px solid var(--ao-border)',
       }}>
+        {/* Main row: [≡ filter] [search] [grid|list] */}
         <div style={{
           maxWidth: 1280, margin: '0 auto',
           display: 'flex', alignItems: 'stretch', height: 44,
+          borderBottom: '1px solid var(--ao-border)',
         }}>
-          {/* Category tabs */}
-          <div style={{ display: 'flex', alignItems: 'stretch', flex: 1, overflowX: 'auto', scrollbarWidth: 'none' }}>
-            {catTabs.map(({ cat, label, color }) => {
-              const tabAccent = color ? catColor(color) : null
-              const isActive = activecat === cat
-              return (
-                <button key={cat} onClick={() => setActivecat(cat)} style={{
-                  flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6,
-                  padding: '0 18px', height: '100%',
-                  fontFamily: mono, fontSize: 10, fontWeight: 400,
-                  letterSpacing: '0.12em', textTransform: 'uppercase',
-                  color: isActive ? 'var(--ao-bg)' : 'var(--ao-t3)',
-                  background: isActive ? 'var(--ao-t1)' : 'none',
-                  border: 'none',
-                  borderRight: '1px solid var(--ao-border)',
-                  borderBottom: isActive ? '2px solid var(--ao-accent)' : '2px solid transparent',
-                  cursor: 'pointer', whiteSpace: 'nowrap',
-                }}>
-                  {tabAccent && (
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: tabAccent, flexShrink: 0, display: 'block', opacity: isActive ? 1 : 0.5 }} />
-                  )}
-                  {label}
-                </button>
-              )
-            })}
-          </div>
+          {/* Category filter toggle */}
+          <button
+            onClick={() => setFiltersOpen(o => !o)}
+            aria-label="Filter by category"
+            aria-expanded={filtersOpen}
+            style={{
+              width: 44, flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: filtersOpen || activecat !== 'all' ? 'var(--ao-t1)' : 'none',
+              border: 'none', borderRight: '1px solid var(--ao-border)',
+              cursor: 'pointer',
+              color: filtersOpen || activecat !== 'all' ? 'var(--ao-bg)' : 'var(--ao-t3)',
+              transition: 'background 0.15s, color 0.15s',
+            }}
+          >
+            <svg viewBox="0 0 16 16" fill="currentColor" width={13} height={13}>
+              <path d="M1 2.5h14l-5 5.5V14l-4-2V8L1 2.5z" />
+            </svg>
+          </button>
 
-          {/* Search */}
-          <div className="ao-filter-search" style={{
+          {/* Search + active cat chip */}
+          <div style={{
             display: 'flex', alignItems: 'center', gap: 8,
-            padding: '0 16px', borderLeft: '1px solid var(--ao-border)',
-            minWidth: 180,
+            padding: '0 14px', flex: 1, minWidth: 0,
           }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={13} height={13} color="var(--ao-t3)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={13} height={13} style={{ color: 'var(--ao-t3)', flexShrink: 0 }}>
               <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
             </svg>
+            {activecat !== 'all' && (
+              <button
+                onClick={() => setActivecat('all')}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0,
+                  fontFamily: mono, fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase',
+                  color: 'var(--ao-bg)', background: 'var(--ao-accent)',
+                  border: 'none', padding: '3px 8px', cursor: 'pointer',
+                }}
+              >
+                {catTabs.find(c => c.cat === activecat)?.label}
+                <span style={{ opacity: 0.7 }}>×</span>
+              </button>
+            )}
             <input
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Search articles..."
+              placeholder={activecat === 'all' ? 'Search articles...' : 'Filter results...'}
               style={{
                 background: 'none', border: 'none', outline: 'none',
                 color: 'var(--ao-t1)', fontFamily: mono, fontSize: 11,
-                letterSpacing: '0.04em', width: '100%',
+                letterSpacing: '0.04em', width: '100%', minWidth: 0,
               }}
             />
           </div>
@@ -347,14 +365,20 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
           {/* View toggle */}
           <div style={{ display: 'flex', alignItems: 'stretch', borderLeft: '1px solid var(--ao-border)' }}>
             {(['card', 'list'] as const).map(v => (
-              <button key={v} onClick={() => setView(v)} aria-label={v === 'card' ? 'Grid view' : 'List view'} aria-pressed={v === view} style={{
-                width: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: v === view ? 'var(--ao-t1)' : 'none',
-                border: 'none',
-                borderLeft: v === 'list' ? '1px solid var(--ao-border)' : 'none',
-                cursor: 'pointer',
-                color: v === view ? 'var(--ao-bg)' : 'var(--ao-t3)',
-              }}>
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                aria-label={v === 'card' ? 'Grid view' : 'List view'}
+                aria-pressed={v === view}
+                style={{
+                  width: 44, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: v === view ? 'var(--ao-t1)' : 'none',
+                  border: 'none',
+                  borderLeft: v === 'list' ? '1px solid var(--ao-border)' : 'none',
+                  cursor: 'pointer',
+                  color: v === view ? 'var(--ao-bg)' : 'var(--ao-t3)',
+                }}
+              >
                 {v === 'card'
                   ? <svg viewBox="0 0 16 16" fill="currentColor" width={14} height={14}><rect x="1" y="1" width="6" height="6" /><rect x="9" y="1" width="6" height="6" /><rect x="1" y="9" width="6" height="6" /><rect x="9" y="9" width="6" height="6" /></svg>
                   : <svg viewBox="0 0 16 16" fill="currentColor" width={14} height={14}><rect x="1" y="2" width="14" height="1.5" /><rect x="1" y="7" width="14" height="1.5" /><rect x="1" y="12" width="14" height="1.5" /></svg>
@@ -363,6 +387,45 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
             ))}
           </div>
         </div>
+
+        {/* Category dropdown panel */}
+        {filtersOpen && (
+          <div style={{
+            borderBottom: '1px solid var(--ao-border)',
+            background: 'var(--ao-bg-2)',
+          }}>
+            <div style={{
+              maxWidth: 1280, margin: '0 auto',
+              display: 'flex', overflowX: 'auto', scrollbarWidth: 'none',
+            }}>
+              {catTabs.map(({ cat, label, color }) => {
+                const tabAccent = color ? catColor(color) : null
+                const isCatActive = activecat === cat
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => { setActivecat(cat); setFiltersOpen(false) }}
+                    style={{
+                      flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6,
+                      padding: '0 18px', height: 40,
+                      fontFamily: mono, fontSize: 10, fontWeight: isCatActive ? 700 : 400,
+                      letterSpacing: '0.12em', textTransform: 'uppercase',
+                      color: isCatActive ? 'var(--ao-bg)' : 'var(--ao-t2)',
+                      background: isCatActive ? 'var(--ao-t1)' : 'none',
+                      border: 'none', borderRight: '1px solid var(--ao-border)',
+                      cursor: 'pointer', whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {tabAccent && (
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: tabAccent, flexShrink: 0, display: 'block', opacity: isCatActive ? 1 : 0.6 }} />
+                    )}
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── Section header ───────────────────────────────────────── */}

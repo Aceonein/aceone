@@ -46,17 +46,17 @@ export const NewsletterSection: React.FC = () => {
   }
 
   return (
-    <section id="newsletter" style={{ background: 'var(--ao-nl-bg)', padding: '110px 48px', transition: 'background 0.4s' }}>
+    <section id="newsletter" className="ao-nl-section" style={{ background: 'var(--ao-nl-bg)', borderTop: '1px solid var(--ao-border)', padding: '110px 48px', transition: 'background 0.4s' }}>
       <div style={{ maxWidth: 560, margin: '0 auto', textAlign: 'center' }}>
-        <div style={{ marginBottom: 26 }}>
+        <div className="ao-nl-label" style={{ marginBottom: 26 }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 500, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--ao-nl-t2)' }}>
             <span style={{ fontSize: 14 }}>—</span> The Aceone Brief
           </span>
         </div>
-        <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(36px,5vw,52px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--ao-nl-t1)', marginBottom: 16, transition: 'color 0.4s' }}>
+        <h2 className="ao-nl-heading" style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(36px,5vw,52px)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', color: 'var(--ao-nl-t1)', marginBottom: 16, transition: 'color 0.4s' }}>
           Market intelligence, distilled.
         </h2>
-        <p style={{ fontSize: 16, fontWeight: 300, color: 'var(--ao-nl-t2)', lineHeight: 1.72, marginBottom: 38, transition: 'color 0.4s' }}>
+        <p className="ao-nl-desc" style={{ fontSize: 16, fontWeight: 300, color: 'var(--ao-nl-t2)', lineHeight: 1.72, marginBottom: 38, transition: 'color 0.4s' }}>
           Every Sunday — one email, the week&apos;s most important financial decision explained clearly. No jargon. No agenda. Founder voice.
         </p>
 
@@ -71,7 +71,7 @@ export const NewsletterSection: React.FC = () => {
           </div>
         ) : (
           <>
-            <form onSubmit={submit} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+            <form onSubmit={submit} className="ao-nl-form" style={{ display: 'flex', gap: 8, marginBottom: 0 }}>
               <input
                 type="email"
                 value={email}
@@ -113,7 +113,7 @@ export const NewsletterSection: React.FC = () => {
           </>
         )}
 
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ao-t3)', transition: 'color 0.4s' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ao-t3)', transition: 'color 0.4s', marginTop: 12, marginBottom: 0 }}>
           Join <strong>1,000+ readers</strong> · No spam · Unsubscribe anytime
         </p>
         {state !== 'done' && (

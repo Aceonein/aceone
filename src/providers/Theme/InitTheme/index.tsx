@@ -1,50 +1,14 @@
-import Script from 'next/script'
 import React from 'react'
 
 import { defaultTheme, themeLocalStorageKey } from '../shared'
 
 export const InitTheme: React.FC = () => {
   return (
-    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
-    <Script
+    <script
       dangerouslySetInnerHTML={{
-        __html: `
-  (function () {
-    function getImplicitPreference() {
-      var mediaQuery = '(prefers-color-scheme: dark)'
-      var mql = window.matchMedia(mediaQuery)
-      var hasImplicitPreference = typeof mql.matches === 'boolean'
-
-      if (hasImplicitPreference) {
-        return mql.matches ? 'dark' : 'light'
-      }
-
-      return null
-    }
-
-    function themeIsValid(theme) {
-      return theme === 'light' || theme === 'dark'
-    }
-
-    var themeToSet = '${defaultTheme}'
-    var preference = window.localStorage.getItem('${themeLocalStorageKey}')
-
-    if (themeIsValid(preference)) {
-      themeToSet = preference
-    } else {
-      var implicitPreference = getImplicitPreference()
-
-      if (implicitPreference) {
-        themeToSet = implicitPreference
-      }
-    }
-
-    document.documentElement.setAttribute('data-theme', themeToSet)
-  })();
-  `,
+        __html: `(function(){function g(){var q='(prefers-color-scheme: dark)';var m=window.matchMedia(q);if(typeof m.matches==='boolean'){return m.matches?'dark':'light';}return null;}function v(t){return t==='light'||t==='dark';}var s='${defaultTheme}';var p=window.localStorage.getItem('${themeLocalStorageKey}');if(v(p)){s=p;}else{var i=g();if(i){s=i;}}document.documentElement.setAttribute('data-theme',s);})();`,
       }}
       id="theme-script"
-      strategy="beforeInteractive"
     />
   )
 }

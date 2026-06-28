@@ -94,9 +94,9 @@
   --ao-card-shad:  none;
   --ao-accent:     #6b6ff0;
   --ao-accent-dim: rgba(107,111,240,0.12);
-  --ao-nl-bg:      #f8f7f4;
-  --ao-nl-t1:      #0a0a08;
-  --ao-nl-t2:      rgba(10,10,8,0.50);
+  --ao-nl-bg:      #16161f;
+  --ao-nl-t1:      #f0efe9;
+  --ao-nl-t2:      rgba(240,239,233,0.52);
 }
 
 /* ── Grain overlay ── */
@@ -336,17 +336,19 @@ html[data-theme='light'] {
   --ao-hl-chartreuse: #84CC16;
 }
 
+/* ── Desktop defaults for mobile-only elements ── */
+.ao-hamburger { display: none; }
+.ao-list-meta-inline { display: none; }
+
 /* ── Mobile responsive (≤ 900px) ── */
 @media (max-width: 900px) {
   /* Header nav */
   .ao-nav-links { display: none !important; }
+  .ao-hamburger { display: flex !important; }
 
   /* Hero */
-  .ao-hero-section { min-height: 42vh !important; }
-  .ao-hero-inner { padding: 32px 16px 24px !important; }
-
-  /* Filter bar */
-  .ao-filter-search { display: none !important; }
+  .ao-hero-section { min-height: 38vh !important; }
+  .ao-hero-inner { padding: 28px 16px 24px !important; }
 
   /* Section header */
   .ao-section-header { padding: 14px 16px !important; }
@@ -355,15 +357,24 @@ html[data-theme='light'] {
   .ao-card-grid { grid-template-columns: 1fr !important; }
   .ao-card-featured { grid-column: span 1 !important; }
 
-  /* List view */
-  .ao-list-row { grid-template-columns: 48px 1fr !important; }
+  /* List view — inline meta replaces right column */
+  .ao-list-row { grid-template-columns: 40px 1fr !important; }
   .ao-list-meta { display: none !important; }
+  .ao-list-meta-inline { display: flex !important; }
+
+  /* Newsletter */
+  .ao-nl-section { padding: 48px 20px !important; }
+  .ao-nl-label { margin-bottom: 14px !important; }
+  .ao-nl-heading { font-size: clamp(28px,8vw,40px) !important; margin-bottom: 12px !important; }
+  .ao-nl-desc { font-size: 14px !important; margin-bottom: 20px !important; }
+  .ao-nl-form input { min-width: 0; box-sizing: border-box !important; }
 
   /* Footer */
   .ao-footer-grid { grid-template-columns: 1fr 1fr !important; }
   .ao-footer-brand { grid-column: span 2 !important; padding: 28px 20px !important; }
   .ao-footer-link-col { padding: 24px 20px !important; }
   .ao-footer-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; padding: 16px 20px !important; }
+  .ao-social-label { display: none !important; }
 
   /* Article */
   .ao-article-3col { grid-template-columns: 1fr !important; }

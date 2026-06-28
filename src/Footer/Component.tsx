@@ -102,13 +102,13 @@ export async function Footer() {
                 const Icon = SOCIAL_ICONS[platform]
                 return (
                   <a key={platform} href={url} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 11, color: t3, textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
-                    {Icon && <Icon />}{platform}
+                    {Icon && <Icon />}<span className="ao-social-label">{platform}</span>
                   </a>
                 )
               })
             : [{ Icon: XIcon, label: 'Twitter / X' }, { Icon: LinkedInIcon, label: 'LinkedIn' }, { Icon: YouTubeIcon, label: 'YouTube' }].map(({ Icon, label }) => (
                 <a key={label} href="#" style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 11, color: t3, textDecoration: 'none', padding: '0 14px', borderLeft: `1px solid ${bdr}` }}>
-                  <Icon />{label}
+                  <Icon /><span className="ao-social-label">{label}</span>
                 </a>
               ))
           }
