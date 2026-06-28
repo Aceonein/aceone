@@ -2418,6 +2418,8 @@ export interface Header {
   id: string;
   navItems?:
     | {
+        type: 'text' | 'cta';
+        alignment: 'left' | 'right';
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -2491,6 +2493,8 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
+        type?: T;
+        alignment?: T;
         link?:
           | T
           | {

@@ -93,22 +93,6 @@ export default buildConfig({
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
-  routes: [
-    {
-      method: 'post',
-      path: '/next/seed',
-      handler: async (req: any, res: any) => {
-        try {
-          const { seed: seedFn } = await import('@/endpoints/seed')
-          await seedFn({ payload: req.payload, req })
-          return res.status(200).json({ success: true, message: 'Seed completed' })
-        } catch (err: any) {
-          console.error('Seed error:', err)
-          return res.status(500).json({ error: 'Seed failed', detail: err?.message })
-        }
-      },
-    },
-  ] as any,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
