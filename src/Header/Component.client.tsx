@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 
 function toRelative(url: string): string {
   try { const u = new URL(url); return u.pathname + u.search + u.hash } catch { return url }
@@ -38,20 +38,20 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
   footerCols = [],
 }) => {
   const pathname = usePathname()
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window === 'undefined') return 'light'
-    const stored = localStorage.getItem('aceone-theme') as 'light' | 'dark' | null
-    const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    return stored ?? preferred
-  })
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [menuOpen, setMenuOpen] = useState(false)
   const [openCols, setOpenCols] = useState<string[]>([])
   const toggleCol = (h: string) =>
     setOpenCols(cols => (cols.includes(h) ? cols.filter(c => c !== h) : [...cols, h]))
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+  // useLayoutEffect fires before browser paint — no flash of wrong icon
+  useLayoutEffect(() => {
+    const stored = localStorage.getItem('aceone-theme') as 'light' | 'dark' | null
+    const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const t = stored ?? preferred
+    setTheme(t)
+    document.documentElement.setAttribute('data-theme', t)
+  }, [])
 
   useEffect(() => { setMenuOpen(false) }, [pathname])
 
