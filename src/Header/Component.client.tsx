@@ -104,8 +104,8 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
         ...borderSide,
         fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: active ? 700 : 400,
         letterSpacing: '0.1em', textTransform: 'uppercase',
-        color: active ? 'var(--ao-t1)' : 'var(--ao-t3)',
-        background: active ? 'var(--ao-accent-dim)' : 'none',
+        color: active ? '#0a0a08' : 'var(--ao-t3)',
+        background: active ? '#ffffff' : 'none',
         textDecoration: 'none', whiteSpace: 'nowrap',
         borderBottom: active ? '2px solid var(--ao-accent)' : '2px solid transparent',
         transition: 'color 0.2s, background 0.2s',
@@ -210,7 +210,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
                   fontWeight: active ? 700 : 400,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
                   color: active ? 'var(--ao-t1)' : 'var(--ao-t2)',
-                  background: active ? 'var(--ao-accent-dim)' : 'transparent',
+                  background: active ? 'rgba(255,255,255,0.07)' : 'transparent',
                   textDecoration: 'none',
                 }}
               >
@@ -261,7 +261,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
                         borderBottom: '1px solid var(--ao-border)',
                         borderLeft: active ? '3px solid var(--ao-accent)' : '3px solid transparent',
                         paddingLeft: active ? '37px' : '40px',
-                        background: active ? 'var(--ao-accent-dim)' : 'var(--ao-bg-2)',
+                        background: active ? 'rgba(255,255,255,0.07)' : 'var(--ao-bg-2)',
                         fontFamily: 'var(--font-mono)', fontSize: 11,
                         fontWeight: active ? 600 : 400,
                         letterSpacing: '0.04em',
