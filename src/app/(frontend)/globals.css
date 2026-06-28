@@ -426,8 +426,8 @@ html[data-theme='light'] {
 @media (max-width: 900px) {
   /* Hero */
   .ao-brief-hero-inner { padding: 28px 16px 0 !important; }
-  .ao-brief-stats { flex-wrap: nowrap !important; overflow-x: auto !important; }
-  .ao-brief-stat-item { padding: 14px 14px !important; flex-shrink: 0 !important; }
+  .ao-brief-stats { display: grid !important; grid-template-columns: 1fr 1fr !important; overflow: hidden !important; }
+  .ao-brief-stat-item { padding: 14px 16px !important; }
   .ao-brief-hero-cta { display: none !important; }
 
   /* Archive layout — single column, sidebar stacks above content */
