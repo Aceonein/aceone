@@ -426,8 +426,10 @@ html[data-theme='light'] {
 @media (max-width: 900px) {
   /* Hero */
   .ao-brief-hero-inner { padding: 28px 16px 0 !important; }
-  .ao-brief-stats { display: grid !important; grid-template-columns: 1fr 1fr !important; overflow: hidden !important; }
-  .ao-brief-stat-item { padding: 14px 16px !important; }
+  .ao-brief-stats { flex-wrap: nowrap !important; overflow: hidden !important; }
+  .ao-brief-stat-item { flex: 1 1 0 !important; min-width: 0 !important; padding: 12px 8px !important; overflow: hidden !important; }
+  .ao-brief-stat-item > div:first-child { font-size: 11px !important; }
+  .ao-brief-stat-item > div:last-child { font-size: 8px !important; }
   .ao-brief-hero-cta { display: none !important; }
 
   /* Archive layout — single column, sidebar stacks above content */
