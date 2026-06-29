@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "space grotesk",
+        "reason": "Aceone design system font — intentional, matches frontend globals.css",
+        "createdAt": "2026-06-29T05:03:43.670Z"
+      }
+    ]
+  }
+}

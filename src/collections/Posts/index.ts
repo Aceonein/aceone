@@ -5,19 +5,7 @@ import { isAdmin } from '../../access/isAdmin'
 import { canEditPost, canReadPost } from '../../access/canEditPost'
 import { authenticated } from '../../access/authenticated'
 
-import { Paragraph } from '../../blocks/Paragraph/config'
-import { Heading } from '../../blocks/Heading/config'
-import { RichTextBlock } from '../../blocks/RichTextBlock/config'
-import { ImageBlock } from '../../blocks/ImageBlock/config'
-import { OrderedList } from '../../blocks/OrderedList/config'
-import { UnorderedList } from '../../blocks/UnorderedList/config'
-import { PullQuote } from '../../blocks/PullQuote/config'
-import { DataBox } from '../../blocks/DataBox/config'
-import { Table } from '../../blocks/Table/config'
-import { SectionMarker } from '../../blocks/SectionMarker/config'
-import { Spacer } from '../../blocks/Spacer/config'
-import { Disclaimer } from '../../blocks/Disclaimer/config'
-import { Accordion } from '../../blocks/Accordion/config'
+import { postsBodyEditor } from '../../fields/postsBodyEditor'
 
 import { revalidatePost, revalidateDelete } from './hooks/revalidatePost'
 
@@ -94,24 +82,9 @@ export const Posts: CollectionConfig<'posts'> = {
             },
             {
               name: 'content',
-              type: 'blocks',
+              type: 'richText',
               required: true,
-              minRows: 1,
-              blocks: [
-                Paragraph,
-                Heading,
-                RichTextBlock,
-                ImageBlock,
-                OrderedList,
-                UnorderedList,
-                PullQuote,
-                DataBox,
-                Table,
-                SectionMarker,
-                Spacer,
-                Disclaimer,
-                Accordion,
-              ],
+              editor: postsBodyEditor,
             },
           ],
         },

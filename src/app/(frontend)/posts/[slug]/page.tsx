@@ -39,14 +39,16 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-function extractTOC(blocks: any[]): { label: string; id: string }[] {
+function extractTOC(content: any): { label: string; id: string }[] {
   const items: { label: string; id: string }[] = []
-  for (const b of blocks) {
-    if (b.blockType === 'heading' && (b.level === 'h2' || !b.level) && b.text) {
-      items.push({ label: b.text, id: slugify(b.text) })
+  const nodes: any[] = content?.root?.children ?? []
+  for (const node of nodes) {
+    if (node.type === 'heading' && node.tag === 'h2') {
+      const text = (node.children || []).map((c: any) => c.text || '').join('')
+      if (text) items.push({ label: text, id: slugify(text) })
     }
-    if (b.blockType === 'section-marker' && b.label) {
-      items.push({ label: b.label, id: slugify(b.label) })
+    if (node.type === 'block' && node.fields?.blockType === 'section-marker' && node.fields?.label) {
+      items.push({ label: node.fields.label, id: slugify(node.fields.label) })
     }
   }
   return items
@@ -66,8 +68,8 @@ export default async function PostPage({ params: paramsPromise }: Args) {
   const accent  = catColor(cat?.color)
   const tags: any[] = (post as any).tags ?? []
   const img     = typeof (post as any).featuredImage === 'object' ? (post as any).featuredImage : null
-  const blocks  = (post as any).content ?? []
-  const toc     = extractTOC(blocks)
+  const content  = (post as any).content
+  const toc      = extractTOC(content)
   const upvotes = (post as any).upvotes ?? 0
   const views   = (post as any).views
 
@@ -265,8 +267,8 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           )}
 
           {/* Content */}
-          <BlockRenderer blocks={blocks} />
-          {!blocks.length && (
+          <BlockRenderer content={content} />
+          {!content?.root?.children?.length && (
             <p style={{ fontSize: 16, color: 'var(--ao-t3)', fontStyle: 'italic' }}>No content yet.</p>
           )}
         </article>
