@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { getEmailProvider } from '@/lib/email'
+import { sendEmail } from '@/lib/email'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
@@ -65,13 +65,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const emailProvider = getEmailProvider()
     const html = issue.htmlEmailContent.replace(
       '{{unsubscribe_url}}',
       `${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'}/unsubscribed`,
     )
 
-    const result = await emailProvider.sendEmail({
+    const result = await sendEmail({
       to: testEmail,
       subject: `[TEST] ${issue.emailSubject}`,
       html,

@@ -104,14 +104,13 @@ async function sendWelcomeEmail(email: string) {
   const resendApiKey = process.env.RESEND_API_KEY
   if (!resendApiKey || resendApiKey === 'YOUR_RESEND_API_KEY_HERE') return
 
-  const { getEmailProvider } = await import('@/lib/email')
-  const provider = getEmailProvider()
+  const { sendEmail } = await import('@/lib/email')
 
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://blog.aceone.in'
   const token = generateUnsubscribeToken(email)
   const unsubUrl = `${baseUrl}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}&token=${token}`
 
-  await provider.sendEmail({
+  await sendEmail({
     to: email,
     subject: 'Welcome to The Aceone Brief',
     html: `<!DOCTYPE html>

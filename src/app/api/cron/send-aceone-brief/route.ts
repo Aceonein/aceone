@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { getEmailProvider } from '@/lib/email'
+import { sendEmail } from '@/lib/email'
 import { generateUnsubscribeToken } from '@/lib/email/tokens'
 
 export async function GET(request: NextRequest) {
@@ -53,7 +53,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'No active subscribers' })
     }
 
-    const emailProvider = getEmailProvider()
     const BATCH_SIZE = 100
     let sentCount = 0
     let failedCount = 0
@@ -68,7 +67,7 @@ export async function GET(request: NextRequest) {
             const unsubUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(subscriber.email)}&token=${token}`
             const html = newsletter.htmlEmailContent.replace('{{unsubscribe_url}}', unsubUrl)
 
-            const result = await emailProvider.sendEmail({
+            const result = await sendEmail({
               to: subscriber.email,
               subject: newsletter.emailSubject,
               html,

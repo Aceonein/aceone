@@ -4,17 +4,6 @@ import React, { useState } from 'react'
 
 type GenerateState = 'idle' | 'generating' | 'preview' | 'saving' | 'saved' | 'error'
 
-const SIZE_OPTIONS = [
-  { value: 'landscape', label: 'Landscape  16:9', sub: '1792 × 1024' },
-  { value: 'square', label: 'Square  1:1', sub: '1024 × 1024' },
-  { value: 'portrait', label: 'Portrait  9:16', sub: '1024 × 1792' },
-]
-
-const QUALITY_OPTIONS = [
-  { value: 'standard', label: 'Standard', sub: 'Faster, lower cost' },
-  { value: 'hd', label: 'HD', sub: 'More detail, 2× cost' },
-]
-
 const s = {
   page: {
     padding: '32px 40px',
@@ -270,7 +259,7 @@ export default function GenerateImageView() {
       <p style={s.subheading}>Media</p>
       <h1 style={s.heading}>Generate Image</h1>
       <p style={{ fontSize: 13, color: 'var(--theme-text-dim, #8c8b84)', margin: '0 0 32px' }}>
-        Generate images with DALL-E 3. Images are converted to WebP and saved to the media library.
+        Generate images with AI. Images are converted to WebP and saved to the media library.
       </p>
 
       <hr style={s.divider} />
@@ -345,7 +334,7 @@ export default function GenerateImageView() {
       {revisedPrompt && revisedPrompt !== prompt && (
         <div style={{ marginBottom: 20, padding: '12px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--theme-border-color, #2a2a26)', fontSize: 12, color: 'var(--theme-text-dim, #8c8b84)', lineHeight: 1.6 }}>
           <span style={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 10 }}>
-            DALL-E revised prompt:{' '}
+            Revised prompt:{' '}
           </span>
           {revisedPrompt}
         </div>

@@ -10,7 +10,6 @@ import { BlogList } from '../../blocks/BlogList/config'
 import { BriefList } from '../../blocks/BriefList/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
-import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
@@ -123,7 +122,12 @@ export const Pages: CollectionConfig<'pages'> = {
   ],
   hooks: {
     afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [({ data, operation, req }) => {
+      if ((operation === 'create' || operation === 'update') && req.data && !req.data.publishedAt) {
+        return { ...data, publishedAt: new Date() }
+      }
+      return data
+    }],
     afterDelete: [revalidateDelete],
   },
   versions: {

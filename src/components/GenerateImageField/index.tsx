@@ -16,12 +16,6 @@ type Props = {
 
 type GenState = 'idle' | 'generating' | 'preview' | 'saving' | 'done' | 'error'
 
-const SIZE_OPTIONS = [
-  { value: 'landscape', label: 'Landscape', sub: '1792×1024' },
-  { value: 'square', label: 'Square', sub: '1024×1024' },
-  { value: 'portrait', label: 'Portrait', sub: '1024×1792' },
-]
-
 const accent = '#6b6ff0'
 const accentDim = 'rgba(107,111,240,0.12)'
 const border = 'var(--theme-border-color, #2a2a26)'
