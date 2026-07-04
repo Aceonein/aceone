@@ -26,15 +26,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // SET key 1 EX 86400 NX — returns 'OK' if set (first view), null if already exists
     const set = await r.set(`ao:view:${slug}:${ip}`, 1, { ex: 86400, nx: true })
     if (set === null) {
-      // Already viewed within 24h — return current count without incrementing
-      const payload = await getPayload({ config: configPromise })
-      const posts = await payload.find({
-        collection: 'posts',
-        where: { slug: { equals: slug } },
-        limit: 1,
-        select: { views: true },
-      })
-      return NextResponse.json({ views: (posts.docs[0] as any)?.views || 0 })
+      // Already viewed within 24h — client ignores null, skip DB entirely
+      return NextResponse.json({ views: null })
     }
   }
 

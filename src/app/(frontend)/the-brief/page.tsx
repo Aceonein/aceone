@@ -5,8 +5,7 @@ import { NewsletterSection } from '@/components/NewsletterSection'
 import { BriefHeroAnimation } from '@/components/BriefHeroAnimation'
 import { BriefClient } from '@/components/BriefClient'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 60
+export const revalidate = 300
 
 import { font, type as t } from '@/lib/ds'
 const mono = font.mono

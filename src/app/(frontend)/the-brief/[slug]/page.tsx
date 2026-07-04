@@ -6,7 +6,18 @@ import React from 'react'
 import { NewsletterSection } from '@/components/NewsletterSection'
 import { font, type as t } from '@/lib/ds'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const res = await payload.find({
+    collection: 'aceone-briefs',
+    limit: 1000,
+    overrideAccess: true,
+    select: { slug: true } as any,
+  })
+  return res.docs.map((b: any) => ({ slug: b.slug }))
+}
 
 const mono = font.mono
 const sans = font.sans

@@ -20,6 +20,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     collection: 'posts',
     where: { slug: { equals: slug } },
     limit: 1,
+    select: { upvotes: true, upvotedBy: true } as any,
   })
 
   if (posts.docs.length === 0) {
