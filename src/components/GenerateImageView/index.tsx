@@ -184,8 +184,8 @@ const s = {
 
 export default function GenerateImageView() {
   const [prompt, setPrompt] = useState('')
-  const [size, setSize] = useState('landscape')
-  const [quality, setQuality] = useState('standard')
+  const size = 'landscape'
+  const quality = 'standard'
   const [alt, setAlt] = useState('')
   const [state, setState] = useState<GenerateState>('idle')
   const [error, setError] = useState('')
@@ -286,43 +286,6 @@ export default function GenerateImageView() {
           disabled={isGenerating}
           rows={4}
         />
-      </div>
-
-      {/* Size + Quality */}
-      <div style={s.row}>
-        <div style={{ flex: 1 }}>
-          <label style={s.label}>Aspect ratio</label>
-          <div style={s.optionGroup}>
-            {SIZE_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                style={s.optionBtn(size === opt.value)}
-                onClick={() => setSize(opt.value)}
-                disabled={isGenerating}
-              >
-                {opt.label}
-                <span style={s.optionSub}>{opt.sub}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ flex: 1 }}>
-          <label style={s.label}>Quality</label>
-          <div style={s.optionGroup}>
-            {QUALITY_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                style={s.optionBtn(quality === opt.value)}
-                onClick={() => setQuality(opt.value)}
-                disabled={isGenerating}
-              >
-                {opt.label}
-                <span style={s.optionSub}>{opt.sub}</span>
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Generate button */}

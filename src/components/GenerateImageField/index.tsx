@@ -35,8 +35,8 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
 
   const [open, setOpen] = useState(false)
   const [prompt, setPrompt] = useState('')
-  const [size, setSize] = useState('landscape')
-  const [quality, setQuality] = useState('standard')
+  const size = 'landscape'
+  const quality = 'standard'
   const [alt, setAlt] = useState('')
   const [state, setState] = useState<GenState>('idle')
   const [error, setError] = useState('')
@@ -154,60 +154,6 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
                 fontFamily: 'inherit', resize: 'vertical', outline: 'none', boxSizing: 'border-box',
               }}
             />
-          </div>
-
-          {/* Size + Quality */}
-          <div style={{ display: 'flex', gap: 16, marginBottom: 16, flexWrap: 'wrap' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: textDim, marginBottom: 6 }}>
-                Size
-              </label>
-              <div style={{ display: 'flex', gap: 6 }}>
-                {SIZE_OPTIONS.map((o) => (
-                  <button
-                    key={o.value}
-                    type="button"
-                    onClick={() => setSize(o.value)}
-                    disabled={isGenerating}
-                    style={{
-                      padding: '6px 12px', borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit',
-                      border: `1px solid ${size === o.value ? accent : border}`,
-                      background: size === o.value ? accentDim : 'transparent',
-                      color: size === o.value ? accent : textDim,
-                      fontSize: 11, fontWeight: 600,
-                    }}
-                  >
-                    {o.label}
-                    <span style={{ display: 'block', fontSize: 9, opacity: 0.7, marginTop: 1 }}>{o.sub}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: textDim, marginBottom: 6 }}>
-                Quality
-              </label>
-              <div style={{ display: 'flex', gap: 6 }}>
-                {[{ value: 'standard', label: 'Standard' }, { value: 'hd', label: 'HD' }].map((o) => (
-                  <button
-                    key={o.value}
-                    type="button"
-                    onClick={() => setQuality(o.value)}
-                    disabled={isGenerating}
-                    style={{
-                      padding: '6px 12px', borderRadius: 0, cursor: 'pointer', fontFamily: 'inherit',
-                      border: `1px solid ${quality === o.value ? accent : border}`,
-                      background: quality === o.value ? accentDim : 'transparent',
-                      color: quality === o.value ? accent : textDim,
-                      fontSize: 11, fontWeight: 600,
-                    }}
-                  >
-                    {o.label}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Generate */}
