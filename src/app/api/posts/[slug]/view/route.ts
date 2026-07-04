@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { Redis } from '@upstash/redis'
 
-// ponytail: simple in-memory dedup per process — good enough for MVP, use Redis if needed
-const recentViews = new Map<string, number>()
+let redis: Redis | null = null
+function getRedis() {
+  const url = process.env.UPSTASH_REDIS_REST_URL?.replace(/^["']|["']$/g, '')
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN?.replace(/^["']|["']$/g, '')
+  if (!redis && url?.startsWith('https://') && token) {
+    redis = new Redis({ url, token })
+  }
+  return redis
+}
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -13,23 +21,22 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     request.headers.get('x-real-ip') ||
     'unknown'
 
-  const key = `${slug}:${ip}`
-  const now = Date.now()
-  const last = recentViews.get(key)
-
-  // Deduplicate: 1 view per IP per 24 hours
-  if (last && now - last < 24 * 60 * 60 * 1000) {
-    const payload = await getPayload({ config: configPromise })
-    const posts = await payload.find({
-      collection: 'posts',
-      where: { slug: { equals: slug } },
-      limit: 1,
-      select: { views: true },
-    })
-    return NextResponse.json({ views: posts.docs[0]?.views || 0 })
+  const r = getRedis()
+  if (r) {
+    // SET key 1 EX 86400 NX — returns 'OK' if set (first view), null if already exists
+    const set = await r.set(`ao:view:${slug}:${ip}`, 1, { ex: 86400, nx: true })
+    if (set === null) {
+      // Already viewed within 24h — return current count without incrementing
+      const payload = await getPayload({ config: configPromise })
+      const posts = await payload.find({
+        collection: 'posts',
+        where: { slug: { equals: slug } },
+        limit: 1,
+        select: { views: true },
+      })
+      return NextResponse.json({ views: (posts.docs[0] as any)?.views || 0 })
+    }
   }
-
-  recentViews.set(key, now)
 
   const payload = await getPayload({ config: configPromise })
   const posts = await payload.find({

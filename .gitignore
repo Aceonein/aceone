@@ -22,3 +22,8 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Internal docs — keep local only
+CODEBASE_AUDIT.md
+PRODUCT.md
+public/design-system.md
