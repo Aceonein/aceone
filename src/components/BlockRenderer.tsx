@@ -141,38 +141,6 @@ function renderBlock(fields: any, i: number): React.ReactNode {
     </blockquote>
   )
 
-  if (type === 'table') return (
-    <div key={i} className="ao-article-table" style={{ margin: '36px 0', overflowX: 'auto' }}>
-      {fields.caption && <div style={{ fontFamily: s.mono, fontSize: 11, color: s.t3, marginBottom: 10 }}>{fields.caption}</div>}
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, color: s.t2 }}>
-        {fields.headers?.length > 0 && (
-          <thead>
-            <tr>
-              {fields.headers.map((h: any, j: number) => (
-                <th key={j} style={{ padding: '10px 14px', textAlign: 'left', fontFamily: s.mono, fontSize: 10.5, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.t3, borderBottom: `2px solid ${s.bdr2}`, whiteSpace: 'nowrap' }}>
-                  {typeof h === 'string' ? h : h.text}
-                </th>
-              ))}
-            </tr>
-          </thead>
-        )}
-        <tbody>
-          {(fields.rows ?? []).map((row: any, j: number) => {
-            const cells: any[] = Array.isArray(row) ? row : (row.cells ?? [])
-            return (
-              <tr key={j} style={{ background: j % 2 === 0 ? 'transparent' : s.bg2, transition: 'background 0.4s' }}>
-                {cells.map((cell: any, k: number) => (
-                  <td key={k} style={{ padding: '10px 14px', borderBottom: `1px solid ${s.bdr}`, lineHeight: 1.5, transition: 'border-color 0.4s' }}>
-                    {typeof cell === 'string' ? cell : cell.text}
-                  </td>
-                ))}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
-  )
 
   if (type === 'section-marker') {
     const id = fields.label
@@ -293,6 +261,38 @@ function renderNode(node: any, i: number): React.ReactNode {
 
   if (type === 'horizontalrule') {
     return <hr key={i} style={{ border: 'none', borderTop: `1px solid ${s.bdr2}`, margin: '44px 0' }} />
+  }
+
+  if (type === 'table') {
+    const rows: any[] = node.children ?? []
+    return (
+      <div key={i} style={{ margin: '36px 0', overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, color: s.t2 }}>
+          {rows.map((row: any, ri: number) => {
+            const cells: any[] = row.children ?? []
+            const isHeaderRow = cells.some((c: any) => c.headerState === 1 || c.headerState === 3)
+            const Tag = isHeaderRow ? 'thead' : 'tbody'
+            const CellTag = isHeaderRow ? 'th' : 'td'
+            const cellStyle: React.CSSProperties = isHeaderRow
+              ? { padding: '10px 14px', textAlign: 'left', fontFamily: s.mono, fontSize: 10.5, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: s.t3, borderBottom: `2px solid ${s.bdr2}`, whiteSpace: 'nowrap' }
+              : { padding: '10px 14px', borderBottom: `1px solid ${s.bdr}`, lineHeight: 1.55, background: ri % 2 === 0 ? 'transparent' : s.bg2 }
+            return (
+              <Tag key={ri}>
+                <tr>
+                  {cells.map((cell: any, ci: number) => (
+                    <CellTag key={ci} style={cellStyle} colSpan={cell.colSpan ?? 1} rowSpan={cell.rowSpan ?? 1}>
+                      {(cell.children ?? []).map((p: any, pi: number) => (
+                        <React.Fragment key={pi}>{inlineChildren(p.children ?? [])}</React.Fragment>
+                      ))}
+                    </CellTag>
+                  ))}
+                </tr>
+              </Tag>
+            )
+          })}
+        </table>
+      </div>
+    )
   }
 
   if (type === 'upload') {

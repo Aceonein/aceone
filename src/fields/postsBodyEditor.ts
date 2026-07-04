@@ -4,6 +4,7 @@ import {
   BlocksFeature,
   BoldFeature,
   ChecklistFeature,
+  EXPERIMENTAL_TableFeature,
   FixedToolbarFeature,
   HeadingFeature,
   HorizontalRuleFeature,
@@ -29,7 +30,6 @@ import type { TextFieldSingleValidation } from 'payload'
 
 import { DataBox } from '../blocks/DataBox/config'
 import { PullQuote } from '../blocks/PullQuote/config'
-import { Table } from '../blocks/Table/config'
 import { SectionMarker } from '../blocks/SectionMarker/config'
 import { Spacer } from '../blocks/Spacer/config'
 import { Disclaimer } from '../blocks/Disclaimer/config'
@@ -72,6 +72,7 @@ export const postsBodyEditor = lexicalEditor({
     // ── Block elements ────────────────────────────────────────
     BlockquoteFeature(),
     HorizontalRuleFeature(),
+    EXPERIMENTAL_TableFeature(),
 
     // ── Media inline ──────────────────────────────────────────
     UploadFeature({
@@ -112,9 +113,9 @@ export const postsBodyEditor = lexicalEditor({
       },
     }),
 
-    // ── Custom blocks (DataBox, Table, PullQuote, etc.) ───────
+    // ── Custom blocks (DataBox, PullQuote, etc.) ───────
     BlocksFeature({
-      blocks: [DataBox, PullQuote, Table, SectionMarker, Spacer, Disclaimer, Accordion],
+      blocks: [DataBox, PullQuote, SectionMarker, Spacer, Disclaimer, Accordion],
     }),
 
     // ── Toolbars ──────────────────────────────────────────────
