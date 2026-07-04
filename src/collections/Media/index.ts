@@ -5,7 +5,8 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import { authenticated } from '../access/authenticated'
+import { authenticated } from '../../access/authenticated'
+import { nsfwModeration } from './hooks/nsfwModeration'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -16,6 +17,9 @@ export const Media: CollectionConfig = {
       user?.role === 'admin' || (user as any)?.role === 'moderator',
     read: () => true,
     update: authenticated,
+  },
+  hooks: {
+    beforeValidate: [nsfwModeration],
   },
   fields: [
     {
