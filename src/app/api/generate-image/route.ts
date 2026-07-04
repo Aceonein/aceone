@@ -59,8 +59,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: message }, { status: 502 })
     }
 
-    // CF returns binary image — convert to WebP
-    const rawBuffer = Buffer.from(await cfRes.arrayBuffer())
+    // CF returns either binary image or JSON with base64 — handle both
+    const contentType = cfRes.headers.get('content-type') ?? ''
+    let rawBuffer: Buffer
+
+    if (contentType.includes('application/json')) {
+      const json = await cfRes.json()
+      const b64 = json?.result?.image ?? json?.image
+      if (!b64) {
+        console.error('CF AI JSON response missing image field:', JSON.stringify(json))
+        return NextResponse.json({ error: 'No image in Cloudflare AI response' }, { status: 502 })
+      }
+      rawBuffer = Buffer.from(b64, 'base64')
+    } else {
+      rawBuffer = Buffer.from(await cfRes.arrayBuffer())
+    }
 
     const { data: webpBuffer, info } = await sharp(rawBuffer)
       .webp({ quality: 85, effort: 4 })
