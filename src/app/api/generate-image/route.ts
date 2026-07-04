@@ -49,10 +49,9 @@ export async function POST(request: NextRequest) {
 
     if (!dalleRes.ok) {
       const err = await dalleRes.json().catch(() => ({}))
-      return NextResponse.json(
-        { error: err?.error?.message || `DALL-E API error ${dalleRes.status}` },
-        { status: 502 },
-      )
+      const message = err?.error?.message || `DALL-E API error ${dalleRes.status}`
+      console.error('DALL-E error:', dalleRes.status, JSON.stringify(err))
+      return NextResponse.json({ error: message, status: dalleRes.status }, { status: 502 })
     }
 
     const dalleJson = await dalleRes.json()
