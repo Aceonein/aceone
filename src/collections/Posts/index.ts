@@ -75,6 +75,16 @@ export const Posts: CollectionConfig<'posts'> = {
               required: true,
             },
             {
+              name: 'generateFeaturedImage',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/components/GenerateImageField#GenerateImageField',
+                },
+                custom: { targetField: 'featuredImage' },
+              },
+            },
+            {
               name: 'featuredImageAlt',
               type: 'text',
               required: true,
