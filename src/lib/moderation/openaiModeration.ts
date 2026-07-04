@@ -3,6 +3,7 @@ interface ModerationResult {
   categories?: Record<string, boolean>
   categoryScores?: Record<string, number>
   error?: string
+  rateLimited?: boolean
 }
 
 export async function checkImageModeration(
@@ -27,7 +28,11 @@ export async function checkImageModeration(
     })
 
     if (!response.ok) {
-      return { flagged: false, error: `OpenAI moderation API returned ${response.status}` }
+      return {
+        flagged: false,
+        error: `OpenAI moderation API returned ${response.status}`,
+        rateLimited: response.status === 429,
+      }
     }
 
     const json = await response.json()

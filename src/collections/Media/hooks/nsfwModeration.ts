@@ -33,7 +33,11 @@ export const nsfwModeration: CollectionBeforeValidateHook = async ({ data, req }
   const result = await checkImageModeration(file.data, file.mimetype)
 
   if (result.error) {
-    throw new APIError(`Upload rejected: content moderation check failed (${result.error})`, 503)
+    if (result.rateLimited) {
+      req.payload.logger.warn(`NSFW moderation rate limited by OpenAI — allowing upload: ${file.name}`)
+    } else {
+      throw new APIError(`Upload rejected: content moderation check failed (${result.error})`, 503)
+    }
   }
 
   req.payload.logger.info(
