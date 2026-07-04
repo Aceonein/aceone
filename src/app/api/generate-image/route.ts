@@ -3,10 +3,12 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import sharp from 'sharp'
 
-const SIZES: Record<string, '1024x1024' | '1792x1024' | '1024x1792'> = {
-  square: '1024x1024',
-  landscape: '1792x1024',
-  portrait: '1024x1792',
+// Cloudflare Workers AI — flux-1-schnell
+// Dimensions must be multiples of 8, max 1024 on free tier
+const SIZES: Record<string, { width: number; height: number }> = {
+  landscape: { width: 1024, height: 576 },
+  square:    { width: 1024, height: 1024 },
+  portrait:  { width: 576,  height: 1024 },
 }
 
 export async function POST(request: NextRequest) {
@@ -18,9 +20,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const apiKey = process.env.OPENAI_API_KEY
-    if (!apiKey) {
-      return NextResponse.json({ error: 'OPENAI_API_KEY not configured' }, { status: 503 })
+    const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+    const apiToken  = process.env.CLOUDFLARE_API_TOKEN
+
+    if (!accountId || !apiToken) {
+      return NextResponse.json(
+        { error: 'CLOUDFLARE_ACCOUNT_ID or CLOUDFLARE_API_TOKEN not configured' },
+        { status: 503 },
+      )
     }
 
     const { prompt, size = 'landscape', quality = 'standard' } = await request.json()
@@ -29,42 +36,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Prompt is required (min 3 characters)' }, { status: 400 })
     }
 
-    const dalleSize = SIZES[size] ?? SIZES.landscape
+    const { width, height } = SIZES[size] ?? SIZES.landscape
+    // standard = 8 steps (fast), hd = 20 steps (more detail)
+    const num_steps = quality === 'hd' ? 20 : 8
 
-    const dalleRes = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+    const cfRes = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-1-schnell`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: prompt.trim(), num_steps, width, height }),
       },
-      body: JSON.stringify({
-        model: 'dall-e-3',
-        prompt: prompt.trim(),
-        n: 1,
-        size: dalleSize,
-        quality,
-        response_format: 'url',
-      }),
-    })
+    )
 
-    if (!dalleRes.ok) {
-      const err = await dalleRes.json().catch(() => ({}))
-      const message = err?.error?.message || `DALL-E API error ${dalleRes.status}`
-      console.error('DALL-E error:', dalleRes.status, JSON.stringify(err))
-      return NextResponse.json({ error: message, status: dalleRes.status }, { status: 502 })
+    if (!cfRes.ok) {
+      const err = await cfRes.json().catch(() => ({}))
+      const message = err?.errors?.[0]?.message || `Cloudflare AI error ${cfRes.status}`
+      console.error('Cloudflare AI error:', cfRes.status, JSON.stringify(err))
+      return NextResponse.json({ error: message }, { status: 502 })
     }
 
-    const dalleJson = await dalleRes.json()
-    const imageUrl: string = dalleJson?.data?.[0]?.url
-    const revisedPrompt: string = dalleJson?.data?.[0]?.revised_prompt || prompt
-
-    if (!imageUrl) {
-      return NextResponse.json({ error: 'No image returned from DALL-E' }, { status: 502 })
-    }
-
-    // Download and convert to WebP
-    const imgRes = await fetch(imageUrl)
-    const rawBuffer = Buffer.from(await imgRes.arrayBuffer())
+    // CF returns binary image — convert to WebP
+    const rawBuffer = Buffer.from(await cfRes.arrayBuffer())
 
     const { data: webpBuffer, info } = await sharp(rawBuffer)
       .webp({ quality: 85, effort: 4 })
@@ -75,7 +71,7 @@ export async function POST(request: NextRequest) {
       size: info.size,
       width: info.width,
       height: info.height,
-      revisedPrompt,
+      revisedPrompt: prompt, // CF doesn't revise prompts
     })
   } catch (err: any) {
     console.error('Generate image error:', err)
