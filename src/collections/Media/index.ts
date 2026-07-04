@@ -23,6 +23,15 @@ export const Media: CollectionConfig = {
   },
   fields: [
     {
+      name: 'generateMediaShortcut',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/GenerateMediaShortcut',
+        },
+      },
+    },
+    {
       name: 'alt',
       type: 'text',
       //required: true,

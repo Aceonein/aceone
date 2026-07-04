@@ -15,6 +15,11 @@ export const nsfwModeration: CollectionBeforeValidateHook = async ({ data, req }
     return data
   }
 
+  // AI-generated images skip moderation — DALL-E enforces content safety upstream
+  if ((req as any).context?.skipNsfwCheck) {
+    return data
+  }
+
   if (!process.env.OPENAI_API_KEY) {
     throw new APIError(
       'Media uploads are disabled: OPENAI_API_KEY not configured. Contact an admin.',
