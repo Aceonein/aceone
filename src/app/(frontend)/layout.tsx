@@ -19,6 +19,7 @@ const spaceMono = Space_Mono({
 })
 
 import { AdminBar } from '@/components/AdminBar'
+import { Analytics } from '@/components/Analytics'
 import { CookieConsent } from '@/components/CookieConsent'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
@@ -53,6 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {children}
           <Footer />
           <CookieConsent />
+          <Analytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         </Providers>
       </body>
     </html>

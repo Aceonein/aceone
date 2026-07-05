@@ -13,6 +13,7 @@ export function CookieConsent() {
 
   function respond(decision: 'accepted' | 'rejected') {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ decision, timestamp: Date.now() }))
+    window.dispatchEvent(new CustomEvent('ao:consent-update', { detail: { accepted: decision === 'accepted' } }))
     setVisible(false)
   }
 
