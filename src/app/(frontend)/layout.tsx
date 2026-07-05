@@ -18,6 +18,7 @@ const spaceMono = Space_Mono({
   display: 'swap',
 })
 
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { AdminBar } from '@/components/AdminBar'
 import { Analytics } from '@/components/Analytics'
 import { CookieConsent } from '@/components/CookieConsent'
@@ -55,6 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Footer />
           <CookieConsent />
           <Analytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>
