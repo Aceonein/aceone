@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
       where: { status: { equals: 'active' } },
       limit: 10000,
       pagination: false,
+      select: { email: true } as any,
     })
 
     if (subscribers.docs.length === 0) {

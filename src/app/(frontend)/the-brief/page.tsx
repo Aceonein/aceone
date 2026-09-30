@@ -19,7 +19,7 @@ export default async function BriefPage() {
     depth: 1,
     limit: 100,
     sort: '-publishedAt',
-    overrideAccess: true,
+    where: { status: { equals: 'published' } },
   })
 
   const briefs = (res.docs as any[]).map(b => ({

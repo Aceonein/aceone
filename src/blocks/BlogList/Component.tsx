@@ -38,6 +38,7 @@ export const BlogListBlock: React.FC<Props> = async ({
       status: { equals: 'published' },
       ...(categoryId ? { categories: { in: [categoryId] } } : {}),
     },
+    select: { title: true, slug: true, excerpt: true, publishedAt: true, featuredImage: true, featuredImageAlt: true, categories: true } as any,
   })
 
   const posts = result.docs as Post[]
