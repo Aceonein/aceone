@@ -158,7 +158,7 @@ export const seed = async ({ payload }: { payload: Payload; req: PayloadRequest 
   const existingUsers = await payload.find({ collection: 'users', where: { email: { equals: 'aman@aceone.in' } }, limit: 1, overrideAccess: true })
   const user = existingUsers.docs[0] ?? await payload.create({
     collection: 'users',
-    data: { name: 'Aman Khan', email: 'aman@aceone.in', password: 'Aceone@2024!', role: 'admin' } as any,
+    data: { name: 'Aman Khan', email: 'aman@aceone.in', password: process.env.SEED_ADMIN_PASSWORD ?? 'Aceone@2024!', role: 'admin' } as any,
   })
 
   // ── Author ────────────────────────────────────────────────────────────────
