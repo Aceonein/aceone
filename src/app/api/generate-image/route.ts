@@ -3,8 +3,8 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import sharp from 'sharp'
 
-// Cloudflare Workers AI — flux-1-schnell
-// Dimensions must be multiples of 8, max 1024 on free tier
+// Cloudflare Workers AI — flux-1-schnell accepts only `prompt` and `steps` (max 8).
+// It always renders a fixed-size image, so the aspect ratio is applied by cropping afterwards.
 const SIZES: Record<string, { width: number; height: number }> = {
   landscape: { width: 1024, height: 576 },
   square:    { width: 1024, height: 1024 },
@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
     }
 
     const { width, height } = SIZES[size] ?? SIZES.landscape
-    // standard = 8 steps (fast), hd = 20 steps (more detail)
-    const num_steps = quality === 'hd' ? 20 : 8
+    // standard = 4 steps (fast), hd = 8 steps (model maximum)
+    const steps = quality === 'hd' ? 8 : 4
 
     const cfRes = await fetch(
       `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-1-schnell`,
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
           Authorization: `Bearer ${apiToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt: prompt.trim(), num_steps, width, height }),
+        body: JSON.stringify({ prompt: prompt.trim(), steps }),
       },
     )
 
@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { data: webpBuffer, info } = await sharp(rawBuffer)
+      .resize({ width, height, fit: 'cover', position: 'centre' })
       .webp({ quality: 85, effort: 4 })
       .toBuffer({ resolveWithObject: true })
 
