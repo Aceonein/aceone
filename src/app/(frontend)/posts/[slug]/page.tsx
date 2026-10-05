@@ -83,7 +83,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
     const payload = await getPayload({ config: configPromise })
     const rel = await payload.find({
       collection: 'posts',
-      where: { and: [{ slug: { not_equals: decodedSlug } }, { categories: { in: [cat.id] } }] },
+      where: { and: [{ slug: { not_equals: decodedSlug } }, { status: { equals: 'published' } }, { categories: { in: [cat.id] } }] },
       limit: 4,
       depth: 1,
       select: { title: true, slug: true, categories: true },

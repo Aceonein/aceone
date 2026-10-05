@@ -15,7 +15,8 @@ export const CoverStoryHero: React.FC<Props> = async ({ coverStoryOverride }) =>
     post = coverStoryOverride as Post
   } else if (typeof coverStoryOverride === 'string') {
     try {
-      post = (await payload.findByID({ collection: 'posts', id: coverStoryOverride, depth: 1 })) as Post
+      const found = (await payload.findByID({ collection: 'posts', id: coverStoryOverride, depth: 1 })) as Post
+      if ((found as any).status === 'published') post = found
     } catch {
       // fall through to auto-pick
     }

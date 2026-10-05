@@ -19,7 +19,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const payload = await getPayload({ config: configPromise })
     const posts = await payload.find({
       collection: 'posts',
-      where: { slug: { equals: slug } },
+      where: { slug: { equals: slug }, status: { equals: 'published' } },
       limit: 1,
       select: { upvotes: true, upvotedBy: true } as any,
     })

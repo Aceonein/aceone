@@ -19,7 +19,7 @@ const getPostsSitemap = unstable_cache(
       limit: 1000,
       pagination: false,
       where: {
-        _status: {
+        status: {
           equals: 'published',
         },
       },
