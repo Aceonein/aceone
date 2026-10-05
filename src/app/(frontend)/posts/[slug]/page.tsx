@@ -157,7 +157,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
 
           {/* Upvote */}
           <div className="ao-sidebar-actions" style={{ marginBottom: 20 }}>
-            <UpvoteButton slug={decodedSlug} initial={upvotes} />
+            <UpvoteButton slug={decodedSlug} initial={upvotes} bar fullWidth />
           </div>
 
           {/* Share */}
@@ -226,6 +226,18 @@ export default async function PostPage({ params: paramsPromise }: Args) {
 
           {/* Mobile meta — share + tags (hidden on desktop) */}
           <div className="ao-mobile-meta" style={{ display: 'none', marginBottom: 28 }}>
+            {/* Views + upvote */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, paddingBottom: 16, marginBottom: 16, borderBottom: '1px solid var(--ao-border)' }}>
+              {views != null ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <span style={{ ...t.label, color: 'var(--ao-t3)' }}>Views</span>
+                  <span style={{ fontFamily: mono, fontSize: 18, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+                    {views > 999 ? `${(views / 1000).toFixed(1)}k` : views}
+                  </span>
+                </div>
+              ) : <span />}
+              <UpvoteButton slug={decodedSlug} initial={upvotes} bar />
+            </div>
             {/* Share */}
             <div style={{ marginBottom: 16 }}>
               <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 8 }}>Share</div>

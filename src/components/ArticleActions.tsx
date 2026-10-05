@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const mono = 'var(--font-mono)'
 
@@ -7,10 +7,19 @@ function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-export function UpvoteButton({ slug, initial, compact }: { slug: string; initial: number; compact?: boolean }) {
+export function UpvoteButton({ slug, initial, compact, bar, fullWidth }: { slug: string; initial: number; compact?: boolean; bar?: boolean; fullWidth?: boolean }) {
   const [count, setCount] = useState(initial)
   const [voted, setVoted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const storageKey = `ao:upvoted:${slug}`
+
+  useEffect(() => {
+    try { if (localStorage.getItem(storageKey)) setVoted(true) } catch {}
+  }, [storageKey])
+
+  const remember = (v: boolean) => {
+    try { v ? localStorage.setItem(storageKey, '1') : localStorage.removeItem(storageKey) } catch {}
+  }
 
   const toggle = async () => {
     if (loading) return
@@ -26,9 +35,42 @@ export function UpvoteButton({ slug, initial, compact }: { slug: string; initial
         const data = await res.json()
         setCount(data.upvotes)
         setVoted(!voted)
+        remember(!voted)
+      } else {
+        const { error } = await res.json().catch(() => ({ error: '' }))
+        if (error === 'Already upvoted') { setVoted(true); remember(true) }
+        else if (error === 'Not upvoted') { setVoted(false); remember(false) }
       }
     } catch {}
     setLoading(false)
+  }
+
+  if (bar) {
+    return (
+      <button
+        onClick={toggle}
+        disabled={loading}
+        aria-label={voted ? 'Remove upvote' : 'Upvote'}
+        aria-pressed={voted}
+        style={{
+          height: 44, padding: '0 16px',
+          width: fullWidth ? '100%' : undefined,
+          display: fullWidth ? 'flex' : 'inline-flex', alignItems: 'center', gap: 10,
+          background: voted ? 'var(--ao-t1)' : 'transparent',
+          border: `1px solid ${voted ? 'var(--ao-t1)' : 'var(--ao-border-2)'}`,
+          color: voted ? 'var(--ao-bg)' : 'var(--ao-t1)',
+          fontFamily: mono, fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+          cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.7 : 1,
+          transition: 'background .18s ease, color .18s ease, border-color .18s ease',
+        }}
+      >
+        <svg viewBox="0 0 16 16" fill="currentColor" width={12} height={12} aria-hidden="true">
+          <path d="M8 2L2 9h4v5h4V9h4L8 2z" />
+        </svg>
+        <span style={{ flex: fullWidth ? 1 : undefined, textAlign: 'left' }}>{voted ? 'Upvoted' : 'Upvote'}</span>
+        <span style={{ paddingLeft: 10, borderLeft: `1px solid ${voted ? 'var(--ao-bg)' : 'var(--ao-border-2)'}`, fontVariantNumeric: 'tabular-nums' }}>{count}</span>
+      </button>
+    )
   }
 
   if (compact) {
