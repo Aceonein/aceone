@@ -209,18 +209,26 @@ export default async function PostPage({ params: paramsPromise }: Args) {
 
           {/* Author row */}
           {author && (
-            <div className="ao-author-row" style={{ display: 'flex', alignItems: 'center', gap: 14, paddingBottom: 28, borderBottom: '1px solid var(--ao-border)', marginBottom: 36 }}>
-              <div style={{ width: 34, height: 34, background: 'var(--ao-bg-2)', border: `1px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: mono, fontSize: 12, fontWeight: 700, color: accent, flexShrink: 0 }}>
-                {author.name?.charAt(0) ?? 'A'}
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: mono, fontSize: 12, fontWeight: 700, color: 'var(--ao-t1)', marginBottom: 3 }}>{author.name}</div>
-                <div style={{ fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                  {(author as any).role && <><span style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>{(author as any).role}</span><span>/</span></>}
-                  {date && <><span>{date}</span><span>/</span></>}
-                  {(post as any).readTime && <span>{(post as any).readTime} min read</span>}
+            <div className="ao-author-row" style={{ paddingBottom: 28, borderBottom: '1px solid var(--ao-border)', marginBottom: 36 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{ width: 34, height: 34, background: 'var(--ao-bg-2)', border: `1px solid ${accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: mono, fontSize: 12, fontWeight: 700, color: accent, flexShrink: 0 }}>
+                  {author.name?.charAt(0) ?? 'A'}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: mono, fontSize: 12, fontWeight: 700, color: 'var(--ao-t1)', marginBottom: 3 }}>{author.name}</div>
+                  {(author as any).designation && (
+                    <div style={{ fontFamily: mono, fontSize: 10, color: accent, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3 }}>{(author as any).designation}</div>
+                  )}
+                  <div style={{ fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                    {date && <span>{date}</span>}
+                    {date && (post as any).readTime && <span>/</span>}
+                    {(post as any).readTime && <span>{(post as any).readTime} min read</span>}
+                  </div>
                 </div>
               </div>
+              {(author as any).bio && (
+                <p style={{ margin: '16px 0 0', paddingLeft: 48, fontSize: 13, lineHeight: 1.65, color: 'var(--ao-t2)', maxWidth: 640 }}>{(author as any).bio}</p>
+              )}
             </div>
           )}
 
