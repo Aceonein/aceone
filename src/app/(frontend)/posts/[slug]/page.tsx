@@ -221,12 +221,6 @@ export default async function PostPage({ params: paramsPromise }: Args) {
                   {(post as any).readTime && <span>{(post as any).readTime} min read</span>}
                 </div>
               </div>
-              {views != null && (
-                <div style={{ fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)', letterSpacing: '0.06em', flexShrink: 0 }}>
-                  {views > 999 ? `${(views / 1000).toFixed(1)}k` : views} views
-                </div>
-              )}
-              <UpvoteButton slug={decodedSlug} initial={upvotes} compact />
             </div>
           )}
 
