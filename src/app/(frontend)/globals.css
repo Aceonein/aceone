@@ -357,6 +357,18 @@ html[data-theme='light'] {
 .ao-mobile-meta { display: none; }
 
 /* ── Mobile responsive (≤ 900px) ── */
+/* Post author section */
+.ao-author-row { padding-bottom: 32px; margin-bottom: 40px; border-bottom: 1px solid var(--ao-border); }
+.ao-author-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ao-author-avatar { width: 56px; height: 56px; flex-shrink: 0; overflow: hidden; background: var(--ao-bg-2); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 18px; font-weight: 700; }
+.ao-author-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ao-author-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.ao-author-name { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ao-t1); line-height: 1.2; }
+.ao-author-title { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ao-t2); border: 1px solid var(--ao-border-2); padding: 3px 7px; line-height: 1; }
+.ao-author-designation { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.4; }
+.ao-author-meta { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; color: var(--ao-t3); white-space: nowrap; }
+.ao-author-bio { margin: 16px 0 0 72px; max-width: 62ch; font-size: 14px; line-height: 1.7; color: var(--ao-t2); text-wrap: pretty; }
+
 @media (max-width: 900px) {
   /* Header nav */
   .ao-nav-links { display: none !important; }
@@ -403,7 +415,11 @@ html[data-theme='light'] {
   .ao-nav-cta-right a { padding: 0 14px !important; font-size: 10px !important; }
   .ao-breadcrumb-inner { padding: 0 16px !important; }
 
-  .ao-author-row { margin-bottom: 12px !important; padding-bottom: 16px !important; }
+  .ao-author-row { margin-bottom: 20px !important; padding-bottom: 20px !important; }
+  .ao-author-head { gap: 12px; }
+  .ao-author-avatar { width: 48px; height: 48px; font-size: 16px; }
+  .ao-author-meta { flex-basis: 100%; white-space: normal; }
+  .ao-author-bio { margin: 14px 0 0 0 !important; max-width: none; }
 
   /* Article typography */
   .ao-article-title { font-size: clamp(24px,7vw,32px) !important; margin-bottom: 16px !important; }
