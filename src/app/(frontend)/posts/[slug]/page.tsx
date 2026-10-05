@@ -4,6 +4,7 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { BlockRenderer } from '@/components/BlockRenderer'
 import { NewsletterSection } from '@/components/NewsletterSection'
 import { ReadingProgress } from '@/components/ReadingProgress'
+import { ViewTracker } from '@/components/ViewTracker'
 import { UpvoteButton, ShareButtons, TOCClient } from '@/components/ArticleActions'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -97,7 +98,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
     <main style={{ background: 'var(--ao-bg)', minHeight: '100vh', paddingTop: 'var(--ao-nav-h)' }}>
       <ReadingProgress />
       <PayloadRedirects disableNotFound url={url} />
-      {draft && <LivePreviewListener />}
+      {draft ? <LivePreviewListener /> : <ViewTracker slug={decodedSlug} />}
 
       {/* Breadcrumb */}
       <div style={{ position: 'sticky', top: 'var(--ao-nav-h)', zIndex: 50, borderBottom: '1px solid var(--ao-border)', background: 'var(--ao-bg)' }}>
