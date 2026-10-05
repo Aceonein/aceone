@@ -16,12 +16,29 @@ export const Media: CollectionConfig = {
     delete: ({ req: { user } }) =>
       user?.role === 'admin' || (user as any)?.role === 'moderator',
     read: () => true,
-    update: authenticated,
+    update: ({ req: { user } }) => {
+      if (!user) return false
+      if (user.role === 'admin' || (user as any).role === 'moderator') return true
+      return { createdBy: { equals: user.id } }
+    },
   },
   hooks: {
     beforeValidate: [nsfwModeration],
+    beforeChange: [
+      ({ data, req, operation }) => {
+        if (operation === 'create' && req.user) data.createdBy = req.user.id
+        return data
+      },
+    ],
   },
   fields: [
+    {
+      name: 'createdBy',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: { disabled: true },
+      access: { update: () => false },
+    },
     {
       name: 'generateMediaShortcut',
       type: 'ui',

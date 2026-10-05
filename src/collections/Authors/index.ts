@@ -1,5 +1,42 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionAfterChangeHook, CollectionConfig } from 'payload'
+
 import { isAdmin } from '../../access/isAdmin'
+
+const AUTHOR_PHOTOS_FOLDER = 'Author Photos'
+
+const filePhotoInFolder: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
+  const id = typeof doc.profileImage === 'object' ? doc.profileImage?.id : doc.profileImage
+  const prev = typeof previousDoc?.profileImage === 'object' ? previousDoc.profileImage?.id : previousDoc?.profileImage
+  if (!id || id === prev) return doc
+
+  const { payload } = req
+  const found = await payload.find({
+    collection: 'payload-folders' as any,
+    where: { name: { equals: AUTHOR_PHOTOS_FOLDER } },
+    limit: 1,
+    depth: 0,
+    overrideAccess: true,
+    req,
+  })
+  const folder =
+    found.docs[0] ??
+    (await payload.create({
+      collection: 'payload-folders' as any,
+      data: { name: AUTHOR_PHOTOS_FOLDER, folderType: ['media'] } as any,
+      overrideAccess: true,
+      req,
+    }))
+
+  await payload.update({
+    collection: 'media',
+    id,
+    data: { _folder: folder.id } as any,
+    overrideAccess: true,
+    context: { skipNsfwCheck: true },
+    req,
+  })
+  return doc
+}
 
 export const Authors: CollectionConfig = {
   slug: 'authors',
@@ -10,6 +47,7 @@ export const Authors: CollectionConfig = {
     update: ({ req: { user } }) =>
       user?.role === 'admin' || (user as any)?.role === 'moderator',
   },
+  hooks: { afterChange: [filePhotoInFolder] },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'designation', 'updatedAt'],
@@ -67,9 +105,10 @@ export const Authors: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       required: true,
+      unique: true,
       admin: {
         position: 'sidebar',
-        description: 'Linked user account',
+        description: 'Linked user account (one profile per user)',
       },
     },
     {

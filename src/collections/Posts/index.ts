@@ -8,6 +8,7 @@ import { authenticated } from '../../access/authenticated'
 import { postsBodyEditor } from '../../fields/postsBodyEditor'
 
 import { revalidatePost, revalidateDelete } from './hooks/revalidatePost'
+import { defaultAuthorToCreator, ownAuthorProfileId } from './hooks/ownAuthorProfile'
 
 import {
   MetaDescriptionField,
@@ -173,8 +174,19 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'author',
       type: 'relationship',
       relationTo: 'authors',
-      required: true,
-      admin: { position: 'sidebar' },
+      admin: { position: 'sidebar', description: 'Defaults to your own author profile' },
+      filterOptions: ({ req: { user } }) =>
+        (user as any)?.role === 'author' ? { user: { equals: user!.id } } : true,
+      validate: async (value: any, { req, previousValue }: any) => {
+        const toId = (v: any) => (v && typeof v === 'object' ? v.id : v)
+        const id = toId(value)
+        const own = await ownAuthorProfileId(req)
+        if (!id) return own ? true : 'This field is required.'
+        if ((req.user as any)?.role === 'author' && String(id) !== String(toId(previousValue)) && String(id) !== own) {
+          return 'Authors can only publish under their own profile.'
+        }
+        return true
+      },
     },
     {
       name: 'readTime',
@@ -240,6 +252,7 @@ export const Posts: CollectionConfig<'posts'> = {
     slugField(),
   ],
   hooks: {
+    beforeValidate: [defaultAuthorToCreator],
     beforeChange: [
       ({ data, req, operation }) => {
         // Auto-set createdBy on first create

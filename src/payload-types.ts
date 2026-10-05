@@ -195,7 +195,7 @@ export interface Author {
    */
   linkedin?: string | null;
   /**
-   * Linked user account
+   * Linked user account (one profile per user)
    */
   user: string | User;
   slug?: string | null;
@@ -208,6 +208,7 @@ export interface Author {
  */
 export interface Media {
   id: string;
+  createdBy?: (string | null) | User;
   alt?: string | null;
   caption?: {
     root: {
@@ -298,32 +299,6 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-folders".
- */
-export interface FolderInterface {
-  id: string;
-  name: string;
-  folder?: (string | null) | FolderInterface;
-  documentsAndFolders?: {
-    docs?: (
-      | {
-          relationTo?: 'payload-folders';
-          value: string | FolderInterface;
-        }
-      | {
-          relationTo?: 'media';
-          value: string | Media;
-        }
-    )[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  folderType?: 'media'[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -348,6 +323,32 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-folders".
+ */
+export interface FolderInterface {
+  id: string;
+  name: string;
+  folder?: (string | null) | FolderInterface;
+  documentsAndFolders?: {
+    docs?: (
+      | {
+          relationTo?: 'payload-folders';
+          value: string | FolderInterface;
+        }
+      | {
+          relationTo?: 'media';
+          value: string | Media;
+        }
+    )[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  folderType?: 'media'[] | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * The Aceone Brief — Weekly newsletter issues
@@ -626,7 +627,10 @@ export interface Post {
    * Auto-set when published
    */
   publishedAt?: string | null;
-  author: string | Author;
+  /**
+   * Defaults to your own author profile
+   */
+  author?: (string | null) | Author;
   /**
    * Auto-calculated (min read)
    */
@@ -1411,6 +1415,7 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  createdBy?: T;
   alt?: T;
   caption?: T;
   prefix?: T;
