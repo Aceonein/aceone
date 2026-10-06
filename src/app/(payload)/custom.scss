@@ -703,7 +703,7 @@ html[data-theme='dark'] .fixed-toolbar__dropdown-items .toolbar-popup__dropdown-
 
 /* ── Upload / media ── */
 [class*="file-details"],
-[class*="upload__"] {
+[class*="upload__"]:not([class*="edit-upload"]) {
   border: 1px solid var(--theme-border-color) !important;
   border-radius: 0 !important;
   background: var(--theme-elevation-50) !important;
