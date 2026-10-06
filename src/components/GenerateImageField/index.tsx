@@ -16,11 +16,11 @@ type Props = {
 
 type GenState = 'idle' | 'generating' | 'preview' | 'saving' | 'done' | 'error'
 
-const accent = '#6b6ff0'
-const accentDim = 'rgba(107,111,240,0.12)'
-const border = 'var(--theme-border-color, #2a2a26)'
-const textDim = 'var(--theme-text-dim, #8c8b84)'
-const text = 'var(--theme-text, #f0efe9)'
+const accent = 'var(--ao-ink)'
+const accentDim = 'var(--ao-surface-2)'
+const border = 'var(--ao-line)'
+const textDim = 'var(--ao-muted)'
+const text = 'var(--theme-text)'
 
 export function GenerateImageField({ field, targetField: targetFieldProp }: Props) {
   const targetField = targetFieldProp ?? field?.admin?.custom?.targetField ?? ''
@@ -97,29 +97,9 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
   return (
     <div style={{ marginBottom: 8 }}>
       {/* Toggle button */}
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 7,
-          padding: '7px 14px',
-          background: open ? accentDim : 'transparent',
-          border: `1px solid ${open ? accent : border}`,
-          color: open ? accent : textDim,
-          fontSize: 11,
-          fontWeight: 700,
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
-          fontFamily: 'inherit',
-          borderRadius: 0,
-          transition: 'all 150ms',
-        }}
-      >
-        <span style={{ fontSize: 13 }}>✦</span>
-        {open ? 'Close Generator' : 'Generate with AI'}
+      <button type="button" className="ao-pill ao-pill--sm" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+        <span aria-hidden="true" style={{ color: 'var(--ao-violet)' }}>✦</span>
+        {open ? 'Close generator' : 'Generate with AI'}
       </button>
 
       {/* Panel */}
@@ -128,8 +108,8 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
           marginTop: 12,
           padding: 20,
           border: `1px solid ${accent}40`,
-          background: 'rgba(107,111,240,0.04)',
-          borderRadius: 0,
+          background: 'var(--ao-surface-2)',
+          borderRadius: 14,
         }}>
           {/* Prompt */}
           <div style={{ marginBottom: 14 }}>
@@ -143,8 +123,8 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
               placeholder="Describe the image you want to generate..."
               rows={3}
               style={{
-                width: '100%', padding: '10px 12px', background: 'rgba(255,255,255,0.04)',
-                border: `1px solid ${border}`, borderRadius: 0, color: text, fontSize: 13,
+                width: '100%', padding: '10px 12px', background: 'var(--ao-surface-2)',
+                border: `1px solid ${border}`, borderRadius: 14, color: text, fontSize: 13,
                 fontFamily: 'inherit', resize: 'vertical', outline: 'none', boxSizing: 'border-box',
               }}
             />
@@ -156,11 +136,11 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
             onClick={handleGenerate}
             disabled={isGenerating || !prompt.trim()}
             style={{
-              padding: '9px 20px', background: isGenerating || !prompt.trim() ? 'rgba(107,111,240,0.3)' : accent,
-              border: 'none', color: isGenerating || !prompt.trim() ? 'rgba(255,255,255,0.4)' : '#fff',
+              padding: '9px 20px', background: isGenerating || !prompt.trim() ? 'var(--theme-elevation-200)' : accent,
+              border: 'none', color: isGenerating || !prompt.trim() ? 'var(--ao-muted)' : 'var(--ao-on-ink)',
               fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
               cursor: isGenerating || !prompt.trim() ? 'not-allowed' : 'pointer',
-              fontFamily: 'inherit', borderRadius: 0, marginBottom: 16,
+              fontFamily: 'inherit', borderRadius: 14, marginBottom: 16,
             }}
           >
             {isGenerating ? 'Generating…' : 'Generate'}
@@ -168,14 +148,14 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
 
           {/* Error */}
           {error && (
-            <div style={{ padding: '8px 12px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#f87171', fontSize: 12, marginBottom: 12 }}>
+            <div style={{ padding: '8px 12px', background: 'color-mix(in srgb, var(--ao-red) 12%, transparent)', border: '1px solid color-mix(in srgb, var(--ao-red) 35%, transparent)', color: 'var(--ao-red)', fontSize: 12, marginBottom: 12 }}>
               {error}
             </div>
           )}
 
           {/* Done flash */}
           {isDone && (
-            <div style={{ padding: '8px 12px', background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)', color: '#4ade80', fontSize: 12, marginBottom: 12 }}>
+            <div style={{ padding: '8px 12px', background: 'color-mix(in srgb, var(--ao-green) 12%, transparent)', border: '1px solid color-mix(in srgb, var(--ao-green) 35%, transparent)', color: 'var(--ao-green)', fontSize: 12, marginBottom: 12 }}>
               Image set.
             </div>
           )}
@@ -214,8 +194,8 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
                   onChange={(e) => setAlt(e.target.value)}
                   disabled={isSaving}
                   style={{
-                    width: '100%', padding: '8px 12px', background: 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${border}`, borderRadius: 0, color: text, fontSize: 13,
+                    width: '100%', padding: '8px 12px', background: 'var(--ao-surface-2)',
+                    border: `1px solid ${border}`, borderRadius: 14, color: text, fontSize: 13,
                     fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box',
                   }}
                 />
@@ -226,10 +206,10 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
                   onClick={handleUse}
                   disabled={isSaving}
                   style={{
-                    padding: '8px 18px', background: isSaving ? 'rgba(107,111,240,0.3)' : accent,
-                    border: 'none', color: isSaving ? 'rgba(255,255,255,0.4)' : '#fff',
+                    padding: '8px 18px', background: isSaving ? 'var(--theme-elevation-200)' : accent,
+                    border: 'none', color: isSaving ? 'var(--ao-muted)' : 'var(--ao-on-ink)',
                     fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-                    cursor: isSaving ? 'not-allowed' : 'pointer', fontFamily: 'inherit', borderRadius: 0,
+                    cursor: isSaving ? 'not-allowed' : 'pointer', fontFamily: 'inherit', borderRadius: 14,
                   }}
                 >
                   {isSaving ? 'Saving…' : 'Use this image'}
@@ -242,7 +222,7 @@ export function GenerateImageField({ field, targetField: targetFieldProp }: Prop
                     padding: '8px 14px', background: 'transparent', border: `1px solid ${border}`,
                     color: textDim, fontSize: 11, fontWeight: 600, letterSpacing: '0.08em',
                     textTransform: 'uppercase', cursor: isSaving ? 'not-allowed' : 'pointer',
-                    fontFamily: 'inherit', borderRadius: 0,
+                    fontFamily: 'inherit', borderRadius: 14,
                   }}
                 >
                   Regenerate

@@ -31,17 +31,23 @@ export default buildConfig({
     },
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
-      beforeDashboard: ['@/components/BeforeDashboard'],
+      beforeNavLinks: ['@/components/Admin/NavBrand'],
+      actions: ['@/components/Admin/ThemeToggle'],
       afterNavLinks: ['@/components/AdminNavGenerateImage'],
+      views: {
+        dashboard: { Component: '@/components/Admin/Dashboard' },
+        generateImage: { Component: '@/components/Admin/GenerateImagePage', path: '/generate-image' },
+      },
       graphics: {
         Logo: '@/components/Logo/Logo#Logo',
-        Icon: '@/components/Logo/Logo#Logo',
+        Icon: '@/components/Logo/Logo#Icon',
       },
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
     user: Users.slug,
+    dateFormat: 'd MMM yyyy, h:mm a',
     livePreview: {
       breakpoints: [
         {
@@ -70,7 +76,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  collections: [Authors, AceoneBriefs, Categories, Media, NewsletterSubscribers, Pages, Posts, Tags, Users],
+  collections: [Posts, Pages, Categories, Tags, Media, AceoneBriefs, NewsletterSubscribers, Authors, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

@@ -37,6 +37,7 @@ export const Pages: CollectionConfig<'pages'> = {
     slug: true,
   },
   admin: {
+    group: 'Content',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     hidden: ({ user }) => (user as any)?.role !== 'admin',
     livePreview: {

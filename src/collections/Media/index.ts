@@ -12,7 +12,12 @@ import { nsfwModeration } from './hooks/nsfwModeration'
 export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
-  admin: { useAsTitle: 'title', listSearchableFields: ['title', 'filename', 'alt'] },
+  admin: {
+    group: 'Library',
+    useAsTitle: 'title',
+    defaultColumns: ['filename', 'title', 'alt', 'updatedAt'],
+    listSearchableFields: ['title', 'filename', 'alt'],
+  },
   access: {
     create: authenticated,
     delete: ({ req: { user } }) =>
@@ -52,6 +57,7 @@ export const Media: CollectionConfig = {
       name: 'generateMediaShortcut',
       type: 'ui',
       admin: {
+        disableListColumn: true,
         components: {
           Field: '@/components/GenerateMediaShortcut',
         },

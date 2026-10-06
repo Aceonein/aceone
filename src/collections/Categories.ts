@@ -12,6 +12,7 @@ export const Categories: CollectionConfig = {
     update: isAdmin,
   },
   admin: {
+    group: 'Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'order'],
   },

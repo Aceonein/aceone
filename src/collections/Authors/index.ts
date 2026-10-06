@@ -49,6 +49,7 @@ export const Authors: CollectionConfig = {
   },
   hooks: { afterChange: [filePhotoInFolder] },
   admin: {
+    group: 'People',
     useAsTitle: 'name',
     defaultColumns: ['name', 'designation', 'updatedAt'],
     hidden: ({ user }) => (user as any)?.role === 'author',

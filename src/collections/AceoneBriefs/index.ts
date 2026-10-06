@@ -6,6 +6,7 @@ import { convertRichTextToEmailHTML, stripHTML } from '@/lib/email/rich-text-to-
 
 export const AceoneBriefs: CollectionConfig = {
   slug: 'aceone-briefs',
+  labels: { singular: 'Brief', plural: 'Briefs' },
   access: {
     create: isAdmin,
     delete: isAdmin,
@@ -13,6 +14,7 @@ export const AceoneBriefs: CollectionConfig = {
     update: isAdmin,
   },
   admin: {
+    group: 'Newsletter',
     useAsTitle: 'title',
     defaultColumns: ['title', 'publishedAt', 'status', 'sentAt'],
     description: 'The Aceone Brief — Weekly newsletter issues',
@@ -105,6 +107,7 @@ export const AceoneBriefs: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
+        components: { Cell: '@/components/Admin/StatusCell' },
         description: 'Scheduled = will auto-send on publishedAt date',
       },
     },

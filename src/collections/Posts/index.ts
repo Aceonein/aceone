@@ -33,7 +33,8 @@ export const Posts: CollectionConfig<'posts'> = {
     meta: { image: true, description: true },
   },
   admin: {
-    defaultColumns: ['title', 'status', 'author', 'updatedAt'],
+    group: 'Content',
+    defaultColumns: ['title', 'status', 'author', 'categories', 'updatedAt'],
     useAsTitle: 'title',
     livePreview: {
       url: ({ data }) => {
@@ -158,7 +159,7 @@ export const Posts: CollectionConfig<'posts'> = {
         update: ({ req: { user } }) =>
           (user as any)?.role === 'admin' || (user as any)?.role === 'moderator',
       },
-      admin: { position: 'sidebar' },
+      admin: { position: 'sidebar', components: { Cell: '@/components/Admin/StatusCell' } },
     },
     {
       name: 'publishedAt',

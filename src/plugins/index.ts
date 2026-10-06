@@ -28,6 +28,7 @@ export const plugins: Plugin[] = [
     collections: ['pages', 'posts'],
     overrides: {
       admin: {
+        group: 'System',
         hidden: ({ user }) => (user as any)?.role !== 'admin',
       },
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
@@ -63,11 +64,13 @@ export const plugins: Plugin[] = [
     },
     formSubmissionOverrides: {
       admin: {
+        group: 'System',
         hidden: ({ user }) => (user as any)?.role === 'author',
       },
     },
     formOverrides: {
       admin: {
+        group: 'System',
         hidden: ({ user }) => (user as any)?.role === 'author',
       },
       fields: ({ defaultFields }) => {
@@ -96,6 +99,7 @@ export const plugins: Plugin[] = [
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
       admin: {
+        group: 'System',
         hidden: ({ user }) => (user as any)?.role === 'author',
       },
       fields: ({ defaultFields }) => {

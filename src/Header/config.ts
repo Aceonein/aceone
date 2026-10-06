@@ -9,6 +9,7 @@ export const Header: GlobalConfig = {
     read: () => true,
   },
   admin: {
+    group: 'System',
     hidden: ({ user }) => (user as any)?.role === 'author',
   },
   fields: [

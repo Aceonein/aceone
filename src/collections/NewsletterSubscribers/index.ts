@@ -4,6 +4,7 @@ import { getSupabase } from '@/lib/supabase'
 
 export const NewsletterSubscribers: CollectionConfig = {
   slug: 'newsletter-subscribers',
+  labels: { singular: 'Subscriber', plural: 'Subscribers' },
   access: {
     create: () => true, // public via API
     delete: isAdmin,
@@ -11,6 +12,7 @@ export const NewsletterSubscribers: CollectionConfig = {
     update: isAdmin,
   },
   admin: {
+    group: 'Newsletter',
     useAsTitle: 'email',
     defaultColumns: ['email', 'status', 'source', 'subscribedAt'],
     description: 'Newsletter subscribers',
@@ -33,7 +35,7 @@ export const NewsletterSubscribers: CollectionConfig = {
         { label: 'Unsubscribed', value: 'unsubscribed' },
         { label: 'Bounced', value: 'bounced' },
       ],
-      admin: { position: 'sidebar' },
+      admin: { position: 'sidebar', components: { Cell: '@/components/Admin/StatusCell' } },
     },
     {
       name: 'source',

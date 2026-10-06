@@ -6,35 +6,32 @@ type GenerateState = 'idle' | 'generating' | 'preview' | 'saving' | 'saved' | 'e
 
 const s = {
   page: {
-    padding: '32px 40px',
+    padding: '8px 28px 56px',
     maxWidth: 900,
-    fontFamily: 'var(--font-sans, "Space Grotesk", sans-serif)',
   } as React.CSSProperties,
 
   heading: {
-    fontSize: 22,
+    fontFamily: 'var(--ao-display)',
+    fontSize: 44,
+    lineHeight: 1.05,
     fontWeight: 700,
-    color: 'var(--theme-text, #f0efe9)',
-    margin: '0 0 4px',
-    letterSpacing: '-0.01em',
+    color: 'var(--theme-text)',
+    margin: '0 0 8px',
+    letterSpacing: '-0.04em',
   } as React.CSSProperties,
 
   subheading: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 500,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase' as const,
-    color: 'var(--theme-text-dim, #8c8b84)',
-    margin: '0 0 32px',
+    color: 'var(--ao-muted)',
+    margin: '0 0 6px',
   },
 
   label: {
     display: 'block',
-    fontSize: 10,
+    fontSize: 13,
     fontWeight: 600,
-    letterSpacing: '0.12em',
-    textTransform: 'uppercase' as const,
-    color: 'var(--theme-text-dim, #8c8b84)',
+    color: 'var(--theme-text)',
     marginBottom: 8,
   } as React.CSSProperties,
 
@@ -42,10 +39,10 @@ const s = {
     width: '100%',
     minHeight: 100,
     padding: '12px 14px',
-    background: 'var(--theme-input-bg, rgba(255,255,255,0.04))',
-    border: '1px solid var(--theme-border-color, #2a2a26)',
-    borderRadius: 0,
-    color: 'var(--theme-text, #f0efe9)',
+    background: 'var(--theme-input-bg)',
+    border: '1px solid var(--ao-line)',
+    borderRadius: 16,
+    color: 'var(--theme-text)',
     fontSize: 14,
     fontFamily: 'inherit',
     resize: 'vertical' as const,
@@ -56,10 +53,10 @@ const s = {
   input: {
     width: '100%',
     padding: '10px 14px',
-    background: 'var(--theme-input-bg, rgba(255,255,255,0.04))',
-    border: '1px solid var(--theme-border-color, #2a2a26)',
-    borderRadius: 0,
-    color: 'var(--theme-text, #f0efe9)',
+    background: 'var(--theme-input-bg)',
+    border: '1px solid var(--ao-line)',
+    borderRadius: 14,
+    color: 'var(--theme-text)',
     fontSize: 14,
     fontFamily: 'inherit',
     outline: 'none',
@@ -72,14 +69,14 @@ const s = {
 
   optionBtn: (selected: boolean) => ({
     padding: '10px 16px',
-    border: selected ? '1px solid #6b6ff0' : '1px solid var(--theme-border-color, #2a2a26)',
-    background: selected ? 'rgba(107,111,240,0.12)' : 'rgba(255,255,255,0.02)',
-    color: selected ? '#8387f4' : 'var(--theme-text-dim, #8c8b84)',
+    border: selected ? '1px solid var(--ao-ink)' : '1px solid var(--ao-line)',
+    background: selected ? 'var(--ao-surface-2)' : 'var(--ao-surface-2)',
+    color: selected ? 'var(--theme-text)' : 'var(--ao-muted)',
     cursor: 'pointer',
     fontSize: 12,
     fontWeight: 600,
     fontFamily: 'inherit',
-    borderRadius: 0,
+    borderRadius: 999,
     transition: 'all 150ms',
     textAlign: 'left' as const,
   } as React.CSSProperties),
@@ -94,36 +91,36 @@ const s = {
 
   primaryBtn: (disabled: boolean) => ({
     padding: '12px 28px',
-    background: disabled ? 'rgba(107,111,240,0.3)' : '#6b6ff0',
+    background: disabled ? 'var(--theme-elevation-200)' : 'var(--ao-ink)',
     border: 'none',
-    color: disabled ? 'rgba(255,255,255,0.4)' : '#fff',
+    color: disabled ? 'var(--ao-muted)' : 'var(--ao-on-ink)',
     fontSize: 12,
     fontWeight: 700,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase' as const,
+    letterSpacing: '0',
+    textTransform: 'none' as const,
     cursor: disabled ? 'not-allowed' : 'pointer',
     fontFamily: 'inherit',
-    borderRadius: 0,
+    borderRadius: 999,
     transition: 'opacity 150ms',
   } as React.CSSProperties),
 
   secondaryBtn: (disabled: boolean) => ({
     padding: '12px 24px',
     background: 'transparent',
-    border: '1px solid var(--theme-border-color, #2a2a26)',
-    color: disabled ? 'rgba(255,255,255,0.3)' : 'var(--theme-text-dim, #8c8b84)',
+    border: '1px solid var(--ao-line)',
+    color: disabled ? 'var(--ao-muted)' : 'var(--ao-muted)',
     fontSize: 12,
     fontWeight: 600,
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase' as const,
+    letterSpacing: '0',
+    textTransform: 'none' as const,
     cursor: disabled ? 'not-allowed' : 'pointer',
     fontFamily: 'inherit',
-    borderRadius: 0,
+    borderRadius: 999,
   } as React.CSSProperties),
 
   previewBox: {
-    border: '1px solid var(--theme-border-color, #2a2a26)',
-    background: 'rgba(255,255,255,0.02)',
+    border: '1px solid var(--ao-line)',
+    background: 'var(--ao-surface-2)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -137,28 +134,28 @@ const s = {
     flexDirection: 'column' as const,
     alignItems: 'center',
     gap: 12,
-    color: 'var(--theme-text-dim, #8c8b84)',
+    color: 'var(--ao-muted)',
     padding: 48,
   },
 
   error: {
     padding: '12px 16px',
-    background: 'rgba(239,68,68,0.1)',
-    border: '1px solid rgba(239,68,68,0.3)',
-    color: '#f87171',
+    background: 'color-mix(in srgb, var(--ao-red) 12%, transparent)',
+    border: '1px solid color-mix(in srgb, var(--ao-red) 35%, transparent)',
+    color: 'var(--ao-red)',
     fontSize: 13,
     marginBottom: 20,
-    borderRadius: 0,
+    borderRadius: 14,
   } as React.CSSProperties,
 
   success: {
     padding: '14px 18px',
-    background: 'rgba(34,197,94,0.08)',
-    border: '1px solid rgba(34,197,94,0.25)',
-    color: '#4ade80',
+    background: 'color-mix(in srgb, var(--ao-green) 12%, transparent)',
+    border: '1px solid color-mix(in srgb, var(--ao-green) 35%, transparent)',
+    color: 'var(--ao-green)',
     fontSize: 13,
     marginBottom: 20,
-    borderRadius: 0,
+    borderRadius: 14,
     display: 'flex',
     alignItems: 'center',
     gap: 12,
@@ -166,7 +163,7 @@ const s = {
 
   divider: {
     border: 'none',
-    borderTop: '1px solid var(--theme-border-color, #2a2a26)',
+    borderTop: '1px solid var(--ao-line)',
     margin: '28px 0',
   } as React.CSSProperties,
 }
@@ -258,7 +255,7 @@ export default function GenerateImageView() {
     <div style={s.page}>
       <p style={s.subheading}>Media</p>
       <h1 style={s.heading}>Generate Image</h1>
-      <p style={{ fontSize: 13, color: 'var(--theme-text-dim, #8c8b84)', margin: '0 0 32px' }}>
+      <p style={{ fontSize: 13, color: 'var(--ao-muted)', margin: '0 0 32px' }}>
         Generate images with AI. Images are converted to WebP and saved to the media library.
       </p>
 
@@ -299,7 +296,7 @@ export default function GenerateImageView() {
           <span>Image saved to media library.</span>
           <a
             href={`/admin/collections/media/${savedId}`}
-            style={{ marginLeft: 'auto', color: '#4ade80', textDecoration: 'none', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}
+            style={{ marginLeft: 'auto', color: 'var(--ao-green)', textDecoration: 'none', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}
           >
             Open in Media →
           </a>
@@ -332,7 +329,7 @@ export default function GenerateImageView() {
 
       {/* Revised prompt (shown after generation) */}
       {revisedPrompt && revisedPrompt !== prompt && (
-        <div style={{ marginBottom: 20, padding: '12px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--theme-border-color, #2a2a26)', fontSize: 12, color: 'var(--theme-text-dim, #8c8b84)', lineHeight: 1.6 }}>
+        <div style={{ marginBottom: 20, padding: '12px 14px', background: 'var(--ao-surface-2)', border: '1px solid var(--ao-line)', fontSize: 12, color: 'var(--ao-muted)', lineHeight: 1.6 }}>
           <span style={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 10 }}>
             Revised prompt:{' '}
           </span>
