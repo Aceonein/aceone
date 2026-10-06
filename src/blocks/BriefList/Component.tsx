@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import Link from 'next/link'
 import type { BriefListBlock as BriefListBlockProps } from '@/payload-types'
+import { mediaImage } from '@/utilities/getMediaUrl'
 
 type Props = BriefListBlockProps & {
   searchParams?: { page?: string }
@@ -50,7 +51,7 @@ export const BriefListBlock: React.FC<Props> = async ({ issuesPerPage = 9, searc
 
 function BriefCard({ issue }: { issue: any }) {
   const image = typeof issue.coverImage === 'object' ? issue.coverImage : null
-  const imgUrl = (image as any)?.sizes?.medium?.url ?? (image as any)?.url ?? ''
+  const { src: imgUrl, objectPosition } = mediaImage(image, 'medium')
 
   return (
     <Link
@@ -71,7 +72,7 @@ function BriefCard({ issue }: { issue: any }) {
           <img
             src={imgUrl}
             alt={issue.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition }}
           />
         </div>
       )}

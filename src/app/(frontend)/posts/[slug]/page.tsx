@@ -6,7 +6,7 @@ import { NewsletterSection } from '@/components/NewsletterSection'
 import { ReadingProgress } from '@/components/ReadingProgress'
 import { ViewTracker } from '@/components/ViewTracker'
 import { AuthorAvatar } from '@/components/AuthorAvatar'
-import { getMediaUrl } from '@/utilities/getMediaUrl'
+import { mediaImage } from '@/utilities/getMediaUrl'
 import { UpvoteButton, ShareButtons, TOCClient } from '@/components/ArticleActions'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -215,7 +215,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
               <div className="ao-author-head">
                 <AuthorAvatar
                   name={author.name ?? 'Author'}
-                  url={getMediaUrl((typeof (author as any).profileImage === 'object' ? ((author as any).profileImage?.sizes?.square?.url ?? (author as any).profileImage?.url) : null))}
+                  url={typeof (author as any).profileImage === 'object' ? mediaImage((author as any).profileImage, 'square').src : null}
                   accent={accent}
                 />
                 <div className="ao-author-id">
@@ -280,7 +280,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           {/* Cover image */}
           {img?.url ? (
             <div style={{ width: '100%', aspectRatio: '16/7', overflow: 'hidden', marginBottom: 48, border: '1px solid var(--ao-border)' }}>
-              <img src={img.url} alt={img.alt ?? post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              <img src={mediaImage(img).src} alt={img.alt ?? post.title} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: mediaImage(img).objectPosition, display: 'block' }} />
             </div>
           ) : (
             <div style={{ width: '100%', aspectRatio: '16/7', marginBottom: 48, border: '1px solid var(--ao-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--ao-bg-2)' }}>

@@ -17,3 +17,15 @@ export const getMediaUrl = (url: string | null | undefined, cacheTag?: string | 
 
   return cacheTag ? `${url}?${cacheTag}` : url
 }
+
+/**
+ * Image src + object-position for a populated media doc. `updatedAt` is appended as a
+ * version so an edited image (same filename) isn't served stale from browser/CDN caches.
+ */
+export const mediaImage = (media: any, size?: string): { src: string; objectPosition: string } => {
+  const url = (size && media?.sizes?.[size]?.url) || media?.url
+  return {
+    src: getMediaUrl(url, media?.updatedAt),
+    objectPosition: `${media?.focalX ?? 50}% ${media?.focalY ?? 50}%`,
+  }
+}

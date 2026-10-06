@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import type { Page, Post } from '@/payload-types'
 import Link from 'next/link'
+import { mediaImage } from '@/utilities/getMediaUrl'
 
 type Props = Page['hero'] & { id?: string }
 
@@ -39,7 +40,7 @@ export const CoverStoryHero: React.FC<Props> = async ({ coverStoryOverride }) =>
   if (!post) return null
 
   const image = typeof post.featuredImage === 'object' ? post.featuredImage : null
-  const imgUrl = (image as any)?.url ?? (image as any)?.sizes?.large?.url ?? ''
+  const { src: imgUrl, objectPosition } = mediaImage(image)
   const category = Array.isArray(post.categories) && typeof post.categories[0] === 'object'
     ? post.categories[0]
     : null
@@ -67,6 +68,7 @@ export const CoverStoryHero: React.FC<Props> = async ({ coverStoryOverride }) =>
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            objectPosition,
             opacity: 0.45,
           }}
         />

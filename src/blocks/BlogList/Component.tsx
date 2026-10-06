@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import Link from 'next/link'
+import { mediaImage } from '@/utilities/getMediaUrl'
 import type { BlogListBlock as BlogListBlockProps, Category, Post } from '@/payload-types'
 
 type Props = BlogListBlockProps & {
@@ -120,7 +121,7 @@ function FilterChip({ label, slug, active }: { label: string; slug: string; acti
 
 function PostCard({ post }: { post: Post }) {
   const image = typeof post.featuredImage === 'object' ? post.featuredImage : null
-  const imgUrl = (image as any)?.sizes?.medium?.url ?? (image as any)?.url ?? ''
+  const { src: imgUrl, objectPosition } = mediaImage(image, 'medium')
   const category =
     Array.isArray(post.categories) && typeof post.categories[0] === 'object'
       ? (post.categories[0] as any)
@@ -145,7 +146,7 @@ function PostCard({ post }: { post: Post }) {
           <img
             src={imgUrl}
             alt={post.featuredImageAlt ?? post.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition }}
           />
         </div>
       )}

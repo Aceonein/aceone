@@ -5,6 +5,7 @@ import React, { useRef, useState } from 'react'
 import { catColor } from '@/utilities/catColor'
 import { HeroGeometric } from '@/components/HeroGeometric'
 import { font, type as t } from '@/lib/ds'
+import { mediaImage } from '@/utilities/getMediaUrl'
 
 type Post = {
   id: string
@@ -69,7 +70,7 @@ function PostCard({ post, featured }: { post: Post; featured?: boolean }) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {img?.url
-          ? <img src={img.url} alt={img.alt ?? ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ? <img src={mediaImage(img).src} alt={img.alt ?? ''} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: mediaImage(img).objectPosition }} />
           : <span style={{ fontFamily: mono, fontSize: 9, color: 'var(--ao-t3)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Cover Image</span>
         }
       </div>

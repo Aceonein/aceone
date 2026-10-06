@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePath } from 'next/cache'
 
 import {
   FixedToolbarFeature,
@@ -28,6 +29,13 @@ export const Media: CollectionConfig = {
       ({ data, req, operation }) => {
         if (operation === 'create' && req.user) data.createdBy = req.user.id
         return data
+      },
+    ],
+    afterChange: [
+      ({ doc, operation, req: { context } }) => {
+        // Edited image keeps its filename/URL; refresh cached pages so the new version-tagged URL is served
+        if (operation === 'update' && !context.disableRevalidate) revalidatePath('/', 'layout')
+        return doc
       },
     ],
   },

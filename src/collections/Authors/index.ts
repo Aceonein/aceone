@@ -32,7 +32,7 @@ const filePhotoInFolder: CollectionAfterChangeHook = async ({ doc, previousDoc, 
     id,
     data: { _folder: folder.id } as any,
     overrideAccess: true,
-    context: { skipNsfwCheck: true },
+    context: { skipNsfwCheck: true, disableRevalidate: true },
     req,
   })
   return doc
