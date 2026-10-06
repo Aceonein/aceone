@@ -27,3 +27,7 @@ node_modules/
 CODEBASE_AUDIT.md
 PRODUCT.md
 public/design-system.md
+
+# admin sandbox
+.next-sandbox/
+/media/

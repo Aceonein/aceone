@@ -46,6 +46,8 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  // Sandbox runs its own dev server alongside the normal one, so it needs a separate build folder
+  ...(process.env.AO_SANDBOX ? { distDir: '.next-sandbox' } : {}),
   async headers() {
     return [
       {
