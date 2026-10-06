@@ -1,4 +1,4 @@
-import type { CollectionBeforeValidateHook } from 'payload'
+import type { CollectionBeforeOperationHook } from 'payload'
 
 import sharp from 'sharp'
 import { APIError } from 'payload'
@@ -8,16 +8,40 @@ const ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'im
 const MAX_BYTES = 10 * 1024 * 1024 // 10MB
 const MAX_DIMENSION = 2400 // cap width/height before storing original
 
-export const nsfwModeration: CollectionBeforeValidateHook = async ({ data, req }) => {
+const slugify = (text: string) =>
+  text
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60)
+    .replace(/-+$/, '')
+
+// Name a new upload after its alt text (SEO-friendly) and default its admin title.
+function nameFromAlt(args: any, file: { name: string }, operation: string) {
+  if (operation !== 'create') return
+  const alt = typeof args.data?.alt === 'string' ? args.data.alt.trim() : ''
+  const ext = file.name.match(/\.[^.]+$/)?.[0] ?? ''
+  const base = file.name.replace(/\.[^.]+$/, '')
+  const slug = slugify(alt)
+  if (slug) file.name = `${slug}${ext}`
+  if (args.data && !args.data.title) args.data.title = alt || base
+}
+
+// Runs as beforeOperation: Payload builds the stored file and its name from req.file
+// *before* beforeValidate hooks, so conversion/rename must happen here to take effect.
+export const nsfwModeration: CollectionBeforeOperationHook = async ({ args, operation, req }) => {
   const file = req.file
 
   if (!file) {
-    return data
+    return args
   }
 
   // AI-generated images skip moderation — DALL-E enforces content safety upstream
   if ((req as any).context?.skipNsfwCheck) {
-    return data
+    nameFromAlt(args, file, operation)
+    return args
   }
 
   if (!process.env.OPENAI_API_KEY) {
@@ -67,5 +91,6 @@ export const nsfwModeration: CollectionBeforeValidateHook = async ({ data, req }
     file.name = file.name.replace(/\.[^.]+$/, '.webp')
   }
 
-  return data
+  nameFromAlt(args, file, operation)
+  return args
 }

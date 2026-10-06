@@ -209,6 +209,13 @@ export interface Author {
 export interface Media {
   id: string;
   createdBy?: (string | null) | User;
+  /**
+   * Display name for finding this image in the library. Does not change the file name or URL.
+   */
+  title?: string | null;
+  /**
+   * Describes the image for accessibility. New uploads are also named after this text.
+   */
   alt?: string | null;
   caption?: {
     root: {
@@ -1416,6 +1423,7 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   createdBy?: T;
+  title?: T;
   alt?: T;
   caption?: T;
   prefix?: T;

@@ -12,6 +12,7 @@ import { nsfwModeration } from './hooks/nsfwModeration'
 export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
+  admin: { useAsTitle: 'title', listSearchableFields: ['title', 'filename', 'alt'] },
   access: {
     create: authenticated,
     delete: ({ req: { user } }) =>
@@ -24,7 +25,7 @@ export const Media: CollectionConfig = {
     },
   },
   hooks: {
-    beforeValidate: [nsfwModeration],
+    beforeOperation: [nsfwModeration],
     beforeChange: [
       ({ data, req, operation }) => {
         if (operation === 'create' && req.user) data.createdBy = req.user.id
@@ -57,9 +58,18 @@ export const Media: CollectionConfig = {
       },
     },
     {
+      name: 'title',
+      type: 'text',
+      admin: { description: 'Display name for finding this image in the library. Does not change the file name or URL.' },
+      hooks: {
+        // Images uploaded before titles existed fall back to their file name
+        afterRead: [({ value, siblingData }) => value || siblingData?.filename],
+      },
+    },
+    {
       name: 'alt',
       type: 'text',
-      //required: true,
+      admin: { description: 'Describes the image for accessibility. New uploads are also named after this text.' },
     },
     {
       name: 'caption',
