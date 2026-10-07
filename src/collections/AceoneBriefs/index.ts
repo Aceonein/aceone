@@ -54,16 +54,10 @@ export const AceoneBriefs: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       required: true,
-      admin: { description: '16:9 ratio, 1200x675px recommended' },
-    },
-    {
-      name: 'generateCoverImage',
-      type: 'ui',
       admin: {
-        components: {
-          Field: '@/components/GenerateImageField#GenerateImageField',
-        },
-        custom: { targetField: 'coverImage' },
+        description: '16:9 ratio, 1200x675px recommended',
+        components: { Field: '@/components/ImagePicker' },
+        custom: { usedIn: 'aceone-briefs' },
       },
     },
     {

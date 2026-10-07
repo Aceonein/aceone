@@ -31,3 +31,5 @@ public/design-system.md
 # admin sandbox
 .next-sandbox/
 /media/
+
+tsconfig.tsbuildinfo

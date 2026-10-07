@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 
-type GenerateState = 'idle' | 'generating' | 'preview' | 'saving' | 'saved' | 'error'
+import { useGenerateImage } from '@/components/ImagePicker/useGenerateImage'
 
 const s = {
   page: {
@@ -169,83 +169,20 @@ const s = {
 }
 
 export default function GenerateImageView() {
-  const [prompt, setPrompt] = useState('')
-  const size = 'landscape'
-  const quality = 'standard'
-  const [alt, setAlt] = useState('')
-  const [state, setState] = useState<GenerateState>('idle')
-  const [error, setError] = useState('')
-  const [imageData, setImageData] = useState<string | null>(null)
+  const g = useGenerateImage()
   const [savedId, setSavedId] = useState<string | null>(null)
-  const [revisedPrompt, setRevisedPrompt] = useState('')
-
-  const filename = `ai-${Date.now()}.webp`
-
-  async function handleGenerate() {
-    if (!prompt.trim()) return
-    setState('generating')
-    setError('')
-    setImageData(null)
-    setSavedId(null)
-
-    try {
-      const res = await fetch('/api/generate-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, size, quality }),
-      })
-      const json = await res.json()
-
-      if (!res.ok) {
-        setError(json.error || 'Generation failed')
-        setState('error')
-        return
-      }
-
-      setImageData(json.imageData)
-      setRevisedPrompt(json.revisedPrompt)
-      if (!alt) setAlt(json.revisedPrompt.slice(0, 120))
-      setState('preview')
-    } catch {
-      setError('Network error. Try again.')
-      setState('error')
-    }
-  }
+  const { prompt, setPrompt, alt, setAlt, state, error, imageData, revisedPrompt } = g
 
   async function handleSave() {
-    if (!imageData) return
-    setState('saving')
-    setError('')
-
-    try {
-      const res = await fetch('/api/generate-image/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageData, alt: alt || revisedPrompt, filename }),
-      })
-      const json = await res.json()
-
-      if (!res.ok) {
-        setError(json.error || 'Save failed')
-        setState('preview')
-        return
-      }
-
-      setSavedId(json.id)
-      setState('saved')
-    } catch {
-      setError('Network error. Try again.')
-      setState('preview')
-    }
+    setSavedId(await g.save())
   }
 
   function handleReset() {
-    setImageData(null)
     setSavedId(null)
-    setError('')
-    setRevisedPrompt('')
-    setState('idle')
+    g.reset()
   }
+
+  const handleGenerate = g.generate
 
   const isGenerating = state === 'generating'
   const isSaving = state === 'saving'

@@ -75,15 +75,9 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'upload',
               relationTo: 'media',
               required: true,
-            },
-            {
-              name: 'generateFeaturedImage',
-              type: 'ui',
               admin: {
-                components: {
-                  Field: '@/components/GenerateImageField#GenerateImageField',
-                },
-                custom: { targetField: 'featuredImage' },
+                components: { Field: '@/components/ImagePicker' },
+                custom: { altPath: 'featuredImageAlt', usedIn: 'posts' },
               },
             },
             {
