@@ -2,14 +2,11 @@
 
 import { useEffect } from 'react'
 
+import { trackView } from '@/lib/liveCounts'
+
 export function ViewTracker({ slug }: { slug: string }) {
   useEffect(() => {
-    const key = `ao:viewed:${slug}`
-    try {
-      if (sessionStorage.getItem(key)) return
-      sessionStorage.setItem(key, '1')
-    } catch {}
-    fetch(`/api/posts/${encodeURIComponent(slug)}/view`, { method: 'POST', keepalive: true }).catch(() => {})
+    void trackView(slug)
   }, [slug])
 
   return null

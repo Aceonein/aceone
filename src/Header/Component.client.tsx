@@ -70,7 +70,9 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
 
   const isActive = (href: string) => {
     if (href.includes('?') || href.startsWith('#')) return false
-    return href === '/' ? pathname === '/' : pathname.startsWith(href)
+    // "Blog" points at "/", so posts and search belong to it too
+    if (href === '/') return pathname === '/' || pathname.startsWith('/posts') || pathname.startsWith('/search')
+    return pathname.startsWith(href)
   }
 
   const items = navItems.length > 0 ? navItems.map(resolveItem) : FALLBACK_NAV

@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
+import { getLiveCounts } from '@/lib/liveCounts'
 
 const mono = 'var(--font-mono)'
 
@@ -16,6 +17,13 @@ export function UpvoteButton({ slug, initial, compact, bar, fullWidth }: { slug:
   useEffect(() => {
     try { if (localStorage.getItem(storageKey)) setVoted(true) } catch {}
   }, [storageKey])
+
+  // The page is cached, so the count in the HTML can be stale: show the current one
+  useEffect(() => {
+    let alive = true
+    getLiveCounts(slug).then((c) => { if (alive && c.upvotes != null) setCount(c.upvotes) })
+    return () => { alive = false }
+  }, [slug])
 
   const remember = (v: boolean) => {
     try { v ? localStorage.setItem(storageKey, '1') : localStorage.removeItem(storageKey) } catch {}

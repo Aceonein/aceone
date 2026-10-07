@@ -5,6 +5,7 @@ import { BlockRenderer } from '@/components/BlockRenderer'
 import { NewsletterSection } from '@/components/NewsletterSection'
 import { ReadingProgress } from '@/components/ReadingProgress'
 import { ViewTracker } from '@/components/ViewTracker'
+import { LiveViews } from '@/components/LiveViews'
 import { AuthorAvatar } from '@/components/AuthorAvatar'
 import { mediaImage } from '@/utilities/getMediaUrl'
 import { UpvoteButton, ShareButtons, TOCClient } from '@/components/ArticleActions'
@@ -151,7 +152,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
               <div className="ao-meta-item" style={{ paddingBottom: 20, marginBottom: 20, borderBottom: '1px solid var(--ao-border)' }}>
                 <div style={{ ...t.label, color: 'var(--ao-t3)', marginBottom: 6 }}>Views</div>
                 <div style={{ fontFamily: mono, fontSize: 22, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1 }}>
-                  {views > 999 ? `${(views / 1000).toFixed(1)}k` : views}
+                  <LiveViews slug={decodedSlug} initial={views} />
                 </div>
               </div>
             )}
@@ -247,7 +248,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <span style={{ ...t.label, color: 'var(--ao-t3)' }}>Views</span>
                   <span style={{ fontFamily: mono, fontSize: 18, fontWeight: 700, color: 'var(--ao-t1)', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
-                    {views > 999 ? `${(views / 1000).toFixed(1)}k` : views}
+                    <LiveViews slug={decodedSlug} initial={views} />
                   </span>
                 </div>
               ) : <span />}

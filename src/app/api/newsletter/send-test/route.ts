@@ -35,8 +35,14 @@ export async function POST(request: NextRequest) {
 
     const rl = getRatelimit()
     if (rl) {
-      const { success } = await rl.limit(ip)
-      if (!success) {
+      let allowed = true
+      try {
+        allowed = (await rl.limit(ip)).success
+      } catch (err: any) {
+        // Rate limiting is best-effort: a Redis outage must not block the request
+        console.error('[ratelimit] Redis unavailable, skipping limit:', err?.message)
+      }
+      if (!allowed) {
         return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 })
       }
     }
