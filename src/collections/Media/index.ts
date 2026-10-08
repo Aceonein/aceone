@@ -7,6 +7,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import { authenticated } from '../../access/authenticated'
+import { blockDeleteIfUsed } from './hooks/blockDeleteIfUsed'
 import { nsfwModeration } from './hooks/nsfwModeration'
 
 export const Media: CollectionConfig = {
@@ -31,6 +32,7 @@ export const Media: CollectionConfig = {
   },
   hooks: {
     beforeOperation: [nsfwModeration],
+    beforeDelete: [blockDeleteIfUsed],
     beforeChange: [
       ({ data, req, operation }) => {
         if (operation === 'create' && req.user) data.createdBy = req.user.id
