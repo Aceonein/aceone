@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { ObjectId } from 'mongodb'
 
+import { postsCollection } from '@/lib/mongo'
+
+// Direct driver access (not Payload): skips Payload's cold start and hooks, and each change is one atomic update
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params
@@ -16,49 +18,38 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
     }
 
-    const payload = await getPayload({ config: configPromise })
-    const posts = await payload.find({
-      collection: 'posts',
-      where: { slug: { equals: slug }, status: { equals: 'published' } },
-      limit: 1,
-      select: { upvotes: true, upvotedBy: true } as any,
-    })
+    const posts = await postsCollection()
+    const published = { slug, status: 'published' }
 
-    if (posts.docs.length === 0) {
-      return NextResponse.json({ error: 'Post not found' }, { status: 404 })
-    }
+    const updated =
+      action === 'add'
+        ? await posts.findOneAndUpdate(
+            { ...published, 'upvotedBy.ip': { $ne: ip } },
+            { $inc: { upvotes: 1 }, $push: { upvotedBy: { ip, id: new ObjectId().toHexString() } } as any },
+            { returnDocument: 'after', projection: { upvotes: 1 } },
+          )
+        : await posts.findOneAndUpdate(
+            { ...published, 'upvotedBy.ip': ip },
+            [
+              {
+                $set: {
+                  upvotes: { $max: [0, { $subtract: [{ $ifNull: ['$upvotes', 0] }, 1] }] },
+                  upvotedBy: { $filter: { input: '$upvotedBy', cond: { $ne: ['$$this.ip', ip] } } },
+                },
+              },
+            ],
+            { returnDocument: 'after', projection: { upvotes: 1 } },
+          )
 
-    const post = posts.docs[0] as any
-    const upvotedBy: Array<{ ip: string }> = post.upvotedBy || []
-    const alreadyUpvoted = upvotedBy.some((u) => u.ip === ip)
+    if (updated) return NextResponse.json({ upvotes: updated.upvotes ?? 0 })
 
-    let newUpvotes = post.upvotes || 0
-    let newUpvotedBy = [...upvotedBy]
-
-    if (action === 'add') {
-      if (alreadyUpvoted) {
-        return NextResponse.json({ error: 'Already upvoted' }, { status: 400 })
-      }
-      newUpvotes += 1
-      newUpvotedBy.push({ ip })
-    } else {
-      if (!alreadyUpvoted) {
-        return NextResponse.json({ error: 'Not upvoted' }, { status: 400 })
-      }
-      newUpvotes = Math.max(0, newUpvotes - 1)
-      newUpvotedBy = newUpvotedBy.filter((u) => u.ip !== ip)
-    }
-
-    await payload.update({
-      collection: 'posts',
-      id: post.id,
-      data: { upvotes: newUpvotes, upvotedBy: newUpvotedBy },
-      depth: 0,
-      // counters change constantly; don't purge the cached post/home pages (live counts are fetched client-side)
-      context: { disableRevalidate: true },
-    })
-
-    return NextResponse.json({ upvotes: newUpvotes })
+    // No match: either the post is missing/unpublished, or the vote state already was what was asked for
+    const exists = await posts.findOne(published, { projection: { _id: 1 } })
+    if (!exists) return NextResponse.json({ error: 'Post not found' }, { status: 404 })
+    return NextResponse.json(
+      { error: action === 'add' ? 'Already upvoted' : 'Not upvoted' },
+      { status: 400 },
+    )
   } catch (err: any) {
     console.error('Upvote error:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

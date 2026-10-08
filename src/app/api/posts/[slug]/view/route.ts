@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { Redis } from '@upstash/redis'
+
+import { postsCollection } from '@/lib/mongo'
 
 let redis: Redis | null = null
 function getRedis() {
@@ -37,32 +37,16 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       }
     }
 
-    const payload = await getPayload({ config: configPromise })
-    const posts = await payload.find({
-      collection: 'posts',
-      where: { slug: { equals: slug }, status: { equals: 'published' } },
-      limit: 1,
-      depth: 0,
-      select: { views: true } as any,
-    })
+    // Atomic $inc straight to the DB (no Payload boot, no update hooks, no cache purge)
+    const posts = await postsCollection()
+    const post = await posts.findOneAndUpdate(
+      { slug, status: 'published' },
+      { $inc: { views: 1 } },
+      { returnDocument: 'after', projection: { views: 1 } },
+    )
+    if (!post) return NextResponse.json({ error: 'Post not found' }, { status: 404 })
 
-    if (posts.docs.length === 0) {
-      return NextResponse.json({ error: 'Post not found' }, { status: 404 })
-    }
-
-    const post = posts.docs[0] as any
-    const newViews = (post.views || 0) + 1
-
-    await payload.update({
-      collection: 'posts',
-      id: post.id,
-      data: { views: newViews },
-      depth: 0,
-      // every view would otherwise purge the cached post + home pages via the revalidate hook
-      context: { disableRevalidate: true },
-    })
-
-    return NextResponse.json({ views: newViews })
+    return NextResponse.json({ views: post.views })
   } catch (err: any) {
     console.error('View count error:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -73,15 +57,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params
-    const payload = await getPayload({ config: configPromise })
-    const posts = await payload.find({
-      collection: 'posts',
-      where: { slug: { equals: slug }, status: { equals: 'published' } },
-      limit: 1,
-      depth: 0,
-      select: { views: true, upvotes: true } as any,
-    })
-    const post = posts.docs[0] as any
+    const posts = await postsCollection()
+    const post = await posts.findOne({ slug, status: 'published' }, { projection: { views: 1, upvotes: 1 } })
     if (!post) return NextResponse.json({ error: 'Post not found' }, { status: 404 })
     return NextResponse.json(
       { views: post.views ?? 0, upvotes: post.upvotes ?? 0 },
