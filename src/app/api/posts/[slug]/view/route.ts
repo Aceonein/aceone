@@ -42,6 +42,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       collection: 'posts',
       where: { slug: { equals: slug }, status: { equals: 'published' } },
       limit: 1,
+      depth: 0,
+      select: { views: true } as any,
     })
 
     if (posts.docs.length === 0) {
@@ -55,6 +57,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       collection: 'posts',
       id: post.id,
       data: { views: newViews },
+      depth: 0,
+      // every view would otherwise purge the cached post + home pages via the revalidate hook
+      context: { disableRevalidate: true },
     })
 
     return NextResponse.json({ views: newViews })

@@ -53,6 +53,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       collection: 'posts',
       id: post.id,
       data: { upvotes: newUpvotes, upvotedBy: newUpvotedBy },
+      depth: 0,
+      // counters change constantly; don't purge the cached post/home pages (live counts are fetched client-side)
+      context: { disableRevalidate: true },
     })
 
     return NextResponse.json({ upvotes: newUpvotes })
