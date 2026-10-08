@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { catColor } from '@/utilities/catColor'
 import { HeroGeometric } from '@/components/HeroGeometric'
 import { font, type as t } from '@/lib/ds'
@@ -189,21 +189,53 @@ function PostListItem({ post, index }: { post: Post; index: number }) {
   )
 }
 
-export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; categories: Category[]; featuredPost: Post | null }) {
+export function BlogHome({ posts, categories, featuredPost, total }: { posts: Post[]; categories: Category[]; featuredPost: Post | null; total: number }) {
   const [activecat, setActivecat] = useState('all')
   const [query, setQuery] = useState('')
   const [view, setView] = useState<'card' | 'list'>('card')
   const [filtersOpen, setFiltersOpen] = useState(false)
   const filterRef = useRef<HTMLDivElement>(null)
 
-  const filtered = posts.filter(p => {
-    const catMatch = activecat === 'all' || (p.categories ?? []).some(c => {
-      const t = (typeof c === 'object' ? c.title : '') ?? ''
-      return catSlug(t) === activecat
-    })
-    const qMatch = !query || p.title.toLowerCase().includes(query.toLowerCase()) || (p.excerpt ?? '').toLowerCase().includes(query.toLowerCase())
-    return catMatch && qMatch
-  })
+  // The server sends only the first page. Category, search and "load more" fetch from /api/blog-posts.
+  const [items, setItems] = useState<Post[]>(posts)
+  const [count, setCount] = useState(total)
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const reqId = useRef(0)
+  const mounted = useRef(false)
+
+  async function fetchPosts(nextPage: number, cat: string, q: string) {
+    const id = ++reqId.current
+    setLoading(true)
+    const params = new URLSearchParams({ page: String(nextPage) })
+    const catTitle = categories.find(c => catSlug(c.title) === cat)?.title
+    if (cat !== 'all' && catTitle) params.set('category', catTitle)
+    if (q.trim()) params.set('q', q.trim())
+    try {
+      const res = await fetch(`/api/blog-posts?${params}`)
+      const json = await res.json()
+      if (id !== reqId.current || !res.ok) return // superseded by a newer request, or failed
+      setItems(prev => (nextPage === 1 ? json.docs : [...prev, ...json.docs]))
+      setCount(json.totalDocs)
+      setPage(nextPage)
+    } finally {
+      if (id === reqId.current) setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return }
+    if (activecat === 'all' && !query.trim()) {
+      reqId.current++
+      setItems(posts); setCount(total); setPage(1); setLoading(false)
+      return
+    }
+    const t = setTimeout(() => fetchPosts(1, activecat, query), 300)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activecat, query])
+
+  const filtered = items
 
   const catTabs = [
     { cat: 'all', label: 'All', color: null },
@@ -432,7 +464,7 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
             Latest Articles
           </div>
           <span style={{ fontFamily: mono, fontSize: 10, color: 'var(--ao-t3)', letterSpacing: '0.06em' }}>
-            {filtered.length} articles
+            {count} articles
           </span>
         </div>
       </div>
@@ -455,6 +487,21 @@ export function BlogHome({ posts, categories, featuredPost }: { posts: Post[]; c
         ) : (
           <div>
             {filtered.map((p, i) => <PostListItem key={p.id} post={p} index={i} />)}
+          </div>
+        )}
+        {filtered.length < count && (
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '32px 0 8px' }}>
+            <button
+              onClick={() => fetchPosts(page + 1, activecat, query)}
+              disabled={loading}
+              style={{
+                fontFamily: mono, fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+                color: 'var(--ao-bg)', background: 'var(--ao-t1)', border: 'none',
+                padding: '12px 28px', cursor: loading ? 'wait' : 'pointer', opacity: loading ? 0.6 : 1,
+              }}
+            >
+              {loading ? 'Loading…' : `Load more (${count - filtered.length} left)`}
+            </button>
           </div>
         )}
       </div>

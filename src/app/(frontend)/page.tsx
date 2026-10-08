@@ -4,6 +4,7 @@ import React from 'react'
 
 import { BlogHome } from '@/components/BlogHome'
 import { NewsletterSection } from '@/components/NewsletterSection'
+import { HOME_PAGE_SIZE, HOME_POST_SELECT } from '@/lib/blogPosts'
 
 export const revalidate = 60
 
@@ -14,15 +15,11 @@ export default async function BlogHomePage() {
     payload.find({
       collection: 'posts',
       depth: 1,
-      limit: 50,
+      limit: HOME_PAGE_SIZE,
       sort: '-publishedAt',
       draft: false,
       overrideAccess: false,
-      select: {
-        title: true, slug: true, excerpt: true, publishedAt: true,
-        readTime: true, views: true, upvotes: true,
-        featuredImage: true, categories: true, author: true,
-      },
+      select: HOME_POST_SELECT,
     }),
     payload.find({
       collection: 'categories',
@@ -39,7 +36,7 @@ export default async function BlogHomePage() {
 
   return (
     <main style={{ background: 'var(--ao-bg)', minHeight: '100vh', transition: 'background 0.4s' }}>
-      <BlogHome posts={posts} categories={categories} featuredPost={featured} />
+      <BlogHome posts={posts} categories={categories} featuredPost={featured} total={postsRes.totalDocs} />
       <NewsletterSection />
     </main>
   )
