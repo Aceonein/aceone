@@ -5,7 +5,6 @@ import React from 'react'
 import { BlogHome } from '@/components/BlogHome'
 import { NewsletterSection } from '@/components/NewsletterSection'
 
-export const dynamic = 'force-dynamic'
 export const revalidate = 60
 
 export default async function BlogHomePage() {
