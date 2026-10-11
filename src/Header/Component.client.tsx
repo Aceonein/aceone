@@ -6,7 +6,12 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { font, z } from '@/lib/ds'
 
 function toRelative(url: string): string {
-  try { const u = new URL(url); return u.pathname + u.search + u.hash } catch { return url }
+  try {
+    const u = new URL(url)
+    // blog.aceone.in root was the old blog homepage, now lives at /blog
+    if (u.hostname === 'blog.aceone.in' && u.pathname === '/') return '/blog'
+    return u.pathname + u.search + u.hash
+  } catch { return url }
 }
 
 function resolveItem(item: any): { href: string; label: string; type: 'text' | 'cta'; alignment: 'left' | 'right' } {
