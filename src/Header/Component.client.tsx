@@ -77,7 +77,14 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
     return pathname === href || pathname.startsWith(href + '/')
   }
 
-  const items = navItems.length > 0 ? navItems.map(resolveItem) : FALLBACK_NAV
+  // If Payload items exist but resolve to '#' (misconfigured reference links),
+  // fall back to matching FALLBACK_NAV entry by label so active state still works
+  const rawItems = navItems.length > 0 ? navItems.map(resolveItem) : FALLBACK_NAV
+  const items = rawItems.map(item =>
+    item.href === '#'
+      ? (FALLBACK_NAV.find(f => f.label.toLowerCase() === item.label.toLowerCase()) ?? item)
+      : item,
+  )
   const leftItems = items.filter(i => i.alignment === 'left')
   const rightItems = items.filter(i => i.alignment === 'right')
   const ctaItem = rightItems.find(i => i.type === 'cta')
