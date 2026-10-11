@@ -27,7 +27,7 @@ function resolveItem(item: any): { href: string; label: string; type: 'text' | '
 }
 
 const FALLBACK_NAV = [
-  { href: '/', label: 'Blog', type: 'text' as const, alignment: 'left' as const },
+  { href: '/blog', label: 'Blog', type: 'text' as const, alignment: 'left' as const },
   { href: '/the-brief', label: 'The Brief', type: 'text' as const, alignment: 'left' as const },
   { href: '#newsletter', label: 'Subscribe', type: 'cta' as const, alignment: 'right' as const },
 ]
@@ -71,7 +71,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
   const isActive = (href: string) => {
     if (href.includes('?') || href.startsWith('#')) return false
     // "Blog" points at "/", so posts and search belong to it too
-    if (href === '/') return pathname === '/' || pathname.startsWith('/posts') || pathname.startsWith('/search')
+    if (href === '/blog') return pathname === '/blog' || pathname.startsWith('/posts') || pathname.startsWith('/search')
     return pathname.startsWith(href)
   }
 
