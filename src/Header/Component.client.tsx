@@ -27,6 +27,7 @@ function resolveItem(item: any): { href: string; label: string; type: 'text' | '
 }
 
 const FALLBACK_NAV = [
+  { href: '/', label: 'Home', type: 'text' as const, alignment: 'left' as const },
   { href: '/blog', label: 'Blog', type: 'text' as const, alignment: 'left' as const },
   { href: '/the-brief', label: 'The Brief', type: 'text' as const, alignment: 'left' as const },
   { href: '#newsletter', label: 'Subscribe', type: 'cta' as const, alignment: 'right' as const },
@@ -157,7 +158,7 @@ export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]
               fontFamily: font.mono, fontSize: 12, fontWeight: 700,
               letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ao-t1)',
               transition: 'color 0.3s',
-            }}>ACEONE/</span>
+            }}>ACEONE</span>
           </Link>
 
           <nav className="ao-nav-links" style={{ display: 'flex', alignItems: 'stretch' }}>
