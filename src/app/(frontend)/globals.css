@@ -516,7 +516,7 @@ html[data-theme='light'] {
   border-bottom: 1px solid var(--ao-border);
   position: relative;
   overflow: hidden;
-  min-height: calc(100dvh - var(--ao-nav-h) - 140px);
+  min-height: 58vh;
 }
 .hp-hero-inner {
   max-width: 1280px;
@@ -524,7 +524,7 @@ html[data-theme='light'] {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: calc(100dvh - var(--ao-nav-h) - 140px);
+  min-height: 58vh;
   position: relative;
   z-index: 1;
 }
@@ -540,19 +540,10 @@ html[data-theme='light'] {
   position: relative; z-index: 1;
 }
 .hp-hero-tool-col {
+  background: var(--ao-bg-2);
   display: flex; flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  padding: clamp(24px,4vh,56px) clamp(20px,3vw,40px);
   position: relative; z-index: 1;
   animation: hp-in .7s cubic-bezier(0,.8,.4,1) .28s both;
-}
-.hp-htc-panel {
-  display: flex; flex-direction: column;
-  background: var(--ao-bg-2);
-  border: 1px solid var(--ao-border);
-  overflow: hidden;
-  max-height: 440px;
 }
 .hp-hero-eyebrow {
   display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
@@ -738,7 +729,6 @@ html[data-theme='light'] {
 
 /* Mobile */
 @media (max-width: 840px) {
-  .hp-hero, .hp-hero-inner { min-height: calc(100dvh - var(--ao-nav-h) - 100px); }
   .hp-hero-inner { grid-template-columns: 1fr; }
   .hp-hero-tool-col { display: none; }
   .hp-hero-left { border-right: none; }
