@@ -68,6 +68,7 @@ export default async function HomePage() {
         </div>
 
         <div className="hp-hero-tool-col">
+          <div className="hp-htc-panel">
           <div className="hp-htc-bar">
             <div className="hp-htc-dots">
               <div className="hp-htc-dot" style={{ background: '#ef4444', opacity: 0.5 }} />
@@ -81,6 +82,7 @@ export default async function HomePage() {
             </div>
           </div>
           <EmiCalculator />
+          </div>
         </div>
         </div>
       </section>
