@@ -68,19 +68,21 @@ export default async function HomePage() {
         </div>
 
         <div className="hp-hero-tool-col">
-          <div className="hp-htc-bar">
-            <div className="hp-htc-dots">
-              <div className="hp-htc-dot" style={{ background: '#ef4444', opacity: 0.5 }} />
-              <div className="hp-htc-dot" style={{ background: '#f59e0b', opacity: 0.5 }} />
-              <div className="hp-htc-dot" style={{ background: '#22c55e', opacity: 0.5 }} />
+          <div className="hp-htc-panel">
+            <div className="hp-htc-bar">
+              <div className="hp-htc-dots">
+                <div className="hp-htc-dot" style={{ background: '#ef4444', opacity: 0.5 }} />
+                <div className="hp-htc-dot" style={{ background: '#f59e0b', opacity: 0.5 }} />
+                <div className="hp-htc-dot" style={{ background: '#22c55e', opacity: 0.5 }} />
+              </div>
+              <div className="hp-htc-title">EMI Exposer</div>
+              <div className="hp-htc-live">
+                <div className="hp-htc-live-dot" />
+                Live
+              </div>
             </div>
-            <div className="hp-htc-title">EMI Exposer</div>
-            <div className="hp-htc-live">
-              <div className="hp-htc-live-dot" />
-              Live
-            </div>
+            <EmiCalculator />
           </div>
-          <EmiCalculator />
         </div>
         </div>
       </section>
