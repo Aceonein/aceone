@@ -40,11 +40,13 @@ const FALLBACK_NAV = [
 
 type FooterCol = { heading: string; links: { href: string; label: string }[] }
 
-export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[] }> = ({
+export const HeaderClient: React.FC<{ navItems?: any[]; footerCols?: FooterCol[]; initialPathname?: string }> = ({
   navItems = [],
   footerCols = [],
+  initialPathname = '/',
 }) => {
-  const pathname = usePathname()
+  const _pathname = usePathname()
+  const pathname = _pathname || initialPathname
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [menuOpen, setMenuOpen] = useState(false)
   const [openCols, setOpenCols] = useState<string[]>([])

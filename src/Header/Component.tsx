@@ -1,4 +1,5 @@
 import React from 'react'
+import { headers } from 'next/headers'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { HeaderClient } from './Component.client'
 
@@ -41,10 +42,12 @@ const FALLBACK_FOOTER_COLS = [
 ]
 
 export async function Header() {
-  const [headerData, footerData] = await Promise.all([
+  const [headerData, footerData, headersList] = await Promise.all([
     getCachedGlobal('header', 1)().catch(() => null),
     getCachedGlobal('footer', 1)().catch(() => null),
+    headers(),
   ])
+  const initialPathname = headersList.get('x-pathname') ?? '/'
 
   const navItems = (headerData as any)?.navItems ?? []
   const footer = footerData as any
@@ -55,5 +58,5 @@ export async function Header() {
       }))
     : FALLBACK_FOOTER_COLS
 
-  return <HeaderClient navItems={navItems} footerCols={footerCols} />
+  return <HeaderClient navItems={navItems} footerCols={footerCols} initialPathname={initialPathname} />
 }
