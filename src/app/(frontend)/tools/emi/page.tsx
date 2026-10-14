@@ -170,33 +170,33 @@ export default function EmiToolPage() {
         </div>
       </div>
 
-      {/* ── Coming soon ── */}
+      {/* ── More tools ── */}
       <div className="tl-more-tools">
         <div className="tl-inner">
-          <div className="tl-mt-label">More tools in progress</div>
+          <div className="tl-mt-label">More tools</div>
           <div className="tl-mt-grid">
-            <div className="tl-mt-card">
-              <span className="tl-mt-badge">Coming soon</span>
+            <Link href="/tools/can-afford" className="tl-mt-card tl-mt-card-link">
+              <span className="tl-mt-badge tl-mt-badge-live">● Live</span>
               <div className="tl-mt-name">Can You Afford It?</div>
               <div className="tl-mt-desc">Salary + existing EMIs + price → honest yes, stretch, or no.</div>
-            </div>
-            <div className="tl-mt-card">
-              <span className="tl-mt-badge">Coming soon</span>
+            </Link>
+            <Link href="/tools/foir" className="tl-mt-card tl-mt-card-link">
+              <span className="tl-mt-badge tl-mt-badge-live">● Live</span>
               <div className="tl-mt-name">FOIR Reality Check</div>
               <div className="tl-mt-desc">Know your borrowing headroom before your bank does.</div>
-            </div>
-            <div className="tl-mt-card">
-              <span className="tl-mt-badge">Coming soon</span>
+            </Link>
+            <Link href="/tools/salary" className="tl-mt-card tl-mt-card-link">
+              <span className="tl-mt-badge tl-mt-badge-live">● Live</span>
               <div className="tl-mt-name">Salary Decoder</div>
               <div className="tl-mt-desc">CTC → what actually lands in your account after all deductions.</div>
-            </div>
-            <div className="tl-mt-card">
-              <span className="tl-mt-badge">Coming soon</span>
+            </Link>
+            <Link href="/tools/credit-card" className="tl-mt-card tl-mt-card-link">
+              <span className="tl-mt-badge tl-mt-badge-live">● Live</span>
               <div className="tl-mt-name">Credit Card True Cost</div>
               <div className="tl-mt-desc">Annual fee vs actual rewards earned. Is your card worth keeping?</div>
-            </div>
+            </Link>
           </div>
-          <Link href="/#newsletter" className="tl-mt-cta">Get notified when they launch →</Link>
+          <Link href="/#newsletter" className="tl-mt-cta">Get notified when new tools launch →</Link>
         </div>
       </div>
 

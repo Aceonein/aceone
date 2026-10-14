@@ -978,3 +978,101 @@ html[data-theme='light'] {
   .emi-ten-btn:nth-child(2) { border-right: 1px solid var(--ao-border); }
   .emi-ten-btn:nth-child(3) { border-right: none; }
 }
+
+/* ── Shared tool calculator (tc-*) ── */
+.tc-tool { padding: 24px 28px 28px; }
+.tc-inputs { display: flex; flex-direction: column; gap: 20px; }
+
+.tc-field { display: flex; flex-direction: column; gap: 8px; }
+.tc-label { font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ao-t3); }
+
+.tc-row { display: flex; align-items: center; border: 1px solid var(--ao-border); background: var(--ao-bg-3); transition: border-color .15s; }
+.tc-row:focus-within { border-color: var(--ao-accent); }
+.tc-row-sm { flex: 1; }
+.tc-pfx, .tc-sfx { padding: 0 10px; font-family: var(--font-mono); font-size: 11px; color: var(--ao-t3); white-space: nowrap; flex-shrink: 0; }
+.tc-inp { flex: 1; padding: 10px 12px; background: transparent; border: none; outline: none; font-family: var(--font-mono); font-size: 14px; font-weight: 500; color: var(--ao-t1); -moz-appearance: textfield; }
+.tc-inp::-webkit-outer-spin-button, .tc-inp::-webkit-inner-spin-button { -webkit-appearance: none; }
+.tc-inp-lg { font-size: 17px; padding: 12px; }
+.tc-field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Tenure buttons */
+.tc-tenure-row { display: grid; grid-template-columns: repeat(7,1fr); border: 1px solid var(--ao-border); }
+.tc-ten-btn { padding: 8px 4px; font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: .04em; text-align: center; color: var(--ao-t3); background: var(--ao-bg-3); border: none; border-right: 1px solid var(--ao-border); cursor: pointer; transition: background .12s, color .12s; }
+.tc-ten-btn:last-child { border-right: none; }
+.tc-ten-btn.active { background: var(--ao-accent); color: #fff; }
+.tc-ten-btn:hover:not(.active) { background: var(--ao-bg-2); color: var(--ao-t1); }
+
+/* Toggle buttons */
+.tc-toggle-row { display: flex; border: 1px solid var(--ao-border); }
+.tc-toggle-btn { flex: 1; padding: 9px 12px; font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-align: center; color: var(--ao-t3); background: var(--ao-bg-3); border: none; border-right: 1px solid var(--ao-border); cursor: pointer; transition: background .12s, color .12s; }
+.tc-toggle-btn:last-child { border-right: none; }
+.tc-toggle-btn.active { background: var(--ao-accent); color: #fff; }
+.tc-toggle-btn:hover:not(.active) { background: var(--ao-bg-2); color: var(--ao-t1); }
+
+/* FOIR multi-input grid */
+.tc-emi-grid { display: flex; flex-direction: column; gap: 8px; }
+.tc-emi-row { display: grid; grid-template-columns: 1fr 180px; gap: 12px; align-items: center; }
+.tc-emi-name { font-family: var(--font-sans); font-size: 13px; font-weight: 400; color: var(--ao-t2); }
+.tc-summary-val { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--ao-t1); font-variant-numeric: tabular-nums; }
+
+/* Divider */
+.tc-divider { height: 1px; background: var(--ao-border); margin: 0; }
+
+/* Results */
+.tc-results { padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 20px; }
+.tc-primary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.tc-primary-label { font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ao-t3); margin-bottom: 6px; }
+.tc-primary-val { font-family: var(--font-sans); font-size: clamp(28px,4vw,40px); font-weight: 700; letter-spacing: -.03em; color: var(--ao-t1); font-variant-numeric: tabular-nums; line-height: 1; }
+.tc-val-red { color: var(--ao-hl-crimson); }
+
+/* Verdict badge */
+.tc-verdict { font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: .1em; padding: 6px 10px; flex-shrink: 0; }
+.tc-verdict-g { color: var(--ao-hl-emerald); border: 1px solid var(--ao-hl-emerald); }
+.tc-verdict-a { color: var(--ao-hl-amber);   border: 1px solid var(--ao-hl-amber);   }
+.tc-verdict-r { color: var(--ao-hl-crimson); border: 1px solid var(--ao-hl-crimson); }
+
+/* Breakdown table */
+.tc-breakdown { display: flex; flex-direction: column; border: 1px solid var(--ao-border); }
+.tc-br-group-hd {
+  padding: 8px 16px; background: var(--ao-bg-3); border-bottom: 1px solid var(--ao-border);
+  font-family: var(--font-mono); font-size: 8px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ao-t3);
+}
+.tc-br-group-hd-red { color: var(--ao-hl-crimson); }
+.tc-br-row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  padding: 10px 16px; border-bottom: 1px solid var(--ao-border);
+  font-family: var(--font-sans); font-size: 12px; color: var(--ao-t2);
+}
+.tc-br-row:last-child { border-bottom: none; }
+.tc-br-row span:last-child { font-family: var(--font-mono); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.tc-br-sub  span:last-child { color: var(--ao-t3); }
+.tc-br-green span:last-child { color: var(--ao-hl-emerald); }
+.tc-br-amber span:last-child { color: var(--ao-hl-amber); }
+.tc-br-red  span:last-child { color: var(--ao-hl-crimson); }
+.tc-br-total { background: var(--ao-bg-2); }
+.tc-br-total span:first-child { font-weight: 600; color: var(--ao-t1); }
+.tc-br-note { font-size: 10px; color: var(--ao-t3); margin-left: 6px; font-weight: 400; }
+
+/* Disc */
+.tc-disc { font-family: var(--font-sans); font-size: 11px; color: var(--ao-t3); line-height: 1.6; }
+
+/* Empty */
+.tc-empty { padding: 32px 28px; font-family: var(--font-sans); font-size: 13px; color: var(--ao-t3); text-align: center; }
+
+/* More-tools card as link */
+.tl-mt-card-link { text-decoration: none; cursor: pointer; transition: background .15s; }
+.tl-mt-card-link:hover { background: var(--ao-bg); }
+.tl-mt-badge-live { color: var(--ao-hl-emerald); }
+
+/* tc-* mobile */
+@media (max-width: 840px) {
+  .tc-field-pair { grid-template-columns: 1fr; }
+  .tc-tenure-row { grid-template-columns: repeat(4,1fr); }
+  .tc-emi-row { grid-template-columns: 1fr; }
+  .tc-emi-row .tc-row-sm { width: 100%; }
+}
+@media (max-width: 540px) {
+  .tc-tenure-row { grid-template-columns: repeat(3,1fr); }
+  .tc-tool { padding: 16px; }
+  .tc-results { padding: 16px; }
+}

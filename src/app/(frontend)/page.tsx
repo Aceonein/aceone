@@ -116,7 +116,7 @@ export default async function HomePage() {
               <span className="hp-sec-label-line" />
               <span className="hp-sec-label-text">Tools · Free, no account</span>
             </div>
-            <span className="hp-sec-right">1 live · 4 in progress</span>
+            <span className="hp-sec-right">5 live · free</span>
           </div>
         </div>
         <div className="hp-tools-grid">
@@ -130,43 +130,43 @@ export default async function HomePage() {
             </div>
             <span className="hp-tc-arrow">Try it → aceone.in/tools/emi</span>
           </Link>
-          <a href="#tools" className="hp-tool-card hp-tc-amber hp-reveal" data-delay="80">
-            <span className="hp-tc-badge hp-tc-badge-soon">Coming soon</span>
+          <Link href="/tools/can-afford" className="hp-tool-card hp-tc-amber hp-reveal" data-delay="80">
+            <span className="hp-tc-badge hp-tc-badge-live">● Live now</span>
             <div className="hp-tc-name">Can You Afford It?</div>
             <div className="hp-tc-desc">
-              Salary + existing EMIs + price → honest yes, stretch, or no, with the full reasoning.
+              Salary + existing EMIs + price → honest yes, stretch, or no, with your full FOIR picture.
             </div>
-            <span className="hp-tc-arrow">Notify me →</span>
-          </a>
-          <a href="#tools" className="hp-tool-card hp-tc-teal hp-reveal" data-delay="160">
-            <span className="hp-tc-badge hp-tc-badge-soon">Coming soon</span>
+            <span className="hp-tc-arrow">Try it → aceone.in/tools/can-afford</span>
+          </Link>
+          <Link href="/tools/foir" className="hp-tool-card hp-tc-teal hp-reveal" data-delay="160">
+            <span className="hp-tc-badge hp-tc-badge-live">● Live now</span>
             <div className="hp-tc-name">FOIR Reality Check</div>
             <div className="hp-tc-desc">
               Know your borrowing headroom before your bank does. See exactly where you stand.
             </div>
-            <span className="hp-tc-arrow">Notify me →</span>
-          </a>
-          <a href="#tools" className="hp-tool-card hp-tc-emerald hp-reveal" data-delay="80">
-            <span className="hp-tc-badge hp-tc-badge-soon">Coming soon</span>
+            <span className="hp-tc-arrow">Try it → aceone.in/tools/foir</span>
+          </Link>
+          <Link href="/tools/salary" className="hp-tool-card hp-tc-emerald hp-reveal" data-delay="80">
+            <span className="hp-tc-badge hp-tc-badge-live">● Live now</span>
             <div className="hp-tc-name">Salary Decoder</div>
             <div className="hp-tc-desc">
-              CTC → what actually lands in your account. PF, gratuity, professional tax, insurance —
+              CTC → what actually lands in your account. PF, gratuity, professional tax, TDS —
               all of it.
             </div>
-            <span className="hp-tc-arrow">Notify me →</span>
-          </a>
-          <a
-            href="#tools"
+            <span className="hp-tc-arrow">Try it → aceone.in/tools/salary</span>
+          </Link>
+          <Link
+            href="/tools/credit-card"
             className="hp-tool-card hp-tool-card-wide hp-tc-crimson hp-reveal"
             data-delay="160"
           >
-            <span className="hp-tc-badge hp-tc-badge-soon">Coming soon</span>
+            <span className="hp-tc-badge hp-tc-badge-live">● Live now</span>
             <div className="hp-tc-name">Credit Card True Cost</div>
             <div className="hp-tc-desc">
               Annual fee vs actual rewards earned per year. Is your card worth keeping?
             </div>
-            <span className="hp-tc-arrow">Notify me →</span>
-          </a>
+            <span className="hp-tc-arrow">Try it → aceone.in/tools/credit-card</span>
+          </Link>
         </div>
       </section>
 
